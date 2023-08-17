@@ -1,0 +1,40 @@
+/**
+ * 
+ */
+package com.alok91340.gethired.entities;
+
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+/**
+ * @author alok91340
+ *
+ */
+@Entity
+@Setter
+@Getter
+@NoArgsConstructor
+public class Award {
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
+	
+	private String title;
+	private String date;
+	private String position;
+	private String description;
+	
+	@ManyToOne
+	@JsonBackReference
+	private UserProfile studentProfile;
+}
