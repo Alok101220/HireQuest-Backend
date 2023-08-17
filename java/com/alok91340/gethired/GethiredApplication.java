@@ -22,7 +22,6 @@ public class GethiredApplication implements CommandLineRunner{
 	@Autowired 
 	RoleRepository roleRepository;
 	
-	
 	public static void main(String[] args) {
 		SpringApplication.run(GethiredApplication.class, args);
 		
