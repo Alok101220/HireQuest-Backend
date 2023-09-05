@@ -23,15 +23,21 @@ import com.alok91340.gethired.security.JwtAuthenticationFilter;
  * @author alok91340
  *
  */
+
 @Configuration
 public class SecurityConfig {
 
     public static final String[] PUBLIC_URLS = {
-            "/v3/api-docs",
-            "/v2/api-docs",
-            "/swagger-ui/**",
-            "/swagger-resources/**",
-            "/api/v*/auth/**"
+    		"/v3/api-docs",
+            "/api/gethired/create-user",
+            "/api/gethired/login",
+            "/api/gethired/generate",
+            "/api/gethired/{email}/send-otp",
+            "/api/gethired/{email}/resend-otp",
+            "/api/gethired/{otpCode}/{email}/otp-verification",
+            "/api/gethired/{email}/check-email",
+            "/api/gethired/{username}/check-username",
+            "/api/gethired/{email}/{password}/change-password"
     };
 
     @Autowired(required = false)
@@ -53,8 +59,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 // to permit all get request and secure post put and delete methods
-                .requestMatchers("/api/gethired/create-user").permitAll()
-                .requestMatchers("/api/gethired/login").permitAll()
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs", "/configuration/**", "/webjars/**").permitAll()
                 .requestMatchers(PUBLIC_URLS).permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v*/contact/**").permitAll()
                 .anyRequest()

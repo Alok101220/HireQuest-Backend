@@ -41,5 +41,5 @@ public class Project {
 	
 	@ManyToOne
 	@JsonBackReference
-	private UserProfile studentProfile;
+	private CandidateProfile candidateProfile;
 }

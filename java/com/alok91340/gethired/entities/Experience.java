@@ -47,5 +47,5 @@ public class Experience {
 	
 	@ManyToOne
 	@JsonBackReference
-	private UserProfile studentProfile;
+	private CandidateProfile candidateProfile;
 }

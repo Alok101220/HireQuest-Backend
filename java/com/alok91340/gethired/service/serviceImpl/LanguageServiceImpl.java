@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 
 import com.alok91340.gethired.dto.LanguageDto;
 import com.alok91340.gethired.entities.Language;
-import com.alok91340.gethired.entities.UserProfile;
+import com.alok91340.gethired.entities.CandidateProfile;
 import com.alok91340.gethired.exception.ResourceNotFoundException;
 import com.alok91340.gethired.repository.LanguageRepository;
-import com.alok91340.gethired.repository.UserProfileRepo;
+import com.alok91340.gethired.repository.CandidateRepository;
 import com.alok91340.gethired.service.LanguageService;
 
 /**
@@ -26,17 +26,17 @@ import com.alok91340.gethired.service.LanguageService;
 public class LanguageServiceImpl implements LanguageService{
 	
 	@Autowired
-	private UserProfileRepo userProfileRepository;
+	private CandidateRepository userProfileRepository;
 	
 	@Autowired
 	private LanguageRepository languageRepository;
 
 	@Override
 	public LanguageDto addLanguage(LanguageDto languageDto, Long userProfileId) {
-		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
+		CandidateProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
 		Language language= new Language();
 		mapToEntity(languageDto,language);
-		language.setStudentProfile(userProfile);
+		language.setCandidateProfile(userProfile);
 		Language savedLanguage= this.languageRepository.save(language);
 		return mapToDto(savedLanguage);
 	}
@@ -58,7 +58,7 @@ public class LanguageServiceImpl implements LanguageService{
 
 	@Override
 	public Set<LanguageDto> getAllLanguage(Long userProfileId) {
-		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("User-Profile",userProfileId));
+		CandidateProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("User-Profile",userProfileId));
 		Set<Language> languages=userProfile.getLanguages();
 		Set<LanguageDto>languageDtos=languages.stream().map(language->mapToDto(language)).collect(Collectors.toSet());
 		return languageDtos;

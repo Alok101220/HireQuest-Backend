@@ -3,7 +3,7 @@
  */
 package com.alok91340.gethired.entities;
 
-import java.util.Date;
+import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -17,24 +17,24 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * @author alok91340
+ * @author aloksingh
  *
  */
+
 @Entity
 @Setter
 @Getter
 @NoArgsConstructor
-public class Award {
+public class Otp {
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
+	private long id;
 	
-	private String title;
-	private String date;
-	private String position;
-	private String description;
+	private String otpCode;
 	
-	@ManyToOne
-	@JsonBackReference
-	private CandidateProfile candidateProfile;
+	private String email;
+	
+	private Instant createdAt;
+
 }

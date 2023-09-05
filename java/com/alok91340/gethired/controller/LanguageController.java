@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.alok91340.gethired.dto.LanguageDto;
 import com.alok91340.gethired.service.LanguageService;
@@ -24,7 +25,7 @@ import com.alok91340.gethired.service.LanguageService;
  * @author alok91340
  *
  */
-@Controller
+@RestController
 @RequestMapping("api/gethired")
 public class LanguageController {
 	

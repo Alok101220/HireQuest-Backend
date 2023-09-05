@@ -56,7 +56,7 @@ public class User extends BaseEntity implements UserDetails{
 	
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonBackReference
-	private UserProfile sutdentprofile;
+	private CandidateProfile candidateProfile;
 	
 	@OneToOne(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference
@@ -76,6 +76,15 @@ public class User extends BaseEntity implements UserDetails{
 	@OneToOne(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference
 	private Address address;
+	
+	@OneToOne(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
+	@JsonManagedReference
+	private HrProfile hrProfile;
+	
+//	@OneToOne(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
+//	@JsonManagedReference
+//	private Otp otp;
+	
 	private String fcmToken;
 	
 	// relation with role

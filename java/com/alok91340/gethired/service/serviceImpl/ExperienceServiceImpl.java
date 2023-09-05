@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 
 import com.alok91340.gethired.dto.ExperienceDto;
 import com.alok91340.gethired.entities.Experience;
-import com.alok91340.gethired.entities.UserProfile;
+import com.alok91340.gethired.entities.CandidateProfile;
 import com.alok91340.gethired.exception.ResourceNotFoundException;
 import com.alok91340.gethired.repository.ExperienceRepository;
-import com.alok91340.gethired.repository.UserProfileRepo;
+import com.alok91340.gethired.repository.CandidateRepository;
 import com.alok91340.gethired.service.ExperienceService;
 
 /**
@@ -26,16 +26,16 @@ import com.alok91340.gethired.service.ExperienceService;
 public class ExperienceServiceImpl implements ExperienceService{
 
 	@Autowired
-	private UserProfileRepo userProfileRepository;
+	private CandidateRepository userProfileRepository;
 	
 	@Autowired
 	private ExperienceRepository experienceRepository;
 	
 	@Override
 	public ExperienceDto addExperience(ExperienceDto experienceDto, Long userProfileId) {
-		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
+		CandidateProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
 		Experience experience=mapToEntity(experienceDto);
-		experience.setStudentProfile(userProfile);
+		experience.setCandidateProfile(userProfile);
 		Experience savedExperience=this.experienceRepository.save(experience);
 		return mapToDto(savedExperience);
 	}
@@ -64,7 +64,7 @@ public class ExperienceServiceImpl implements ExperienceService{
 	@Override
 	public Set<ExperienceDto> getAllExperience(Long userProfileId) {
 
-		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("User-Profile",userProfileId));
+		CandidateProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("User-Profile",userProfileId));
 		Set<Experience> experiences=userProfile.getExperiences();
 		Set<ExperienceDto> experienceDtos=experiences.stream().map(experience->mapToDto(experience)).collect(Collectors.toSet());
 		return experienceDtos;

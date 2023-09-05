@@ -38,5 +38,5 @@ public class ProfileLink {
 	
 	@ManyToOne
 	@JsonBackReference
-	private UserProfile studentProfile;
+	private CandidateProfile candidateProfile;
 }

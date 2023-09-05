@@ -5,7 +5,7 @@ package com.alok91340.gethired.dto;
 
 import java.util.List;
 
-import com.alok91340.gethired.entities.UserProfile;
+import com.alok91340.gethired.entities.CandidateProfile;
 
 import lombok.Data;
 

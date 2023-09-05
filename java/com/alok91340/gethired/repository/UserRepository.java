@@ -16,7 +16,7 @@ import com.alok91340.gethired.entities.User;
  * @author alok91340
  *
  */
-public interface UserRepo extends JpaRepository<User,Long> {
+public interface UserRepository extends JpaRepository<User,Long> {
 	
 	User findUserById(Long userId);
 	User findUserByEmail(String email);

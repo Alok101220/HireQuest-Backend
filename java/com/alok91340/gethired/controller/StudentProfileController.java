@@ -22,10 +22,10 @@ import com.alok91340.gethired.dto.Response;
 import com.alok91340.gethired.dto.UserDto;
 import com.alok91340.gethired.dto.UserProfileDto;
 import com.alok91340.gethired.entities.User;
-import com.alok91340.gethired.entities.UserProfile;
+import com.alok91340.gethired.entities.CandidateProfile;
 import com.alok91340.gethired.exception.ResourceNotFoundException;
-import com.alok91340.gethired.repository.UserProfileRepo;
-import com.alok91340.gethired.repository.UserRepo;
+import com.alok91340.gethired.repository.CandidateRepository;
+import com.alok91340.gethired.repository.UserRepository;
 import com.alok91340.gethired.service.UserProfileService;
 import com.alok91340.gethired.utils.Constant;
 
@@ -43,27 +43,27 @@ public class StudentProfileController {
 	private UserProfileService userProfileService;
 	
 	@Autowired
-	private UserRepo userRepository;
+	private UserRepository userRepository;
 	
 	@Autowired
-	private UserProfileRepo userProfileRepository;
+	private CandidateRepository candidateRepository;
 	
 //	get user by id
 	@GetMapping("/{userProfileId}/user-profile")
-	public ResponseEntity<UserProfile> getUser(@PathVariable Long userProfileId){
-		UserProfile userProfile= this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
-		return ResponseEntity.ok(userProfile);
+	public ResponseEntity<CandidateProfile> getUser(@PathVariable Long userProfileId){
+		CandidateProfile candidateProfile= this.candidateRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
+		return ResponseEntity.ok(candidateProfile);
 	}
 	
 //	get all users
 	@GetMapping("/users-profile")
-	public ResponseEntity<List<UserProfile>> getUsers(
+	public ResponseEntity<List<CandidateProfile>> getUsers(
 			@RequestParam(value = "pageNo", defaultValue = Constant.DEFAULT_PAGE_NUMBER) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = Constant.DEFAULT_PAGE_SIZE) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = Constant.DEFAULT_SORT_BY) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = Constant.DEFAULT_SORT_DIRECTION) String sortDir
 			){
-		List<UserProfile> userProfile=userProfileService.getUsersProfile(pageNo,pageSize,sortBy,sortDir);
+		List<CandidateProfile> userProfile=userProfileService.getUsersProfile(pageNo,pageSize,sortBy,sortDir);
 		
 		return ResponseEntity.ok(userProfile);
 	}
@@ -73,8 +73,8 @@ public class StudentProfileController {
 	public ResponseEntity<?> createUser(@PathVariable Long userId,@RequestBody UserProfileDto userProfileDto){
 		
 		User user=userRepository.findUserById(userId);
-		if(user.getSutdentprofile()!=null) {
-			return new ResponseEntity<>(new Response(""," user-profile already exists",HttpStatus.ALREADY_REPORTED),HttpStatus.ALREADY_REPORTED);
+		if(user.getCandidateProfile()!=null) {
+			return new ResponseEntity<>(new Response(""," user-profile already exists",HttpStatus.ALREADY_REPORTED.value()),HttpStatus.ALREADY_REPORTED);
 		}
 		
 		UserProfileDto result=userProfileService.createStudentProfile(userProfileDto,userId);

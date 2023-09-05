@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 import com.alok91340.gethired.dto.AwardDto;
 import com.alok91340.gethired.service.AwardService;
 import com.alok91340.gethired.entities.Award;
-import com.alok91340.gethired.entities.UserProfile;
+import com.alok91340.gethired.entities.CandidateProfile;
 import com.alok91340.gethired.exception.ResourceNotFoundException;
 import com.alok91340.gethired.repository.AwardRepository;
-import com.alok91340.gethired.repository.UserProfileRepo;
+import com.alok91340.gethired.repository.CandidateRepository;
 
 /**
  * @author alok91340
@@ -29,14 +29,14 @@ public class AwardServiceImpl implements AwardService{
 	private AwardRepository awardRepository;
 	
 	@Autowired 
-	private UserProfileRepo userProfileRepository;
+	private CandidateRepository userProfileRepository;
 
 	@Override
 	public AwardDto addAward(AwardDto awardDto, Long userProfileId) {
 
-		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
+		CandidateProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
 		Award award=mapToEntity(awardDto);
-		award.setStudentProfile(userProfile);
+		award.setCandidateProfile(userProfile);
 		Award savedAward=this.awardRepository.save(award);
 		return mapToDto(savedAward);
 	}
@@ -60,7 +60,7 @@ public class AwardServiceImpl implements AwardService{
 
 	@Override
 	public Set<AwardDto> getAllAward(Long userProfileId) {
-		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
+		CandidateProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
 		Set<Award> awards=userProfile.getAwards();
 		Set<AwardDto> awardDtos=awards.stream().map(award->mapToDto(award)).collect(Collectors.toSet());
 		return awardDtos;

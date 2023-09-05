@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.alok91340.gethired.entities.Role;
 import com.alok91340.gethired.entities.User;
-import com.alok91340.gethired.repository.UserRepo;
+import com.alok91340.gethired.repository.UserRepository;
 
 
 
@@ -22,7 +22,7 @@ import com.alok91340.gethired.repository.UserRepo;
 public class CustomUserDetailsService implements UserDetailsService {
 
         @Autowired
-        private UserRepo userRepository;
+        private UserRepository userRepository;
 
         @Override
         public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

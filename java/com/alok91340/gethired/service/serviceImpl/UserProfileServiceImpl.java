@@ -17,9 +17,9 @@ import org.springframework.stereotype.Service;
 
 import com.alok91340.gethired.dto.UserProfileDto;
 import com.alok91340.gethired.entities.User;
-import com.alok91340.gethired.entities.UserProfile;
+import com.alok91340.gethired.entities.CandidateProfile;
 import com.alok91340.gethired.exception.ResourceNotFoundException;
-import com.alok91340.gethired.repository.UserProfileRepo;
+import com.alok91340.gethired.repository.CandidateRepository;
 import com.alok91340.gethired.service.UserProfileService;
 import com.alok91340.gethired.repository.*;
 
@@ -33,20 +33,20 @@ public class UserProfileServiceImpl implements UserProfileService{
 	
 	
 	@Autowired
-	private UserProfileRepo userProfileRepo;
+	private CandidateRepository userProfileRepo;
 	
 	@Autowired
-	private UserRepo userRepository;
+	private UserRepository userRepository;
 	
 	@Override
 	public UserProfileDto createStudentProfile(UserProfileDto userProfileDto, Long userId) {
 		
 		
 		User user= userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("user",userId));
-		UserProfile userProfile= new UserProfile();
+		CandidateProfile userProfile= new CandidateProfile();
 		userProfile.setUser(user);
 		userProfile.setBio(userProfileDto.getBio());
-		UserProfile savedUserProfile=userProfileRepo.save(userProfile);
+		CandidateProfile savedUserProfile=userProfileRepo.save(userProfile);
 		return mapToDto(savedUserProfile);
 		
 		
@@ -88,7 +88,7 @@ public class UserProfileServiceImpl implements UserProfileService{
 	@Override
 	public UserProfileDto getUserProfile(Long userId) {
 		User user=this.userRepository.findById(userId).orElseThrow(()->new ResourceNotFoundException("user",userId));
-		UserProfile userProfile=user.getSutdentprofile();
+		CandidateProfile userProfile=user.getCandidateProfile();
 		UserProfileDto userProfileDto= new UserProfileDto();
 		userProfileDto.setId(userProfile.getId());
 		userProfileDto.setBio(userProfile.getBio());
@@ -97,13 +97,13 @@ public class UserProfileServiceImpl implements UserProfileService{
 	}
 
 	@Override
-	public List<UserProfile> getUsersProfile(int pageNo, int pageSize, String sortBy, String sortDir) {
+	public List<CandidateProfile> getUsersProfile(int pageNo, int pageSize, String sortBy, String sortDir) {
 		Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
 		Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-		Page<UserProfile> userProfiles = userProfileRepo.findAll(pageable);
+		Page<CandidateProfile> userProfiles = userProfileRepo.findAll(pageable);
 		
-		List<UserProfile> userProfileList=userProfiles.getContent();
+		List<CandidateProfile> userProfileList=userProfiles.getContent();
 		
 		List<UserProfileDto> userProfileDtoList = userProfileList.stream()
                 .map(userProfile -> mapToDto(userProfile))
@@ -111,15 +111,15 @@ public class UserProfileServiceImpl implements UserProfileService{
 		return userProfileList;
 	}
 	
-	UserProfileDto mapToDto(UserProfile userProfile) {
+	UserProfileDto mapToDto(CandidateProfile userProfile) {
 		UserProfileDto userProfileDto= new UserProfileDto();
 		userProfileDto.setId(userProfile.getId());
 		userProfileDto.setBio(userProfile.getBio());
 		return userProfileDto;
 	}
 	
-	UserProfile mapToEntity(UserProfileDto userProfileDto) {
-		UserProfile userProfile= new UserProfile();
+	CandidateProfile mapToEntity(UserProfileDto userProfileDto) {
+		CandidateProfile userProfile= new CandidateProfile();
 		userProfile.setBio(userProfileDto.getBio());
 		return userProfile;
 		
@@ -314,11 +314,11 @@ public class UserProfileServiceImpl implements UserProfileService{
 
 	@Override
 	public UserProfileDto updateUserProfile(UserProfileDto userProfileDto, Long userProfileId) {
-		UserProfile userProfile=this.userProfileRepo.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
+		CandidateProfile userProfile=this.userProfileRepo.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
 		userProfile.setBio(userProfileDto.getBio());
 		userProfile.setUpdatedAt(LocalDateTime.now());
 		userProfile.setUpdatedBy(userProfile.getUser().getEmail());
-		UserProfile savedUserProfile=this.userProfileRepo.save(userProfile);
+		CandidateProfile savedUserProfile=this.userProfileRepo.save(userProfile);
 		return mapToDto(savedUserProfile);
 	}
 

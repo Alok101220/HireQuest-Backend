@@ -5,6 +5,7 @@ package com.alok91340.gethired.controller;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.alok91340.gethired.utils.Constant;
+import com.alok91340.gethired.utils.GoogleIdTokenVerifierUtil;
 import com.alok91340.gethired.utils.isAuthenticatedAsAdminOrUser;
 import com.alok91340.gethired.dto.LoginDto;
 import com.alok91340.gethired.dto.RegistrationResponse;
@@ -37,7 +39,7 @@ import com.alok91340.gethired.dto.UserDto;
 import com.alok91340.gethired.entities.User;
 import com.alok91340.gethired.exception.GlobalExceptionHandler;
 import com.alok91340.gethired.exception.ResourceNotFoundException;
-import com.alok91340.gethired.repository.UserRepo;
+import com.alok91340.gethired.repository.UserRepository;
 import com.alok91340.gethired.security.JwtAuthResponse;
 import com.alok91340.gethired.security.JwtTokenProvider;
 import com.alok91340.gethired.service.UserService;
@@ -70,7 +72,7 @@ public class UserController {
     }
 	
     @Autowired
-    private UserRepo userRepo;
+    private UserRepository userRepo;
 //	get user by id
     @isAuthenticatedAsAdminOrUser
 	@GetMapping("/user/{userId}")
@@ -120,6 +122,32 @@ public class UserController {
 	@PostMapping(value="login", produces = "application/json")
     public ResponseEntity<JwtAuthResponse> authenticateUser(@RequestBody LoginDto loginDto) throws Exception {
 
+		if(!loginDto.getGoogleIdToken().isEmpty()) {
+			
+//			String userEmailFromGoogle=GoogleIdTokenVerifierUtil.verifyAndExtractEmail(loginDto.getGoogleIdToken());
+			
+			User optionalUser = userRepo.findUserByEmail(loginDto.getGoogleIdToken());
+            User user;
+//            if (optionalUser.isPresent()) {
+//                user = optionalUser.get();
+//            } else {
+//                // Create a new user if not found
+//                user = new User();
+//                user.setUsername(userEmailFromGoogle);
+//                // Set other user attributes as needed
+//                userRepo.save(user);
+//            }
+            user=optionalUser;
+
+            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+            String token = tokenProvider.generateToken(userDetails);
+            user.setFcmToken(loginDto.getFcmToken());
+            this.userRepo.save(user);
+            return ResponseEntity.ok(new JwtAuthResponse(token));
+            
+		}
+		else {
+		
         authenticate(loginDto.getUsername(),
 
                 loginDto.getPassword());
@@ -133,6 +161,7 @@ public class UserController {
         user.setFcmToken(loginDto.getFcmToken());
         this.userRepo.save(user);
         return ResponseEntity.ok(new JwtAuthResponse(token));
+		}
     }
 
 	
@@ -170,6 +199,11 @@ public class UserController {
 		boolean isAvailable=this.userRepo.existsByUsername(username);
 		return new ResponseEntity<>(isAvailable,HttpStatus.OK);
 	}
+	@GetMapping("{email}/check-email")
+	public ResponseEntity<Boolean> checkEmail(@PathVariable String email){
+		boolean isAvailable=this.userRepo.existsByEmail(email);
+		return new ResponseEntity<>(isAvailable,HttpStatus.OK);
+	}
 	
 	@GetMapping("/search")
     public ResponseEntity<List<User>> searchUsers(@RequestParam String query) {
@@ -182,6 +216,12 @@ public class UserController {
 		String username= this.tokenProvider.getUserNameFromToken(token);
 		User user=this.userRepo.findByUsername(username).orElseThrow(()-> new ResourceNotFoundException("user",(long)0));
 		UserDto userDto=this.mapToDto(user);
+		return new ResponseEntity<>(userDto,HttpStatus.OK);
+	}
+	
+	@PutMapping("{email}/{password}/change-password")
+	public ResponseEntity<UserDto> changePassword(@PathVariable String email,@PathVariable String password){
+		UserDto userDto=this.userService.updatePassword(email, email);
 		return new ResponseEntity<>(userDto,HttpStatus.OK);
 	}
 	

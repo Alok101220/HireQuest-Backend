@@ -15,5 +15,5 @@ import com.alok91340.gethired.dto.ProjectDto;
  *
  */
 public interface ProjectRepository extends JpaRepository<Project,Long>{
-	List<ProjectDto> findAllByStudentProfileId(Long userProfileId);
+	List<ProjectDto> findAllByCandidateProfileId(Long userProfileId);
 }

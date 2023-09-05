@@ -1,24 +1,32 @@
+/**
+ * 
+ */
 package com.alok91340.gethired.entities;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+/**
+ * @author aloksingh
+ *
+ */
 
 @Entity
-public class Hr {
+@Setter
+@Getter
+@NoArgsConstructor
+public class PdfGenerator {
 	
-
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
 	
-	
-	@OneToOne
-	@JsonManagedReference
-	private User user;
-
+	private String name;
+	private String username;
+	private String email;
 }

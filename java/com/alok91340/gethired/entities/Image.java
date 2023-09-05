@@ -30,7 +30,9 @@ public class Image {
 	private long id;
 	
 	private String name;
+	
 	private byte[] data;
+	
 	private String type;
 	
 	@OneToOne

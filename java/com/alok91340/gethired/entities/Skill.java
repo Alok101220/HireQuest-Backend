@@ -34,7 +34,11 @@ public class Skill {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JsonBackReference
-	private UserProfile studentProfile;
+	private CandidateProfile candidateProfile;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonBackReference
+	private HrProfile hrProfile;
 	
 
 }

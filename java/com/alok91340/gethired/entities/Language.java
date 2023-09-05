@@ -34,6 +34,10 @@ public class Language {
 	
 	@ManyToOne
 	@JsonBackReference
-	private UserProfile studentProfile;
+	private CandidateProfile candidateProfile;
+	
+	@ManyToOne
+	@JsonBackReference
+	private HrProfile hrProfile;
 	
 }

@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 
 import com.alok91340.gethired.dto.ProfileLinkDto;
 import com.alok91340.gethired.entities.ProfileLink;
-import com.alok91340.gethired.entities.UserProfile;
+import com.alok91340.gethired.entities.CandidateProfile;
 import com.alok91340.gethired.exception.ResourceNotFoundException;
 import com.alok91340.gethired.repository.ProfileLinkRepository;
-import com.alok91340.gethired.repository.UserProfileRepo;
+import com.alok91340.gethired.repository.CandidateRepository;
 import com.alok91340.gethired.service.ProfileLinkService;
 
 /**
@@ -26,7 +26,7 @@ import com.alok91340.gethired.service.ProfileLinkService;
 public class ProfileLinkServiceImpl implements ProfileLinkService{
 	
 	@Autowired
-	private UserProfileRepo userProfileRepository;
+	private CandidateRepository userProfileRepository;
 	
 	@Autowired
 	private ProfileLinkRepository profileLinkRespository;
@@ -34,10 +34,10 @@ public class ProfileLinkServiceImpl implements ProfileLinkService{
 	@Override
 	public ProfileLinkDto addProfileLink(ProfileLinkDto profileLinkDto, Long userProfileId) {
 		
-		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
+		CandidateProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
 		ProfileLink profileLink= new ProfileLink();
 		mapToEntity(profileLinkDto,profileLink);
-		profileLink.setStudentProfile(userProfile);
+		profileLink.setCandidateProfile(userProfile);
 		ProfileLink savedProfileLink=this.profileLinkRespository.save(profileLink);
 		return mapToDto(savedProfileLink);
 	}
@@ -57,7 +57,7 @@ public class ProfileLinkServiceImpl implements ProfileLinkService{
 	}
 	@Override
 	public Set<ProfileLinkDto> getAllProfileLink(Long userProfileId) {
-		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("User-Profile",userProfileId));
+		CandidateProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("User-Profile",userProfileId));
 		Set<ProfileLink> profileLinks=userProfile.getProfileLinks();
 		Set<ProfileLinkDto> profileLinkDtos=profileLinks.stream().map(profileLink->mapToDto(profileLink)).collect(Collectors.toSet());
 		

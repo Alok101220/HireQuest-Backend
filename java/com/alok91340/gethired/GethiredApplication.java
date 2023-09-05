@@ -3,15 +3,15 @@ package com.alok91340.gethired;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 
 import com.alok91340.gethired.utils.Constant;
+
+
 import com.alok91340.gethired.entities.Role;
 import com.alok91340.gethired.repository.RoleRepository;
 

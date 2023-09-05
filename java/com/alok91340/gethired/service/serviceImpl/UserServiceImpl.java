@@ -18,10 +18,10 @@ import org.springframework.stereotype.Service;
 
 import com.alok91340.gethired.dto.UserDto;
 import com.alok91340.gethired.entities.User;
-import com.alok91340.gethired.entities.UserProfile;
+import com.alok91340.gethired.entities.CandidateProfile;
 import com.alok91340.gethired.exception.ResourceNotFoundException;
-import com.alok91340.gethired.repository.UserProfileRepo;
-import com.alok91340.gethired.repository.UserRepo;
+import com.alok91340.gethired.repository.CandidateRepository;
+import com.alok91340.gethired.repository.UserRepository;
 import com.alok91340.gethired.service.UserService;
 
 /**
@@ -32,15 +32,15 @@ import com.alok91340.gethired.service.UserService;
 public class UserServiceImpl implements UserService{
 
 	@Autowired
-	private UserRepo userRepo;
+	private UserRepository userRepo;
 	
 	@Autowired
-	private UserProfileRepo userProfileRepository;
+	private CandidateRepository candidateRepository;
 	
 	
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	
-	public UserServiceImpl(UserRepo userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+	public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepo = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
@@ -83,13 +83,13 @@ public class UserServiceImpl implements UserService{
 	    User user = userRepo.findById(userId)
 	                        .orElseThrow(() -> new ResourceNotFoundException("user", userId));
 
-	    if (user.getSutdentprofile() == null && userDto.getIsRecuritie() == 1) {
-	        UserProfile userProfile = new UserProfile();
+	    if (user.getCandidateProfile() == null && userDto.getIsRecuritie() == 1) {
+	        CandidateProfile userProfile = new CandidateProfile();
 	        userProfile.setCreatedAt(LocalDateTime.now());
 	        userProfile.setCreatedBy(user.getCreatedBy());
 	        userProfile.setUser(user);
-	        UserProfile savedUserProfile = this.userProfileRepository.save(userProfile);
-	        user.setSutdentprofile(savedUserProfile);
+	        CandidateProfile savedUserProfile = this.candidateRepository.save(userProfile);
+	        user.setCandidateProfile(savedUserProfile);
 	        user.setIsRecuritie(1);
 	    }
 	    
@@ -165,5 +165,15 @@ public class UserServiceImpl implements UserService{
 		userDto.setCurrentCompany(user.getCurrentCompany());
 		userDto.setFcmToken(user.getFcmToken());
 		return userDto;
+	}
+
+	@Override
+	public UserDto updatePassword(String email,String password) {
+		User user=this.userRepo.findUserByEmail(email);
+		String hashedPassword = bCryptPasswordEncoder.encode(password);
+		user.setPassword(hashedPassword);
+		User updatedUser=this.userRepo.save(user);
+		
+		return mapToDto(updatedUser);
 	}
 }

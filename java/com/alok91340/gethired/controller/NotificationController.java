@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alok91340.gethired.dto.NotificationRequest;
 import com.alok91340.gethired.entities.User;
 import com.alok91340.gethired.exception.ResourceNotFoundException;
-import com.alok91340.gethired.repository.UserRepo;
+import com.alok91340.gethired.repository.UserRepository;
 import com.alok91340.gethired.service.serviceImpl.NotificationService;
 
 @RestController
@@ -26,7 +26,7 @@ public class NotificationController {
  private final NotificationService notificationService;
  
  @Autowired
- private UserRepo userRepository;
+ private UserRepository userRepository;
 
  @Autowired
  public NotificationController(NotificationService notificationService) {

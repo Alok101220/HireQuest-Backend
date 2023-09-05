@@ -19,5 +19,5 @@ import lombok.NoArgsConstructor;
 public class Response {
 	private String url;
 	private String message;
-	private HttpStatus status;
+	private int status;
 }

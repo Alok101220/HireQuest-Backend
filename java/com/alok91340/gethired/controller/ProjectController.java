@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.alok91340.gethired.dto.ProjectDto;
 import com.alok91340.gethired.service.ProjectService;
@@ -25,7 +26,7 @@ import com.alok91340.gethired.utils.isAuthenticatedAsAdminOrUser;
  * @author alok91340
  *
  */
-@Controller
+@RestController
 @RequestMapping("api/gethired")
 public class ProjectController {
 	

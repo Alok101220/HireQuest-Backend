@@ -25,5 +25,7 @@ public interface UserService {
 	
 	String deleteUser(Long userId);
 	
+	UserDto updatePassword(String email,String password);
+	
 	
 }

@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 import com.alok91340.gethired.dto.ProjectDto;
 import com.alok91340.gethired.entities.Project;
 import com.alok91340.gethired.entities.User;
-import com.alok91340.gethired.entities.UserProfile;
+import com.alok91340.gethired.entities.CandidateProfile;
 import com.alok91340.gethired.exception.ResourceNotFoundException;
 import com.alok91340.gethired.repository.ProjectRepository;
-import com.alok91340.gethired.repository.UserProfileRepo;
+import com.alok91340.gethired.repository.CandidateRepository;
 import com.alok91340.gethired.service.ProjectService;
 
 /**
@@ -27,7 +27,7 @@ import com.alok91340.gethired.service.ProjectService;
 public class ProjectServiceImpl implements ProjectService{
 	
 	@Autowired
-	private UserProfileRepo userProfileRepository;
+	private CandidateRepository userProfileRepository;
 	
 	@Autowired
 	private ProjectRepository projectRepository;
@@ -35,9 +35,9 @@ public class ProjectServiceImpl implements ProjectService{
 	@Override
 	public ProjectDto addProject(ProjectDto projectDto, Long userProfileId) {
 		
-		UserProfile userProfile = this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
+		CandidateProfile userProfile = this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
 		Project project=mapToEntity(projectDto);
-		project.setStudentProfile(userProfile);
+		project.setCandidateProfile(userProfile);
 		Project savedProject = this.projectRepository.save(project);
 		
 		return mapToDto(savedProject);
@@ -64,7 +64,7 @@ public class ProjectServiceImpl implements ProjectService{
 
 	@Override
 	public Set<ProjectDto> getAllProject(Long userProfileId) {
-		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
+		CandidateProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
 		Set<Project> projects = userProfile.getProjects();
 		Set<ProjectDto> projectDtos=projects.stream().map(project->mapToDto(project)).collect(Collectors.toSet());
 		

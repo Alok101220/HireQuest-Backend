@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 
 import com.alok91340.gethired.dto.EducationDto;
 import com.alok91340.gethired.entities.Education;
-import com.alok91340.gethired.entities.UserProfile;
+import com.alok91340.gethired.entities.CandidateProfile;
 import com.alok91340.gethired.exception.ResourceNotFoundException;
 import com.alok91340.gethired.repository.EducationRepository;
-import com.alok91340.gethired.repository.UserProfileRepo;
+import com.alok91340.gethired.repository.CandidateRepository;
 import com.alok91340.gethired.service.EducationService;
 
 /**
@@ -27,7 +27,7 @@ import com.alok91340.gethired.service.EducationService;
 public class EducationServiceImpl implements EducationService{
 
 	@Autowired
-	private UserProfileRepo userProfileRepository;
+	private CandidateRepository userProfileRepository;
 	
 	@Autowired
 	private EducationRepository educationRepository;
@@ -35,10 +35,10 @@ public class EducationServiceImpl implements EducationService{
 	
 	@Override
 	public EducationDto addEducation(EducationDto educationDto, Long userProfileId) {
-		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
+		CandidateProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
 		Education education=new Education();
 		mapToEntity(educationDto,education);
-		education.setStudentProfile(userProfile);
+		education.setCandidateProfile(userProfile);
 		Education savedEducation=this.educationRepository.save(education);
 		return mapToDto(savedEducation);
 	}
@@ -60,7 +60,7 @@ public class EducationServiceImpl implements EducationService{
 
 	@Override
 	public Set<EducationDto> getAllEducation(Long userprofileId) {
-		UserProfile userProfile=this.userProfileRepository.findById(userprofileId).orElseThrow(()->new ResourceNotFoundException("user with userprofile Id",userprofileId));
+		CandidateProfile userProfile=this.userProfileRepository.findById(userprofileId).orElseThrow(()->new ResourceNotFoundException("user with userprofile Id",userprofileId));
 		Set<Education> educations=userProfile.getEducations();
 		Set<EducationDto>educationDtos=educations.stream().map(education -> mapToDto(education))
                 .collect(Collectors.toSet());

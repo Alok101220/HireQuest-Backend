@@ -12,7 +12,7 @@ import com.alok91340.gethired.dto.AddressDto;
 import com.alok91340.gethired.entities.Address;
 import com.alok91340.gethired.exception.ResourceNotFoundException;
 import com.alok91340.gethired.repository.AddressRepository;
-import com.alok91340.gethired.repository.UserRepo;
+import com.alok91340.gethired.repository.UserRepository;
 import com.alok91340.gethired.service.AddressService;
 import com.alok91340.gethired.entities.User;
 
@@ -24,7 +24,7 @@ import com.alok91340.gethired.entities.User;
 public class AddressServiceImpl implements AddressService{
 
 	@Autowired 
-	private UserRepo userRepository;
+	private UserRepository userRepository;
 	
 	@Autowired
 	private AddressRepository addressRepository;
