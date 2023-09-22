@@ -31,8 +31,8 @@ public class HrExperience {
 	
 	
 	
-	@ManyToOne
-	@JsonBackReference
-	private HrProfile hrProfile;
+//	@ManyToOne
+//	@JsonBackReference
+//	private HrProfile hrProfile;
 
 }

@@ -33,12 +33,13 @@ public class Certificate {
 	private String start;
 	private String end;
 	private String organisation;
+	private String certificateUrl;
 	
 	@ManyToOne
 	@JsonBackReference
-	private CandidateProfile candidateProfile;
+	private UserProfile userProfile;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonBackReference
-	private HrProfile hrProfile;
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JsonBackReference
+//	private HrProfile hrProfile;
 }

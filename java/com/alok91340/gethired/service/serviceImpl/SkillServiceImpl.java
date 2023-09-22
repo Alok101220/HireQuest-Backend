@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.alok91340.gethired.dto.SkillDto;
 import com.alok91340.gethired.entities.Skill;
-import com.alok91340.gethired.entities.CandidateProfile;
+import com.alok91340.gethired.entities.UserProfile;
 import com.alok91340.gethired.exception.ResourceNotFoundException;
 import com.alok91340.gethired.repository.SkillRepository;
-import com.alok91340.gethired.repository.CandidateRepository;
+import com.alok91340.gethired.repository.UserProfileRepository;
 import com.alok91340.gethired.service.SkillService;
 
 /**
@@ -28,14 +28,14 @@ public class SkillServiceImpl implements SkillService{
 	private SkillRepository skillRepository;
 	
 	@Autowired
-	private CandidateRepository userProfileRepository;
+	private UserProfileRepository userProfileRepository;
 
 	@Override
 	public SkillDto addSkill(Long userProfileId, SkillDto skillDto) {
 		
-		CandidateProfile userProfile=userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
+		UserProfile userProfile=userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
 		Skill skill= mapToEntity(skillDto);
-		skill.setCandidateProfile(userProfile);
+		skill.setUserProfile(userProfile);
 		Skill savedSkill=skillRepository.save(skill);
 		
 		return mapToDto(savedSkill);
@@ -44,7 +44,7 @@ public class SkillServiceImpl implements SkillService{
 	@Override
 	public SkillDto updateSkill(Long skillId, SkillDto skillDto) {
 		Skill skill= skillRepository.findById(skillId).orElseThrow(()-> new ResourceNotFoundException("skill",skillId));
-		skill.setName(skillDto.getName());
+		skill.setSkillName(skillDto.getSkillName());
 		skillRepository.save(skill);
 		return mapToDto(skill);
 	}
@@ -62,21 +62,21 @@ public class SkillServiceImpl implements SkillService{
 	}
 	@Override
 	public Set<SkillDto> getAllSkill(Long userProfileId){
-		CandidateProfile userProfile=userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
+		UserProfile userProfile=userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
 		Set<Skill> skills=userProfile.getSkills();
 		Set<SkillDto> skillDtos=skills.stream().map(skill->mapToDto(skill)).collect(Collectors.toSet());
 		return skillDtos;
 	}
 	Skill mapToEntity(SkillDto skillDto) {
 		Skill skill= new Skill();
-		skill.setName(skillDto.getName());
+		skill.setSkillName(skillDto.getSkillName());
 		return skill;
 	}
 	SkillDto mapToDto(Skill skill) {
 		
 		SkillDto skillDto= new SkillDto();
 		skillDto.setId(skill.getId());
-		skillDto.setName(skill.getName());
+		skillDto.setSkillName(skill.getSkillName());
 		
 		return skillDto;
 	}

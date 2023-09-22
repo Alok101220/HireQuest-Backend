@@ -3,11 +3,10 @@
  */
 package com.alok91340.gethired.entities;
 
-import java.util.List;
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,25 +17,24 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * @author alok91340
+ * @author aloksingh
  *
  */
 @Entity
 @Setter
 @Getter
 @NoArgsConstructor
-public class ProfileLink {
-	
+public class Meeting {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
 	
-	@Column(name="handleName")
-	private String handleName;
-	
-	private String link;
+	private String timeStamp;
+	private String url;
+	private boolean isAttended;
 	
 	@ManyToOne
 	@JsonBackReference
-	private CandidateProfile candidateProfile;
+	private User user;
+
 }

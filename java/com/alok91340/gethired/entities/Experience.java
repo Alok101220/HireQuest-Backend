@@ -37,7 +37,7 @@ public class Experience {
 	@Size(max = 1000)
 	private String description;
 	
-	private String link;
+	private String experienceUrl;
 	
 	private String start;
 	private String end;
@@ -47,5 +47,5 @@ public class Experience {
 	
 	@ManyToOne
 	@JsonBackReference
-	private CandidateProfile candidateProfile;
+	private UserProfile userProfile;
 }

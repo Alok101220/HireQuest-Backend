@@ -46,28 +46,28 @@ public class HrProfile extends BaseEntity{
 	
 	private String jobType;
 	
-	@OneToMany(mappedBy="hrProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
-	@JsonManagedReference
-	private Set<Skill> skills= new HashSet<>();
-	
-	@OneToMany(mappedBy="hrProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
-	@JsonManagedReference
-	private Set<Education> educations;
-	
-	@OneToMany(mappedBy="hrProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
-	@JsonManagedReference
-	private Set<Certificate> certificates;
-	
-	@OneToMany(mappedBy="hrProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
-	@JsonManagedReference
-	private Set<Language> languages;
-	
-	@OneToMany(mappedBy="hrProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
-	@JsonManagedReference
-	private Set<HrExperience> hrExperience;
-	
-	@OneToOne
-	@JsonManagedReference
-	private User user;
+//	@OneToMany(mappedBy="hrProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
+//	@JsonManagedReference
+//	private Set<Skill> skills= new HashSet<>();
+//	
+//	@OneToMany(mappedBy="hrProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
+//	@JsonManagedReference
+//	private Set<Education> educations;
+//	
+//	@OneToMany(mappedBy="hrProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
+//	@JsonManagedReference
+//	private Set<Certificate> certificates;
+//	
+//	@OneToMany(mappedBy="hrProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
+//	@JsonManagedReference
+//	private Set<Language> languages;
+//	
+//	@OneToMany(mappedBy="hrProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
+//	@JsonManagedReference
+//	private Set<HrExperience> hrExperience;
+//	
+//	@OneToOne
+//	@JsonManagedReference
+//	private User user;
 
 }

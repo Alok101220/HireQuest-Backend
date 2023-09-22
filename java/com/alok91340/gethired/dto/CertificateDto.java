@@ -16,4 +16,5 @@ public class CertificateDto {
 	private String start;
 	private String end;
 	private String organisation;
+	private String certificateUrl;
 }

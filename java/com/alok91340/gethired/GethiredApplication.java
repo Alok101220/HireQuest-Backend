@@ -3,11 +3,11 @@ package com.alok91340.gethired;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 import com.alok91340.gethired.utils.Constant;
 
@@ -17,6 +17,7 @@ import com.alok91340.gethired.repository.RoleRepository;
 
 
 @SpringBootApplication
+@ComponentScan(basePackages = "com.alok91340.gethired")
 public class GethiredApplication implements CommandLineRunner{
 
 	@Autowired 

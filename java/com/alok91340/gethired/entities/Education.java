@@ -38,9 +38,5 @@ public class Education {
 	
 	@ManyToOne
 	@JsonBackReference
-	private CandidateProfile candidateProfile;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonBackReference
-	private HrProfile hrProfile;
+	private UserProfile userProfile;
 }

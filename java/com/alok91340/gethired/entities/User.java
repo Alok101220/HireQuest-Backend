@@ -23,6 +23,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,19 +46,14 @@ public class User extends BaseEntity implements UserDetails{
 	
 	private String username;
 	
-	@Length(min = 3, max = 15)
 	private String name;
 	
 	private String email;
-	
 	
 	private String password;
 	
 	private String headline;
 	
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
-	@JsonBackReference
-	private CandidateProfile candidateProfile;
 	
 	@OneToOne(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference
@@ -64,26 +61,17 @@ public class User extends BaseEntity implements UserDetails{
 	
 	private String birthdate;
 	
-	private String currentCompany;
+	private String currentOccupation;
 	
 	private boolean status;
 	
 	private String phone;
 	
-	private int isRecuritie;
 	private int isRecuriter;
 	
 	@OneToOne(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference
 	private Address address;
-	
-	@OneToOne(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
-	@JsonManagedReference
-	private HrProfile hrProfile;
-	
-//	@OneToOne(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
-//	@JsonManagedReference
-//	private Otp otp;
 	
 	private String fcmToken;
 	

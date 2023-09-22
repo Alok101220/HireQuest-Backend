@@ -3,12 +3,11 @@
  */
 package com.alok91340.gethired.entities;
 
-import java.util.List;
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,16 +24,17 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class Skill {
+public class Appreciation {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	private String skillName;
+	private String title;
+	private String date;
+	private String position;
+	private String description;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JsonBackReference
 	private UserProfile userProfile;
-	
-
 }

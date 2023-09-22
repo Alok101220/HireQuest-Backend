@@ -8,10 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.Random;
 
 import com.alok91340.gethired.entities.Otp;
-import com.alok91340.gethired.entities.User;
-import com.alok91340.gethired.exception.ResourceNotFoundException;
 import com.alok91340.gethired.repository.OtpRepository;
-import com.alok91340.gethired.repository.UserRepository;
 import com.alok91340.gethired.service.EmailServiceImpl;
 import com.alok91340.gethired.service.OtpService;
 

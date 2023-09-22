@@ -13,6 +13,4 @@ import lombok.Data;
 public class LanguageDto {
 	private Long id;
 	private String name;
-	
-	private String proficencyLevel;
 }

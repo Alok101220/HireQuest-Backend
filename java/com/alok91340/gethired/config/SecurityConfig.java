@@ -37,7 +37,8 @@ public class SecurityConfig {
             "/api/gethired/{otpCode}/{email}/otp-verification",
             "/api/gethired/{email}/check-email",
             "/api/gethired/{username}/check-username",
-            "/api/gethired/{email}/{password}/change-password"
+            "/api/gethired/{email}/{password}/change-password",
+            "/ws/{token}"
     };
 
     @Autowired(required = false)

@@ -29,51 +29,53 @@ import lombok.Setter;
  *
  */
 @Entity
-@Table(name="student_profile")
+@Table(name="user_profile")
 @Setter
 @Getter
 @NoArgsConstructor
-public class CandidateProfile extends BaseEntity {
+public class UserProfile extends BaseEntity {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
 	
-	private String bio;
+	private String about;
 	
-	@OneToMany(mappedBy="candidateProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
+	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference
-	private Set<ProfileLink> profileLinks;
+	private Set<Profile> profiles;
 	
-	@OneToMany(mappedBy="candidateProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
+	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference
 	private Set<Education> educations;
 	
-	@OneToMany(mappedBy="candidateProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
+	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference
 	private Set<Certificate> certificates;
 	
-	@OneToMany(mappedBy="candidateProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
+	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference
 	private Set<Skill> skills= new HashSet<>();
 	
-	@OneToMany(mappedBy="candidateProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
+	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference
 	private Set<Experience> experiences;
 	
-	@OneToMany(mappedBy="candidateProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
+	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference
 	private Set<Project> projects;
 	
-	@OneToMany(mappedBy="candidateProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
+	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference
 	private Set<Language> languages;
 	
-	private Set<String> intrests;
-	
-	@OneToMany(mappedBy="candidateProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
+	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference
-	private Set<Award> awards;
+	private Set<Hobbies> hobbies;
+	
+	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
+	@JsonManagedReference
+	private Set<Appreciation> appreciations;
 	
 	@OneToOne
 	@JsonManagedReference

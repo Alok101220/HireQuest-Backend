@@ -5,7 +5,7 @@ package com.alok91340.gethired.dto;
 
 import java.util.List;
 
-import com.alok91340.gethired.entities.CandidateProfile;
+import com.alok91340.gethired.entities.UserProfile;
 
 import lombok.Data;
 
@@ -22,13 +22,9 @@ public class UserDto {
 	private String password;
 	private String headline;
 	private String birthdate;
-
-	private String currentCompany;
-
+	private String currentOccupation;
 	private boolean status;
-
 	private String phone;
-	private int isRecuritie;
 	private int isRecuriter;
 	private String fcmToken;
 }

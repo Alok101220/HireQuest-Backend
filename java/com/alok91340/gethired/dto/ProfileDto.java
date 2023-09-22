@@ -10,10 +10,10 @@ import lombok.Data;
  *
  */
 @Data
-public class ProfileLinkDto {
+public class ProfileDto {
 	private Long id;
-	private String handleName;
+	private String profileName;
 	
-	private String link;
+	private String profileUrl;
 	
 }

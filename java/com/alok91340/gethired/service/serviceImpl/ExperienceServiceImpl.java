@@ -3,7 +3,6 @@
  */
 package com.alok91340.gethired.service.serviceImpl;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -12,10 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.alok91340.gethired.dto.ExperienceDto;
 import com.alok91340.gethired.entities.Experience;
-import com.alok91340.gethired.entities.CandidateProfile;
+import com.alok91340.gethired.entities.UserProfile;
 import com.alok91340.gethired.exception.ResourceNotFoundException;
 import com.alok91340.gethired.repository.ExperienceRepository;
-import com.alok91340.gethired.repository.CandidateRepository;
+import com.alok91340.gethired.repository.UserProfileRepository;
 import com.alok91340.gethired.service.ExperienceService;
 
 /**
@@ -26,16 +25,16 @@ import com.alok91340.gethired.service.ExperienceService;
 public class ExperienceServiceImpl implements ExperienceService{
 
 	@Autowired
-	private CandidateRepository userProfileRepository;
+	private UserProfileRepository userProfileRepository;
 	
 	@Autowired
 	private ExperienceRepository experienceRepository;
 	
 	@Override
 	public ExperienceDto addExperience(ExperienceDto experienceDto, Long userProfileId) {
-		CandidateProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
+		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
 		Experience experience=mapToEntity(experienceDto);
-		experience.setCandidateProfile(userProfile);
+		experience.setUserProfile(userProfile);
 		Experience savedExperience=this.experienceRepository.save(experience);
 		return mapToDto(savedExperience);
 	}
@@ -55,7 +54,7 @@ public class ExperienceServiceImpl implements ExperienceService{
 		experience.setPosition(experienceDto.getPosition());
 		experience.setOrganisation(experienceDto.getOrganisation());
 		experience.setDescription(experienceDto.getDescription());
-		experience.setLink(experienceDto.getLink());
+		experience.setExperienceUrl(experienceDto.getExperienceUrl());
 		Experience savedExperience=this.experienceRepository.save(experience);
 		
 		return mapToDto(savedExperience);
@@ -64,7 +63,7 @@ public class ExperienceServiceImpl implements ExperienceService{
 	@Override
 	public Set<ExperienceDto> getAllExperience(Long userProfileId) {
 
-		CandidateProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("User-Profile",userProfileId));
+		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("User-Profile",userProfileId));
 		Set<Experience> experiences=userProfile.getExperiences();
 		Set<ExperienceDto> experienceDtos=experiences.stream().map(experience->mapToDto(experience)).collect(Collectors.toSet());
 		return experienceDtos;
@@ -82,7 +81,7 @@ public class ExperienceServiceImpl implements ExperienceService{
 		experience.setDescription(experienceDto.getDescription());
 		experience.setPosition(experienceDto.getPosition());
 		experience.setOrganisation(experienceDto.getOrganisation());
-		experience.setLink(experienceDto.getLink());
+		experience.setExperienceUrl(experienceDto.getExperienceUrl());
 		experience.setTitle(experienceDto.getTitle());
 		experience.setStart(experienceDto.getStart());
 		experience.setEnd(experienceDto.getEnd());
@@ -93,7 +92,7 @@ public class ExperienceServiceImpl implements ExperienceService{
 		ExperienceDto experienceDto= new ExperienceDto();
 		experienceDto.setId(experience.getId());
 		experienceDto.setTitle(experience.getTitle());
-		experienceDto.setLink(experience.getLink());
+		experienceDto.setExperienceUrl(experience.getExperienceUrl());
 		experienceDto.setDescription(experience.getDescription());
 		experienceDto.setPosition(experience.getPosition());
 		experienceDto.setOrganisation(experience.getOrganisation());

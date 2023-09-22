@@ -3,7 +3,6 @@
  */
 package com.alok91340.gethired.service.serviceImpl;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -12,10 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.alok91340.gethired.dto.CertificateDto;
 import com.alok91340.gethired.entities.Certificate;
-import com.alok91340.gethired.entities.CandidateProfile;
+import com.alok91340.gethired.entities.UserProfile;
 import com.alok91340.gethired.exception.ResourceNotFoundException;
 import com.alok91340.gethired.repository.CertificateRepository;
-import com.alok91340.gethired.repository.CandidateRepository;
+import com.alok91340.gethired.repository.UserProfileRepository;
 import com.alok91340.gethired.service.CertificateService;
 
 /**
@@ -28,17 +27,17 @@ public class CertificateServiceImpl implements CertificateService{
 	
 
 	@Autowired 
-	CertificateRepository certificateRepository;
+	private CertificateRepository certificateRepository;
 	
 	@Autowired
-	private CandidateRepository userProfileRepository;
+	private UserProfileRepository userProfileRepository;
 	
 	@Override
 	public CertificateDto addCertificate(CertificateDto certificateDto, Long userProfileId) {
-		CandidateProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()-> new ResourceNotFoundException("user-profile",userProfileId));
+		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()-> new ResourceNotFoundException("user-profile",userProfileId));
 		Certificate certificate= new Certificate();
 		mapToEntity(certificateDto, certificate);
-		certificate.setCandidateProfile(userProfile);
+		certificate.setUserProfile(userProfile);
 		Certificate savedCertificate=this.certificateRepository.save(certificate);
 		return mapToDto(savedCertificate);
 	}
@@ -60,7 +59,7 @@ public class CertificateServiceImpl implements CertificateService{
 
 	@Override
 	public Set<CertificateDto> getAllCertificate(Long userProfileId) {
-		CandidateProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()-> new ResourceNotFoundException("user-profile",userProfileId));
+		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()-> new ResourceNotFoundException("user-profile",userProfileId));
 		Set<Certificate> certificates=userProfile.getCertificates();
 		Set<CertificateDto> certificateDto=certificates.stream().map(certificate->mapToDto(certificate)).collect(Collectors.toSet());
 		return certificateDto;

@@ -6,7 +6,6 @@ package com.alok91340.gethired.service.serviceImpl;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,11 +17,11 @@ import org.springframework.stereotype.Service;
 
 import com.alok91340.gethired.dto.UserDto;
 import com.alok91340.gethired.entities.User;
-import com.alok91340.gethired.entities.CandidateProfile;
 import com.alok91340.gethired.exception.ResourceNotFoundException;
-import com.alok91340.gethired.repository.CandidateRepository;
+import com.alok91340.gethired.repository.UserProfileRepository;
 import com.alok91340.gethired.repository.UserRepository;
 import com.alok91340.gethired.service.UserService;
+import com.alok91340.gethired.entities.UserProfile;
 
 /**
  * @author alok91340
@@ -35,7 +34,7 @@ public class UserServiceImpl implements UserService{
 	private UserRepository userRepo;
 	
 	@Autowired
-	private CandidateRepository candidateRepository;
+	private UserProfileRepository userProfileRepository;
 	
 	
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -51,6 +50,11 @@ public class UserServiceImpl implements UserService{
 		User user=new User();
 		mapToEntity(user,userDto);
 		User savedUser=userRepo.save(user);
+		
+		UserProfile userProfile=new UserProfile();
+		userProfile.setUser(savedUser);
+		userProfile.setCreatedAt(LocalDateTime.now());
+		this.userProfileRepository.save(userProfile);
 		
 		return mapToDto(savedUser);
 	}
@@ -82,16 +86,6 @@ public class UserServiceImpl implements UserService{
 	public UserDto updateUser(Long userId, UserDto userDto) {
 	    User user = userRepo.findById(userId)
 	                        .orElseThrow(() -> new ResourceNotFoundException("user", userId));
-
-	    if (user.getCandidateProfile() == null && userDto.getIsRecuritie() == 1) {
-	        CandidateProfile userProfile = new CandidateProfile();
-	        userProfile.setCreatedAt(LocalDateTime.now());
-	        userProfile.setCreatedBy(user.getCreatedBy());
-	        userProfile.setUser(user);
-	        CandidateProfile savedUserProfile = this.candidateRepository.save(userProfile);
-	        user.setCandidateProfile(savedUserProfile);
-	        user.setIsRecuritie(1);
-	    }
 	    
 	    user.setName(userDto.getName());
 		user.setEmail(userDto.getEmail());
@@ -103,8 +97,7 @@ public class UserServiceImpl implements UserService{
 		user.setStatus(userDto.isStatus());
 		user.setPhone(userDto.getPhone());
 		user.setIsRecuriter(userDto.getIsRecuriter());
-		user.setIsRecuritie(userDto.getIsRecuritie());
-		user.setCurrentCompany(userDto.getCurrentCompany());
+		user.setCurrentOccupation(userDto.getCurrentOccupation());
 
 	    user.setUpdatedAt(LocalDateTime.now());
 	    user.setUpdatedBy(userDto.getUsername());
@@ -141,8 +134,7 @@ public class UserServiceImpl implements UserService{
 		user.setStatus(userDto.isStatus());
 		user.setPhone(userDto.getPhone());
 		user.setIsRecuriter(userDto.getIsRecuriter());
-		user.setIsRecuritie(userDto.getIsRecuritie());
-		user.setCurrentCompany(userDto.getCurrentCompany());
+		user.setCurrentOccupation(userDto.getCurrentOccupation());
 		user.setFcmToken(userDto.getFcmToken());
 		return user;
 		
@@ -161,8 +153,7 @@ public class UserServiceImpl implements UserService{
 		userDto.setStatus(user.isStatus());
 		userDto.setPhone(userDto.getPhone());
 		userDto.setIsRecuriter(user.getIsRecuriter());
-		userDto.setIsRecuritie(user.getIsRecuritie());
-		userDto.setCurrentCompany(user.getCurrentCompany());
+		userDto.setCurrentOccupation(user.getCurrentOccupation());
 		userDto.setFcmToken(user.getFcmToken());
 		return userDto;
 	}

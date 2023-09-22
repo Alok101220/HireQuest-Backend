@@ -30,14 +30,8 @@ public class Language {
 	
 	private String name;
 	
-	private String proficencyLevel;
-	
 	@ManyToOne
 	@JsonBackReference
-	private CandidateProfile candidateProfile;
-	
-	@ManyToOne
-	@JsonBackReference
-	private HrProfile hrProfile;
+	private UserProfile userProfile;
 	
 }

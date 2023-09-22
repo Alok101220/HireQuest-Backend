@@ -6,7 +6,7 @@ package com.alok91340.gethired.service;
 import java.util.List;
 import java.util.Set;
 
-import com.alok91340.gethired.dto.ProfileLinkDto;
+import com.alok91340.gethired.dto.ProfileDto;
 
 /**
  * @author alok91340
@@ -14,9 +14,9 @@ import com.alok91340.gethired.dto.ProfileLinkDto;
  */
 public interface ProfileLinkService {
 	
-	ProfileLinkDto addProfileLink(ProfileLinkDto profileLinkDto, Long userProfileId);
-	ProfileLinkDto updateProfileLink(ProfileLinkDto profileLinkDto, Long profileLinkId);
-	Set<ProfileLinkDto> getAllProfileLink(Long userProfileId);
+	ProfileDto addProfileLink(ProfileDto profileLinkDto, Long userProfileId);
+	ProfileDto updateProfileLink(ProfileDto profileLinkDto, Long profileLinkId);
+	Set<ProfileDto> getAllProfileLink(Long userProfileId);
 	void deleteProfileLink(Long profileLinkId);
-	ProfileLinkDto getProfileLink(Long profileLinkId);
+	ProfileDto getProfileLink(Long profileLinkId);
 }

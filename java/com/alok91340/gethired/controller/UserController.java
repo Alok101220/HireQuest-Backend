@@ -5,12 +5,10 @@ package com.alok91340.gethired.controller;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -30,14 +28,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.alok91340.gethired.utils.Constant;
-import com.alok91340.gethired.utils.GoogleIdTokenVerifierUtil;
 import com.alok91340.gethired.utils.isAuthenticatedAsAdminOrUser;
+
+import jakarta.servlet.http.HttpSession;
+
 import com.alok91340.gethired.dto.LoginDto;
 import com.alok91340.gethired.dto.RegistrationResponse;
-import com.alok91340.gethired.dto.Response;
 import com.alok91340.gethired.dto.UserDto;
 import com.alok91340.gethired.entities.User;
-import com.alok91340.gethired.exception.GlobalExceptionHandler;
 import com.alok91340.gethired.exception.ResourceNotFoundException;
 import com.alok91340.gethired.repository.UserRepository;
 import com.alok91340.gethired.security.JwtAuthResponse;
@@ -54,7 +52,6 @@ public class UserController {
 	
 	private final UserService userService;
     private final AuthenticationManager authenticationManager;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     
     @Autowired
     private UserDetailsService userDetailsService;
@@ -62,13 +59,15 @@ public class UserController {
     @Autowired
     private JwtTokenProvider tokenProvider;
     
+    @Autowired
+    HttpSession session;
+    
     
 
-    public UserController(UserService userService, AuthenticationManager authenticationManager,
-                          BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserController(UserService userService, AuthenticationManager authenticationManager
+                         ) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 	
     @Autowired
@@ -143,6 +142,7 @@ public class UserController {
             String token = tokenProvider.generateToken(userDetails);
             user.setFcmToken(loginDto.getFcmToken());
             this.userRepo.save(user);
+            session.setAttribute("userId", user.getId());
             return ResponseEntity.ok(new JwtAuthResponse(token));
             
 		}
@@ -160,6 +160,7 @@ public class UserController {
         User user=this.userRepo.findByUsername(loginDto.getUsername()).orElseThrow(()-> new ResourceNotFoundException("user",(long)0));
         user.setFcmToken(loginDto.getFcmToken());
         this.userRepo.save(user);
+        session.setAttribute("userId", user.getId());
         return ResponseEntity.ok(new JwtAuthResponse(token));
 		}
     }
@@ -180,19 +181,6 @@ public class UserController {
 		return ResponseEntity.ok("Deleted user with id:"+userId);
 	}
 	
-//	@GetMapping("{username}/{password}/{fcmToken}/user-login")
-//	public ResponseEntity<UserDto> login(@PathVariable("username") String username,@PathVariable("password") String password,@PathVariable("fcmToken") String fcmToken) {
-//		User user=this.userRepo.findUserByUsername(username);
-//		user.setFcmToken(fcmToken);
-//		User savedUser=this.userRepo.save(user);
-//		Boolean isMatched = bCryptPasswordEncoder.matches(password, savedUser.getPassword());
-//		if((user==null)||(!user.getUsername().equals(username)||!isMatched)) {
-//			return new ResponseEntity<>(new UserDto(),HttpStatus.BAD_REQUEST);
-//		}
-//		UserDto userDto=mapToDto(savedUser);
-//		
-//		return new ResponseEntity<>(userDto,HttpStatus.OK);
-//	}
 	
 	@GetMapping("{username}/check-username")
 	public ResponseEntity<Boolean> checkUsername(@PathVariable String username){
@@ -236,10 +224,9 @@ public UserDto mapToDto(User user) {
 		userDto.setPassword(user.getPassword());
 		userDto.setHeadline(user.getHeadline());
 		userDto.setIsRecuriter(user.getIsRecuriter());
-		userDto.setIsRecuritie(user.getIsRecuritie());
 		userDto.setStatus(user.isStatus());
 		userDto.setBirthdate(user.getBirthdate());
-		userDto.setCurrentCompany(user.getCurrentCompany());
+		userDto.setCurrentOccupation(user.getCurrentOccupation());
 		userDto.setPhone(user.getPhone());
 		userDto.setFcmToken(user.getFcmToken());
 		return userDto;

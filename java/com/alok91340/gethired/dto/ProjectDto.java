@@ -18,5 +18,5 @@ public class ProjectDto {
 	private String description;
 	private String start;
 	private String end;
-	private String link;
+	private String projectUrl;
 }

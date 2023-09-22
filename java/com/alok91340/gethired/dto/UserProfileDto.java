@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 
-import com.alok91340.gethired.entities.ProfileLink;
+import com.alok91340.gethired.entities.Profile;
 import com.alok91340.gethired.entities.User;
 
 import lombok.Data;
@@ -20,7 +20,7 @@ import lombok.Data;
 @Data
 public class UserProfileDto {
 	private Long id;
-	private String bio;
+	private String about;
 	
 
 }

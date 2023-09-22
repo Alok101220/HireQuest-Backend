@@ -3,7 +3,6 @@
  */
 package com.alok91340.gethired.service.serviceImpl;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -12,11 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.alok91340.gethired.dto.ProjectDto;
 import com.alok91340.gethired.entities.Project;
-import com.alok91340.gethired.entities.User;
-import com.alok91340.gethired.entities.CandidateProfile;
+import com.alok91340.gethired.entities.UserProfile;
 import com.alok91340.gethired.exception.ResourceNotFoundException;
 import com.alok91340.gethired.repository.ProjectRepository;
-import com.alok91340.gethired.repository.CandidateRepository;
+import com.alok91340.gethired.repository.UserProfileRepository;
 import com.alok91340.gethired.service.ProjectService;
 
 /**
@@ -27,7 +25,7 @@ import com.alok91340.gethired.service.ProjectService;
 public class ProjectServiceImpl implements ProjectService{
 	
 	@Autowired
-	private CandidateRepository userProfileRepository;
+	private UserProfileRepository userProfileRepository;
 	
 	@Autowired
 	private ProjectRepository projectRepository;
@@ -35,9 +33,9 @@ public class ProjectServiceImpl implements ProjectService{
 	@Override
 	public ProjectDto addProject(ProjectDto projectDto, Long userProfileId) {
 		
-		CandidateProfile userProfile = this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
+		UserProfile userProfile = this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
 		Project project=mapToEntity(projectDto);
-		project.setCandidateProfile(userProfile);
+		project.setUserProfile(userProfile);
 		Project savedProject = this.projectRepository.save(project);
 		
 		return mapToDto(savedProject);
@@ -48,7 +46,7 @@ public class ProjectServiceImpl implements ProjectService{
 		
 		Project project = this.projectRepository.findById(projectId).orElseThrow(()->new ResourceNotFoundException("project",projectId));
 		project.setTitle(projectDto.getTitle());
-		project.setLink(projectDto.getLink());
+		project.setProjectUrl(projectDto.getProjectUrl());
 		project.setStart(projectDto.getStart());
 		project.setEnd(projectDto.getEnd());
 		Project savedProject=this.projectRepository.save(project);
@@ -64,7 +62,7 @@ public class ProjectServiceImpl implements ProjectService{
 
 	@Override
 	public Set<ProjectDto> getAllProject(Long userProfileId) {
-		CandidateProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
+		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
 		Set<Project> projects = userProfile.getProjects();
 		Set<ProjectDto> projectDtos=projects.stream().map(project->mapToDto(project)).collect(Collectors.toSet());
 		
@@ -81,7 +79,7 @@ public class ProjectServiceImpl implements ProjectService{
 	private Project mapToEntity(ProjectDto projectDto) {
 		Project project = new Project();
 		project.setTitle(projectDto.getTitle());
-		project.setLink(projectDto.getLink());
+		project.setProjectUrl(projectDto.getProjectUrl());
 		project.setStart(projectDto.getStart());
 		project.setEnd(projectDto.getEnd());
 		project.setDescription(projectDto.getDescription());
@@ -97,7 +95,7 @@ public class ProjectServiceImpl implements ProjectService{
 		ProjectDto projectDto= new ProjectDto();
 		projectDto.setId(project.getId());
 		projectDto.setTitle(project.getTitle());
-		projectDto.setLink(project.getLink());
+		projectDto.setProjectUrl(project.getProjectUrl());
 		projectDto.setStart(project.getStart());
 		projectDto.setEnd(project.getEnd());
 		projectDto.setDescription(project.getDescription());

@@ -37,9 +37,10 @@ public class Project {
 	private String description;
 	private String start;
 	private String end;
-	private String link;
+	
+	private String projectUrl;
 	
 	@ManyToOne
 	@JsonBackReference
-	private CandidateProfile candidateProfile;
+	private UserProfile userProfile;
 }
