@@ -4,7 +4,6 @@
 package com.alok91340.gethired.controller;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -20,8 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.TextMessage;
 
-
-import com.alok91340.gethired.dto.SendMessageRequest;
 import com.alok91340.gethired.service.ChatService;
 import com.alok91340.gethired.websocket.PresenceService;
 import com.alok91340.gethired.entities.Message;
@@ -31,7 +28,7 @@ import com.alok91340.gethired.entities.Message;
  *
  */
 @RestController
-@RequestMapping("api/gethired")
+@RequestMapping("api/hireQuest")
 public class MessageController {
 
     @Autowired

@@ -3,13 +3,11 @@
  */
 package com.alok91340.gethired.controller;
 
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +25,7 @@ import com.alok91340.gethired.service.EducationService;
  *
  */
 @RestController
-@RequestMapping("api/gethired")
+@RequestMapping("api/hireQuest")
 public class EducationController {
 	
 	@Autowired
@@ -39,19 +37,19 @@ public class EducationController {
 		return ResponseEntity.ok(result);
 	}
 	
-	@PutMapping("update-education/{educationId}")
+	@PutMapping("/{educationId}/update-education")
 	public ResponseEntity<EducationDto> updateEducation(@RequestBody EducationDto educationDto,@PathVariable Long educationId){
 		EducationDto result=this.educationService.updateEducation(educationDto, educationId);
 		return ResponseEntity.ok(result);
 	}
 	
-	@GetMapping("/{userProfileId}/educations")
-	public ResponseEntity<Set<EducationDto>> getEducation(@PathVariable Long userProfileId){
+	@GetMapping("/{userProfileId}/get-educations")
+	public ResponseEntity<Set<EducationDto>> getAllEducation(@PathVariable Long userProfileId){
 		Set<EducationDto> educationDtos=this.educationService.getAllEducation(userProfileId);
 		return new ResponseEntity<>(educationDtos,HttpStatus.OK);
 	}
 	
-	@DeleteMapping("{educationId}/education")
+	@DeleteMapping("/{educationId}/delete-education")
 	public ResponseEntity<String> deleteEducation(@PathVariable Long educationId){
 		this.educationService.deleteEducation(educationId);
 		return ResponseEntity.ok("deleted");

@@ -3,8 +3,6 @@
  */
 package com.alok91340.gethired.dto;
 
-import com.alok91340.gethired.entities.ChatRoom;
-
 import lombok.Data;
 
 /**

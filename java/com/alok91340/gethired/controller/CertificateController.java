@@ -25,7 +25,7 @@ import com.alok91340.gethired.service.CertificateService;
  *
  */
 @RestController
-@RequestMapping("api/gethired")
+@RequestMapping("api/hireQuest")
 public class CertificateController {
 
 	@Autowired
@@ -42,7 +42,7 @@ public class CertificateController {
 		return new ResponseEntity<>(result,HttpStatus.OK);
 	}
 	
-	@GetMapping("{userProfileId}/certificates")
+	@GetMapping("{userProfileId}/get-certificates")
 	public ResponseEntity<Set<CertificateDto>> getAllLanguage(@PathVariable Long userProfileId){
 		Set<CertificateDto> certificateDtos=this.certificateService.getAllCertificate(userProfileId);
 		return new ResponseEntity<>(certificateDtos,HttpStatus.OK);

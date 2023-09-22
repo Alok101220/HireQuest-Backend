@@ -3,13 +3,6 @@
  */
 package com.alok91340.gethired.dto;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
-
-import com.alok91340.gethired.entities.Profile;
-import com.alok91340.gethired.entities.User;
 
 import lombok.Data;
 

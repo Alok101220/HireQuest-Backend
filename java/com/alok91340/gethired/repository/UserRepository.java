@@ -9,7 +9,6 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.alok91340.gethired.dto.UserDto;
 import com.alok91340.gethired.entities.User;
 
 /**

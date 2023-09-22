@@ -3,7 +3,6 @@
  */
 package com.alok91340.gethired.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alok91340.gethired.dto.MeetingDto;
 import com.alok91340.gethired.repository.MeetingRepository;
 import com.alok91340.gethired.service.MeetingService;
-import com.alok91340.gethired.utils.Constant;
 
 /**
  * @author aloksingh
  *
  */
 @RestController
-@RequestMapping("api/gethired")
+@RequestMapping("api/hireQuest")
 public class MeetingController {
 	
 	@Autowired
@@ -57,7 +55,7 @@ public class MeetingController {
 	}
 	
 	@GetMapping("{currentDateTime}/upcomming-meetings")
-	private ResponseEntity<List<MeetingDto>> upcommingMeetings(@RequestParam(value = "currentDateTime") Date currentDateTime){
+	private ResponseEntity<List<MeetingDto>> upcommingMeetings(@RequestParam(value = "currentDateTime") String currentDateTime){
 		
 		List<MeetingDto> meetings=this.meetingRepository.upcomingMeetings(currentDateTime);
 		return new ResponseEntity<>(meetings,HttpStatus.OK);
@@ -65,7 +63,7 @@ public class MeetingController {
 	}
 	
 	@GetMapping("{currentDateTime}/past-meetings")
-	private ResponseEntity<List<MeetingDto>> pastMeetings(@RequestParam(value = "currentDateTime") Date currentDateTime){
+	private ResponseEntity<List<MeetingDto>> pastMeetings(@RequestParam(value = "currentDateTime") String currentDateTime){
 		
 		List<MeetingDto> meetings=this.meetingRepository.pastMeetings(currentDateTime);
 		return new ResponseEntity<>(meetings,HttpStatus.OK);

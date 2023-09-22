@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alok91340.gethired.dto.NotificationRequest;
@@ -21,6 +22,7 @@ import com.alok91340.gethired.repository.UserRepository;
 import com.alok91340.gethired.service.serviceImpl.NotificationService;
 
 @RestController
+@RequestMapping("api/hireQuest")
 public class NotificationController {
 
  private final NotificationService notificationService;
@@ -32,7 +34,7 @@ public class NotificationController {
  public NotificationController(NotificationService notificationService) {
      this.notificationService = notificationService;
  }
- @PostMapping("/sendNotification")
+ @PostMapping("/send-notification")
  public ResponseEntity<String> sendNotification(@RequestBody NotificationRequest request) {
      // Call the notificationService to send the notification
 	 User user = userRepository.findById(request.getUserId())

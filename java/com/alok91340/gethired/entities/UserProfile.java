@@ -3,10 +3,7 @@
  */
 package com.alok91340.gethired.entities;
 
-import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;

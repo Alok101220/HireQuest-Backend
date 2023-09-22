@@ -3,8 +3,6 @@
  */
 package com.alok91340.gethired.entities;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Entity;

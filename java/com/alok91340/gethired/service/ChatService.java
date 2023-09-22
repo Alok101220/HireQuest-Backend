@@ -3,12 +3,10 @@
  */
 package com.alok91340.gethired.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import com.alok91340.gethired.dto.ChatUser;
 import com.alok91340.gethired.entities.Message;
-import com.alok91340.gethired.entities.User;
 
 /**
  * @author aloksingh

@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,14 +26,14 @@ import com.alok91340.gethired.entities.PdfGenerator;
  *
  */
 @RestController
-@RequestMapping("api/gethired")
+@RequestMapping("api/hireQuest")
 public class PdfGeneratorController {
 	
 	@Autowired
 	private PdfGeneratorRepository pdfGeneratorRepository ;
 	
 	
-	@PostMapping("/generate")
+	@PostMapping("/generate-pdf")
     public ResponseEntity<String> generateAndStorePdf(@RequestBody Map<String, String> userInputMap) {
         String userInput = userInputMap.get("name");
         
@@ -47,7 +46,7 @@ public class PdfGeneratorController {
         return ResponseEntity.ok("PDF generated and stored.");
     }
 	
-	@GetMapping("/view/{pdfId}")
+	@GetMapping("/{pdfId}/view")
     public ResponseEntity<byte[]> viewPdf(@PathVariable Long pdfId) {
         Optional<PdfGenerator> optionalPdf = pdfGeneratorRepository.findById(pdfId);
         

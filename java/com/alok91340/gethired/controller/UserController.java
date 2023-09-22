@@ -47,7 +47,7 @@ import com.alok91340.gethired.service.UserService;
  *
  */
 @Controller
-@RequestMapping("api/gethired")
+@RequestMapping("api/HireQuest")
 public class UserController {
 	
 	private final UserService userService;
@@ -74,7 +74,7 @@ public class UserController {
     private UserRepository userRepo;
 //	get user by id
     @isAuthenticatedAsAdminOrUser
-	@GetMapping("/user/{userId}")
+	@GetMapping("/{userId}/get-user")
 	public ResponseEntity<?> getUser(@AuthenticationPrincipal Authentication authentication,@PathVariable Long userId){
 		
 //			UserDto userDto= userService.getUser(userId);
@@ -85,7 +85,7 @@ public class UserController {
 	}
 	
 //	get all users
-	@GetMapping("/users")
+	@GetMapping("/get-users")
 	public ResponseEntity<List<UserDto>> getUsers(
 			@RequestParam(value = "pageNo", defaultValue = Constant.DEFAULT_PAGE_NUMBER) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = Constant.DEFAULT_PAGE_SIZE) int pageSize,
@@ -97,7 +97,7 @@ public class UserController {
 	}
 	
 //	create user
-	@PostMapping("create-user")
+	@PostMapping("/create-user")
 	public ResponseEntity<RegistrationResponse> createUser(@RequestBody UserDto userDto){
 
 		RegistrationResponse response=new RegistrationResponse();
@@ -118,7 +118,7 @@ public class UserController {
 	}
 	
 //	authenticate
-	@PostMapping(value="login", produces = "application/json")
+	@PostMapping(value="/user-login", produces = "application/json")
     public ResponseEntity<JwtAuthResponse> authenticateUser(@RequestBody LoginDto loginDto) throws Exception {
 
 		if(!loginDto.getGoogleIdToken().isEmpty()) {
@@ -168,26 +168,26 @@ public class UserController {
 	
 	
 //	update user
-	@PutMapping("{userId}/update-user")
+	@PutMapping("/{userId}/update-user")
 	public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto,@PathVariable Long userId){
 		UserDto updatedUserDto= userService.updateUser(userId, userDto);
 		return ResponseEntity.ok(updatedUserDto);
 	}
 	
 //	delete user
-	@DeleteMapping("/delete-user/{userId}")
+	@DeleteMapping("/{userId}/delete-user")
 	public ResponseEntity<?> deleteUser(@PathVariable Long userId){
 		userService.deleteUser(userId);
 		return ResponseEntity.ok("Deleted user with id:"+userId);
 	}
 	
 	
-	@GetMapping("{username}/check-username")
+	@GetMapping("/{username}/check-username")
 	public ResponseEntity<Boolean> checkUsername(@PathVariable String username){
 		boolean isAvailable=this.userRepo.existsByUsername(username);
 		return new ResponseEntity<>(isAvailable,HttpStatus.OK);
 	}
-	@GetMapping("{email}/check-email")
+	@GetMapping("/{email}/check-email")
 	public ResponseEntity<Boolean> checkEmail(@PathVariable String email){
 		boolean isAvailable=this.userRepo.existsByEmail(email);
 		return new ResponseEntity<>(isAvailable,HttpStatus.OK);
@@ -199,7 +199,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 	
-	@GetMapping("{token}/get-user-info")
+	@GetMapping("/{token}/get-user-info")
 	public ResponseEntity<UserDto> getUsername(@PathVariable String token){
 		String username= this.tokenProvider.getUserNameFromToken(token);
 		User user=this.userRepo.findByUsername(username).orElseThrow(()-> new ResourceNotFoundException("user",(long)0));
@@ -207,7 +207,7 @@ public class UserController {
 		return new ResponseEntity<>(userDto,HttpStatus.OK);
 	}
 	
-	@PutMapping("{email}/{password}/change-password")
+	@PutMapping("/{email}/{password}/change-password")
 	public ResponseEntity<UserDto> changePassword(@PathVariable String email,@PathVariable String password){
 		UserDto userDto=this.userService.updatePassword(email, email);
 		return new ResponseEntity<>(userDto,HttpStatus.OK);

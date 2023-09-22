@@ -3,12 +3,10 @@
  */
 package com.alok91340.gethired.controller;
 
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +25,7 @@ import com.alok91340.gethired.utils.isAuthenticatedAsAdminOrUser;
  *
  */
 @RestController
-@RequestMapping("api/gethired")
+@RequestMapping("api/hireQuest")
 public class ProjectController {
 	
 	@Autowired
@@ -52,7 +50,7 @@ public class ProjectController {
 		return ResponseEntity.ok("deleted");
 	}
 	
-	@GetMapping("{userProfileId}/projects")
+	@GetMapping("/{userProfileId}/get-projects")
 	public ResponseEntity<Set<ProjectDto>> getProjects(@PathVariable long userProfileId){
 		
 		Set<ProjectDto> result=this.projectService.getAllProject(userProfileId);

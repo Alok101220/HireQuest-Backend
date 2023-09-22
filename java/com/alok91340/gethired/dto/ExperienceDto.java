@@ -3,7 +3,6 @@
  */
 package com.alok91340.gethired.dto;
 
-import java.util.List;
 
 import lombok.Data;
 

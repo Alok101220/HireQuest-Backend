@@ -3,7 +3,6 @@
  */
 package com.alok91340.gethired.service.serviceImpl;
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -3,7 +3,6 @@
  */
 package com.alok91340.gethired.dto;
 
-import org.springframework.http.HttpStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

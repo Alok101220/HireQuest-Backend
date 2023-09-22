@@ -1,6 +1,5 @@
 package com.alok91340.gethired.exception;
 
-import java.util.Date;
 
 import org.springframework.http.HttpStatus;
 

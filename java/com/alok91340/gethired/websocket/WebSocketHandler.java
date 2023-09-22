@@ -3,7 +3,6 @@
  */
 package com.alok91340.gethired.websocket;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 /**
  * @author aloksingh
@@ -16,8 +15,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;

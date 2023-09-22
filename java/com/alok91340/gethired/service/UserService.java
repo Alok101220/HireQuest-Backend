@@ -6,7 +6,6 @@ package com.alok91340.gethired.service;
 import java.util.List;
 
 import com.alok91340.gethired.dto.UserDto;
-import com.alok91340.gethired.entities.User;
 
 /**
  * @author alok91340
