@@ -16,6 +16,6 @@ public interface AppreciationService {
 	AwardDto addAppreciation(AwardDto awardDto, Long userProfileId);
 	AwardDto updateAppreciation(AwardDto awardDto, Long awardId);
 	Set<AwardDto> getAllAppreciation(Long userProfileId);
-	void deleteAppreciation(long awardId);
+	void deleteAppreciation(Long awardId);
 	AwardDto getAppreciation(Long awardId);
 }

@@ -29,8 +29,8 @@ public class MeetingServiceImpl implements MeetingService{
 	
 	
 	@Override
-	public MeetingDto addMeeting(Long userId, MeetingDto meetingDto) {
-		User user= this.userRepository.findUserById(userId);
+	public MeetingDto addMeeting(String userId, MeetingDto meetingDto) {
+		User user= this.userRepository.findUserByUsername(userId);
 		Meeting meeting=new Meeting();
 		mapToEntity(meetingDto,meeting);
 		meeting.setUser(user);

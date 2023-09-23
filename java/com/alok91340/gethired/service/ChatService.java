@@ -14,13 +14,13 @@ import com.alok91340.gethired.entities.Message;
  */
 public interface ChatService {
 	
-	List<ChatUser> getChattingUsersWithLastMessage(Long currentUserId);
+	List<ChatUser> getChattingUsersWithLastMessage(String username);
 
 	/**
 	 * @param messageEntity
 	 */
 	Message saveMessage(Message messageEntity);
 	
-	List<Message> getMessages(Long senderId, Long receiverId,String timeStamp);
+	List<Message> getMessages(String senderUser, String receiverUser,String timeStamp);
 
 }

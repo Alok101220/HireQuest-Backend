@@ -40,8 +40,8 @@ public class MessageController {
     @PostMapping("/send-message")
     public ResponseEntity<String> sendMessage(@RequestBody Message request) {
         try {
-            Long senderId = request.getSenderId();
-            Long receiverId = request.getReceiverId();
+            String senderId = request.getSenderId();
+            String receiverId = request.getReceiverId();
             String content = request.getContent();
 
             // Save the message to the database
@@ -83,8 +83,8 @@ public class MessageController {
 
     @GetMapping("/{senderId}/{receiverId}/{timeStamp}/get-message")
     public ResponseEntity<List<Message>> getMessages(
-            @PathVariable Long senderId,
-            @PathVariable Long receiverId,
+            @PathVariable String senderId,
+            @PathVariable String receiverId,
             @PathVariable String timeStamp
     ) {
         try {

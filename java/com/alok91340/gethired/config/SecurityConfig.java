@@ -29,15 +29,15 @@ public class SecurityConfig {
 
     public static final String[] PUBLIC_URLS = {
     		"/v3/api-docs",
-            "/api/gethired/create-user",
-            "/api/gethired/login",
-            "/api/gethired/generate",
-            "/api/gethired/{email}/send-otp",
-            "/api/gethired/{email}/resend-otp",
-            "/api/gethired/{otpCode}/{email}/otp-verification",
-            "/api/gethired/{email}/check-email",
-            "/api/gethired/{username}/check-username",
-            "/api/gethired/{email}/{password}/change-password",
+            "/api/hireQuest/create-user",
+            "/api/hireQuest/user-login",
+            "/api/hireQuest/generate",
+            "/api/hireQuest/{email}/send-otp",
+            "/api/hireQuest/{email}/resend-otp",
+            "/api/hireQuest/{otpCode}/{email}/otp-verification",
+            "/api/hireQuest/{email}/check-email",
+            "/api/hireQuest/{username}/check-username",
+            "/api/hireQuest/{email}/{password}/change-password",
             "/ws/{token}"
     };
 

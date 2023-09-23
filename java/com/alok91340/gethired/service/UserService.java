@@ -16,13 +16,13 @@ public interface UserService {
 	
 	UserDto createUser(UserDto userDto);
 	
-	UserDto getUser(Long userId);
+	UserDto getUser(String username);
 	
 	List<UserDto> getAllUser(int pageNo, int pageSize, String sortBy, String sortDir);
 	
-	UserDto updateUser(Long userId, UserDto userDto);
+	UserDto updateUser(String username, UserDto userDto);
 	
-	String deleteUser(Long userId);
+	String deleteUser(String username);
 	
 	UserDto updatePassword(String email,String password);
 	

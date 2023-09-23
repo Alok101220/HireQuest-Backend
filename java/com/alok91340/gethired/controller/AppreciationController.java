@@ -26,7 +26,7 @@ public class AppreciationController {
 	private AppreciationService awardService;
 	
 	
-	@PostMapping("{userProfileId}/add-award")
+	@PostMapping("/{userProfileId}/add-award")
 	public ResponseEntity<AwardDto> addAward(@PathVariable Long userProfileId, @RequestBody AwardDto awardDto){
 		
 		AwardDto result=this.awardService.addAppreciation(awardDto, userProfileId);

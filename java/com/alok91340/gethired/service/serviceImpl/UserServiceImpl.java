@@ -60,8 +60,8 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public UserDto getUser(Long userId)throws ResourceNotFoundException {
-		User user=userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("user not available",userId));
+	public UserDto getUser(String username)throws ResourceNotFoundException {
+		User user=userRepo.findById(username).orElseThrow(()-> new ResourceNotFoundException("user not available",(long)0));
 		
 		return mapToDto(user);
 	}
@@ -83,9 +83,9 @@ public class UserServiceImpl implements UserService{
 	// ...
 
 	@Override
-	public UserDto updateUser(Long userId, UserDto userDto) {
-	    User user = userRepo.findById(userId)
-	                        .orElseThrow(() -> new ResourceNotFoundException("user", userId));
+	public UserDto updateUser(String username, UserDto userDto) {
+	    User user = userRepo.findById(username)
+	                        .orElseThrow(() -> new ResourceNotFoundException("user", (long)0));
 	    
 	    user.setName(userDto.getName());
 		user.setEmail(userDto.getEmail());
@@ -111,8 +111,8 @@ public class UserServiceImpl implements UserService{
 
 
 	@Override
-	public String deleteUser(Long userId) {
-		User user= this.userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("user",userId));
+	public String deleteUser(String username) {
+		User user= this.userRepo.findById(username).orElseThrow(()->new ResourceNotFoundException("user",(long)0));
 		this.userRepo.delete(user);
 		return null;
 	}
@@ -143,7 +143,6 @@ public class UserServiceImpl implements UserService{
 	public UserDto mapToDto(User user) {
 		
 		UserDto userDto= new UserDto();
-		userDto.setId(user.getId());
 		userDto.setName(user.getName());
 		userDto.setEmail(user.getEmail());
 		userDto.setPassword(user.getPassword());

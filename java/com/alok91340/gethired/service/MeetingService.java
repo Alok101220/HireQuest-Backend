@@ -11,7 +11,7 @@ import com.alok91340.gethired.dto.MeetingDto;
  */
 public interface MeetingService {
 	
-	MeetingDto addMeeting(Long userId, MeetingDto meetingDto);
+	MeetingDto addMeeting(String username, MeetingDto meetingDto);
 	void deleteMeeting(Long meetingId);
 	MeetingDto updateMeeting(Long meetingId,MeetingDto meetingDto);
 	

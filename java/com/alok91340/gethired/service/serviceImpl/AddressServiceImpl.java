@@ -29,8 +29,8 @@ public class AddressServiceImpl implements AddressService{
 	private AddressRepository addressRepository;
 
 	@Override
-	public AddressDto addAddress(AddressDto addressDto, Long userId) {
-		User user=this.userRepository.findById(userId).orElseThrow(()->new ResourceNotFoundException("user",userId));
+	public AddressDto addAddress(AddressDto addressDto, String username) {
+		User user=this.userRepository.findById(username).orElseThrow(()->new ResourceNotFoundException("user",(long)0));
 		Address address=mapToEntity(addressDto);
 		address.setUser(user);
 		Address savedAddress=this.addressRepository.save(address);

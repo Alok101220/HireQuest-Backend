@@ -12,7 +12,7 @@ import lombok.Data;
 //NotificationRequest.java
 @Data
 public class NotificationRequest {
- private Long userId;
+ private String username;
  private String title;
  private String body;
 

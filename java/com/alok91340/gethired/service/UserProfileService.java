@@ -14,7 +14,7 @@ import com.alok91340.gethired.entities.UserProfile;
  */
 public interface UserProfileService {
 	
-	UserProfileDto getUserProfile(Long studentId);
+	UserProfileDto getUserProfile(String username);
 	
 	List<UserProfile> getUserProfiles(int pageNo, int pageSize, String sortBy, String sortDir);
 

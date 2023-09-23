@@ -37,8 +37,8 @@ public class NotificationController {
  @PostMapping("/send-notification")
  public ResponseEntity<String> sendNotification(@RequestBody NotificationRequest request) {
      // Call the notificationService to send the notification
-	 User user = userRepository.findById(request.getUserId())
-             .orElseThrow(() -> new ResourceNotFoundException("user",request.getUserId()));
+	 User user = userRepository.findById(request.getUsername())
+             .orElseThrow(() -> new ResourceNotFoundException("user",(long)0));
      notificationService.sendNotification(user.getFcmToken(), request.getTitle(), request.getBody());
      return ResponseEntity.ok("Notification sent successfully");
  }

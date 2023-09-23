@@ -13,6 +13,6 @@ import com.alok91340.gethired.entities.Image;
  */
 public interface ImageService {
 	
-	Image saveImage(Long userId,MultipartFile file);
+	Image saveImage(String username,MultipartFile file);
 	Image saveImage(Long imageId);
 }

@@ -46,7 +46,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         this.notificationService=notificationService;
     }
 	
-    private final Map<Long, WebSocketSession> activeSessions = new HashMap<>();
+    private final Map<String, WebSocketSession> activeSessions = new HashMap<>();
     
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -59,7 +59,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
             Optional<User> userOptional = this.userRepository.findByUsername(userName);
 
             if (userOptional.isPresent()) {
-                Long userId = userOptional.get().getId();
+                String userId = userOptional.get().getUsername();
                 session.getAttributes().put("userId", userId);
                 
                 presenceService.addUserSession(userId, session);
@@ -84,17 +84,17 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        Long senderId = getUserIdFromSession(session);
+        String senderId = getUserIdFromSession(session);
 
         // Parse the message content and extract sender, receiver, and content
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> messageData = objectMapper.readValue(message.getPayload(), new TypeReference<Map<String,Object>>(){});
-        Long receiverId=((Integer) messageData.get("receiverId")).longValue();
+        String receiverId=messageData.get("receiverId").toString();
         
         String content = (String) messageData.get("content");
        
         // Save the message to the database
-        senderId=((Integer)messageData.get("senderId")).longValue();
+        senderId=messageData.get("senderId").toString();
         Message messageEntity = new Message();
         messageEntity.setSenderId(senderId);
         messageEntity.setReceiverId(receiverId);
@@ -107,7 +107,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         Set<WebSocketSession> receiverSessions = presenceService.getSessionsForUser(receiverId);
         if(receiverSessions.isEmpty()) {
         	User user = userRepository.findById(receiverId)
-                    .orElseThrow(() -> new ResourceNotFoundException("user",receiverId));
+                    .orElseThrow(() -> new ResourceNotFoundException("user",(long)0));
             notificationService.sendNotification(user.getFcmToken(), "message", content);
         	
         }else {
@@ -138,7 +138,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         // Extract the user ID from the session
-        Long userId = getUserIdFromSession(session);
+        String userId = getUserIdFromSession(session);
 
         // Remove the WebSocket session for the user
         activeSessions.remove(userId);
@@ -147,7 +147,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 //        broadcastPresenceUpdate(userId, false);
     }
 
-    private void broadcastPresenceUpdate(Long userId, boolean isOnline) {
+    private void broadcastPresenceUpdate(String userId, boolean isOnline) {
         // Notify all connected WebSocket clients about the presence update
         for (WebSocketSession session : activeSessions.values()) {
             try {
@@ -163,12 +163,12 @@ public class WebSocketHandler extends TextWebSocketHandler {
     }
 
     // Implement getUserIdFromSession method to retrieve user ID from the WebSocketSession
-    private Long getUserIdFromSession(WebSocketSession session) {
+    private String getUserIdFromSession(WebSocketSession session) {
         // Assume that you've stored the user ID in the session attributes during login
         Map<String, Object> attributes = session.getAttributes();
         Object userIdObject = attributes.get("userId"); // Replace "userId" with the actual key you use
-        if (userIdObject instanceof Long) {
-            return (Long) userIdObject;
+        if (userIdObject instanceof String) {
+            return userIdObject.toString();
         } else {
             return null;
         }

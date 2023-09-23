@@ -66,7 +66,7 @@ public class AppreciationServiceImpl implements AppreciationService{
 	}
 
 	@Override
-	public void deleteAppreciation(long awardId) {
+	public void deleteAppreciation(Long awardId) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -25,32 +25,32 @@ import com.alok91340.gethired.service.ExperienceService;
  *
  */
 @RestController
-@RequestMapping("api/gethired")
+@RequestMapping("api/hireQuest")
 public class ExperienceController {
 
 	@Autowired
 	private ExperienceService experienceService;
 	
-	@PostMapping("{userProfileId}/add-experience")
+	@PostMapping("/{userProfileId}/add-experience")
 	public ResponseEntity<ExperienceDto> addExperience(@PathVariable Long userProfileId, @RequestBody ExperienceDto experienceDto){
 		ExperienceDto result=this.experienceService.addExperience(experienceDto, userProfileId);
 		
 		return ResponseEntity.ok(result);
 	}
 	
-	@GetMapping("{userProfileId}/experiences")
+	@GetMapping("/{userProfileId}/get-experiences")
 	public ResponseEntity<Set<ExperienceDto>> getAllExperience(@PathVariable Long userProfileId){
 		Set<ExperienceDto> experienceDtoList=this.experienceService.getAllExperience(userProfileId);
 		return new ResponseEntity<>(experienceDtoList,HttpStatus.OK);
 	}
 	
-	@DeleteMapping("{experienceId}/delete-experience")
+	@DeleteMapping("/{experienceId}/delete-experience")
 	public ResponseEntity<String> deleteExperience(@PathVariable Long experienceId){
 		this.experienceService.deleteExperience(experienceId);
 		return ResponseEntity.ok("Deleted");
 	}
 	
-	@PutMapping("{experienceId}/update-experience")
+	@PutMapping("/{experienceId}/update-experience")
 	public ResponseEntity<ExperienceDto> updateExperience(@PathVariable Long experienceId, @RequestBody ExperienceDto experienceDto){
 		ExperienceDto result=this.experienceService.updateExperience(experienceDto, experienceId);
 		return new ResponseEntity<>(result,HttpStatus.OK);

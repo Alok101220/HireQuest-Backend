@@ -36,8 +36,8 @@ public class ChatServiceImpl implements ChatService{
 	private UserRepository userRepository;
 
 	@Override
-	public List<ChatUser> getChattingUsersWithLastMessage(Long currentUserId) {
-		User currentUser=this.userRepository.findUserById(currentUserId);
+	public List<ChatUser> getChattingUsersWithLastMessage(String currentUserId) {
+		User currentUser=this.userRepository.findUserByUsername(currentUserId);
 		List<ChatRoom> userChatRoom=this.chatRoomRepository.findBySender(currentUser);
 		
 		List<ChatUser> chatUsers = new ArrayList<>();
@@ -48,7 +48,7 @@ public class ChatServiceImpl implements ChatService{
             Long unseenMessageCount = messageRepository.countUnseenMessages(room.getId(), currentUserId);
 
             ChatUser chatUser = new ChatUser();
-            chatUser.setId(otherUser.getId());
+//            chatUser.setId(otherUser.getUsername());
             chatUser.setUsername(otherUser.getUsername());
             chatUser.setImage(otherUser.getImage());
             chatUser.setLastMessageTime(lastMessageTime);
@@ -66,7 +66,7 @@ public class ChatServiceImpl implements ChatService{
     }
 
 	@Override
-	public List<Message> getMessages(Long senderId, Long receiverId,String timeStamp) {
+	public List<Message> getMessages(String senderId, String receiverId,String timeStamp) {
 	    // Assuming you have a MessageRepository
 	    List<Message> messages = messageRepository.fetchAllMessage(senderId, receiverId, timeStamp);
 	    return messages;

@@ -24,7 +24,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     LocalDateTime findLatestMessageTime(@Param("roomId") Long roomId);
     
     @Query("SELECT COUNT(m) FROM Message m WHERE m.roomId = :roomId AND m.receiverId = :userId AND m.seen = false")
-    Long countUnseenMessages(@Param("roomId") Long roomId, @Param("userId") Long userId);
+    Long countUnseenMessages(@Param("roomId") Long roomId, @Param("userId") String userId);
     
     @Query("SELECT m FROM Message m WHERE " +
             "((m.senderId = :senderId AND m.receiverId = :receiverId) OR " +
@@ -32,8 +32,8 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
             "m.timestamp > :timeStamp " +
             "ORDER BY m.timestamp DESC")
     List<Message> fetchAllMessage(
-            @Param("senderId") Long senderId,
-            @Param("receiverId") Long receiverId,
+            @Param("senderId") String senderId,
+            @Param("receiverId") String receiverId,
             @Param("timeStamp") String timeStamp);
 
 

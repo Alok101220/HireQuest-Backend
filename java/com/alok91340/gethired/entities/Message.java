@@ -31,10 +31,10 @@ public class Message {
     private Long roomId;
 
     @Column(name = "sender_id")
-    private Long senderId;
+    private String senderId;
 
     @Column(name = "receiver_id")
-    private Long receiverId;
+    private String receiverId;
 
     private String content;
     private String timestamp;

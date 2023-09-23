@@ -39,8 +39,8 @@ public class UserProfileServiceImpl implements UserProfileService{
 			
 
 	@Override
-	public UserProfileDto getUserProfile(Long userId) {
-		User user=this.userRepository.findById(userId).orElseThrow(()->new ResourceNotFoundException("user",userId));
+	public UserProfileDto getUserProfile(String username) {
+		User user=this.userRepository.findById(username).orElseThrow(()->new ResourceNotFoundException("user",(long)0));
 		UserProfile userProfile=userProfileRepo.findUserProfileByUser(user);
 		UserProfileDto userProfileDto= new UserProfileDto();
 		userProfileDto.setId(userProfile.getId());

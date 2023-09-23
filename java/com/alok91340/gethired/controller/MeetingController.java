@@ -36,25 +36,25 @@ public class MeetingController {
 	@Autowired
 	private MeetingRepository meetingRepository;
 	
-	@PostMapping("{userId}/create-meeting")
-	private ResponseEntity<MeetingDto> createMeeting(@PathVariable Long userId, @RequestBody MeetingDto meetingDto){
+	@PostMapping("/{username}/create-meeting")
+	private ResponseEntity<MeetingDto> createMeeting(@PathVariable String username, @RequestBody MeetingDto meetingDto){
 		
-		MeetingDto createdMeeting=this.meetingService.addMeeting(userId, meetingDto);
+		MeetingDto createdMeeting=this.meetingService.addMeeting(username, meetingDto);
 		return new ResponseEntity<>(createdMeeting,HttpStatus.OK);
 	}
 	
-	@PutMapping("{meetingId}/update-meeting")
+	@PutMapping("/{meetingId}/update-meeting")
 	private ResponseEntity<MeetingDto> updateMeeting(@PathVariable Long meetingId, @RequestBody MeetingDto meetingDto){
-		MeetingDto updatedMeeting=this.meetingService.addMeeting(meetingId, meetingDto);
+		MeetingDto updatedMeeting=this.meetingService.updateMeeting(meetingId, meetingDto);
 		return new ResponseEntity<>(updatedMeeting,HttpStatus.OK);
 	}
 	
-	@DeleteMapping("{meetingId}/delete-meeting")
+	@DeleteMapping("/{meetingId}/delete-meeting")
 	private void deleteMeeting(@PathVariable Long meetingId) {
 		this.meetingService.deleteMeeting(meetingId);
 	}
 	
-	@GetMapping("{currentDateTime}/upcomming-meetings")
+	@GetMapping("/{currentDateTime}/upcomming-meetings")
 	private ResponseEntity<List<MeetingDto>> upcommingMeetings(@RequestParam(value = "currentDateTime") String currentDateTime){
 		
 		List<MeetingDto> meetings=this.meetingRepository.upcomingMeetings(currentDateTime);
@@ -62,7 +62,7 @@ public class MeetingController {
 		
 	}
 	
-	@GetMapping("{currentDateTime}/past-meetings")
+	@GetMapping("/{currentDateTime}/past-meetings")
 	private ResponseEntity<List<MeetingDto>> pastMeetings(@RequestParam(value = "currentDateTime") String currentDateTime){
 		
 		List<MeetingDto> meetings=this.meetingRepository.pastMeetings(currentDateTime);

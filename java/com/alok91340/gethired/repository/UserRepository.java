@@ -15,9 +15,9 @@ import com.alok91340.gethired.entities.User;
  * @author alok91340
  *
  */
-public interface UserRepository extends JpaRepository<User,Long> {
+public interface UserRepository extends JpaRepository<User,String> {
 	
-	User findUserById(Long userId);
+	User findUserByUsername(String username);
 	User findUserByEmail(String email);
 	Optional<User> findByUsername(String username);
 	Boolean existsByUsername(String username);

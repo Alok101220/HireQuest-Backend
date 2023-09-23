@@ -47,7 +47,7 @@ import com.alok91340.gethired.service.UserService;
  *
  */
 @Controller
-@RequestMapping("api/HireQuest")
+@RequestMapping("api/hireQuest")
 public class UserController {
 	
 	private final UserService userService;
@@ -74,11 +74,11 @@ public class UserController {
     private UserRepository userRepo;
 //	get user by id
     @isAuthenticatedAsAdminOrUser
-	@GetMapping("/{userId}/get-user")
-	public ResponseEntity<?> getUser(@AuthenticationPrincipal Authentication authentication,@PathVariable Long userId){
+	@GetMapping("/{username}/get-user")
+	public ResponseEntity<?> getUser(@AuthenticationPrincipal Authentication authentication,@PathVariable String username){
 		
 //			UserDto userDto= userService.getUser(userId);
-		UserDto user= this.userService.getUser(userId);
+		UserDto user= this.userService.getUser(username);
 		
 			return new ResponseEntity<>(user,HttpStatus.OK);
 		
@@ -142,7 +142,6 @@ public class UserController {
             String token = tokenProvider.generateToken(userDetails);
             user.setFcmToken(loginDto.getFcmToken());
             this.userRepo.save(user);
-            session.setAttribute("userId", user.getId());
             return ResponseEntity.ok(new JwtAuthResponse(token));
             
 		}
@@ -160,7 +159,6 @@ public class UserController {
         User user=this.userRepo.findByUsername(loginDto.getUsername()).orElseThrow(()-> new ResourceNotFoundException("user",(long)0));
         user.setFcmToken(loginDto.getFcmToken());
         this.userRepo.save(user);
-        session.setAttribute("userId", user.getId());
         return ResponseEntity.ok(new JwtAuthResponse(token));
 		}
     }
@@ -168,17 +166,17 @@ public class UserController {
 	
 	
 //	update user
-	@PutMapping("/{userId}/update-user")
-	public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto,@PathVariable Long userId){
-		UserDto updatedUserDto= userService.updateUser(userId, userDto);
+	@PutMapping("/{username}/update-user")
+	public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto,@PathVariable String username){
+		UserDto updatedUserDto= userService.updateUser(username, userDto);
 		return ResponseEntity.ok(updatedUserDto);
 	}
 	
 //	delete user
-	@DeleteMapping("/{userId}/delete-user")
-	public ResponseEntity<?> deleteUser(@PathVariable Long userId){
-		userService.deleteUser(userId);
-		return ResponseEntity.ok("Deleted user with id:"+userId);
+	@DeleteMapping("/{username}/delete-user")
+	public ResponseEntity<?> deleteUser(@PathVariable String username){
+		userService.deleteUser(username);
+		return ResponseEntity.ok("Deleted user with id:"+username);
 	}
 	
 	
@@ -217,7 +215,6 @@ public class UserController {
 public UserDto mapToDto(User user) {
 		
 	UserDto userDto= new UserDto();
-		userDto.setId(user.getId());
 		userDto.setName(user.getName());
 		userDto.setUsername(user.getUsername());
 		userDto.setEmail(user.getEmail());
