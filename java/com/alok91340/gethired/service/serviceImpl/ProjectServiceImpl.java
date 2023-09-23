@@ -3,7 +3,7 @@
  */
 package com.alok91340.gethired.service.serviceImpl;
 
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,10 +61,10 @@ public class ProjectServiceImpl implements ProjectService{
 	}
 
 	@Override
-	public Set<ProjectDto> getAllProject(Long userProfileId) {
+	public List<ProjectDto> getAllProject(Long userProfileId) {
 		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
-		Set<Project> projects = userProfile.getProjects();
-		Set<ProjectDto> projectDtos=projects.stream().map(project->mapToDto(project)).collect(Collectors.toSet());
+		List<Project> projects = userProfile.getProjects();
+		List<ProjectDto> projectDtos=projects.stream().map(project->mapToDto(project)).collect(Collectors.toList());
 		
 		return projectDtos;
 	}

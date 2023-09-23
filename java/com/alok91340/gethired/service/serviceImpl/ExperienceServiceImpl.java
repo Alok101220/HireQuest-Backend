@@ -3,6 +3,7 @@
  */
 package com.alok91340.gethired.service.serviceImpl;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -61,11 +62,11 @@ public class ExperienceServiceImpl implements ExperienceService{
 	}
 
 	@Override
-	public Set<ExperienceDto> getAllExperience(Long userProfileId) {
+	public List<ExperienceDto> getAllExperience(Long userProfileId) {
 
 		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("User-Profile",userProfileId));
-		Set<Experience> experiences=userProfile.getExperiences();
-		Set<ExperienceDto> experienceDtos=experiences.stream().map(experience->mapToDto(experience)).collect(Collectors.toSet());
+		List<Experience> experiences=userProfile.getExperiences();
+		List<ExperienceDto> experienceDtos=experiences.stream().map(experience->mapToDto(experience)).collect(Collectors.toList());
 		return experienceDtos;
 	}
 

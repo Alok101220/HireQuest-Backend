@@ -3,7 +3,7 @@
  */
 package com.alok91340.gethired.service;
 
-import java.util.Set;
+import java.util.List;
 
 import com.alok91340.gethired.dto.ExperienceDto;
 
@@ -15,7 +15,7 @@ public interface ExperienceService {
 	
 	ExperienceDto addExperience(ExperienceDto experienceDto, Long userProfileId);
 	ExperienceDto updateExperience(ExperienceDto experiencezdto, Long experienceId);
-	Set<ExperienceDto> getAllExperience(Long userProfileId);
+	List<ExperienceDto> getAllExperience(Long userProfileId);
 	void deleteExperience(Long experienceId);
 	ExperienceDto getExperience(Long experienceId);
 }

@@ -4,7 +4,7 @@
 package com.alok91340.gethired.service.serviceImpl;
 
 
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,10 +57,10 @@ public class LanguageServiceImpl implements LanguageService{
 	}
 
 	@Override
-	public Set<LanguageDto> getAllLanguage(Long userProfileId) {
+	public List<LanguageDto> getAllLanguage(Long userProfileId) {
 		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("User-Profile",userProfileId));
-		Set<Language> languages=userProfile.getLanguages();
-		Set<LanguageDto>languageDtos=languages.stream().map(language->mapToDto(language)).collect(Collectors.toSet());
+		List<Language> languages=userProfile.getLanguages();
+		List<LanguageDto>languageDtos=languages.stream().map(language->mapToDto(language)).collect(Collectors.toList());
 		return languageDtos;
 	}
 

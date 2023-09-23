@@ -3,7 +3,7 @@
  */
 package com.alok91340.gethired.controller;
 
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,8 +39,8 @@ public class ExperienceController {
 	}
 	
 	@GetMapping("/{userProfileId}/get-experiences")
-	public ResponseEntity<Set<ExperienceDto>> getAllExperience(@PathVariable Long userProfileId){
-		Set<ExperienceDto> experienceDtoList=this.experienceService.getAllExperience(userProfileId);
+	public ResponseEntity<List<ExperienceDto>> getAllExperience(@PathVariable Long userProfileId){
+		List<ExperienceDto> experienceDtoList=this.experienceService.getAllExperience(userProfileId);
 		return new ResponseEntity<>(experienceDtoList,HttpStatus.OK);
 	}
 	

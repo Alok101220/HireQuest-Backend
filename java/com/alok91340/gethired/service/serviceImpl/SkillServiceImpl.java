@@ -3,7 +3,7 @@
  */
 package com.alok91340.gethired.service.serviceImpl;
 
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,10 +61,10 @@ public class SkillServiceImpl implements SkillService{
 		return mapToDto(skill);
 	}
 	@Override
-	public Set<SkillDto> getAllSkill(Long userProfileId){
+	public List<SkillDto> getAllSkill(Long userProfileId){
 		UserProfile userProfile=userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
-		Set<Skill> skills=userProfile.getSkills();
-		Set<SkillDto> skillDtos=skills.stream().map(skill->mapToDto(skill)).collect(Collectors.toSet());
+		List<Skill> skills=userProfile.getSkills();
+		List<SkillDto> skillDtos=skills.stream().map(skill->mapToDto(skill)).collect(Collectors.toList());
 		return skillDtos;
 	}
 	Skill mapToEntity(SkillDto skillDto) {

@@ -3,7 +3,7 @@
  */
 package com.alok91340.gethired.controller;
 
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,8 +44,8 @@ public class EducationController {
 	}
 	
 	@GetMapping("/{userProfileId}/get-educations")
-	public ResponseEntity<Set<EducationDto>> getAllEducation(@PathVariable Long userProfileId){
-		Set<EducationDto> educationDtos=this.educationService.getAllEducation(userProfileId);
+	public ResponseEntity<List<EducationDto>> getAllEducation(@PathVariable Long userProfileId){
+		List<EducationDto> educationDtos=this.educationService.getAllEducation(userProfileId);
 		return new ResponseEntity<>(educationDtos,HttpStatus.OK);
 	}
 	

@@ -3,7 +3,7 @@
  */
 package com.alok91340.gethired.service;
 
-import java.util.Set;
+import java.util.List;
 
 import com.alok91340.gethired.dto.SkillDto;
 
@@ -16,6 +16,6 @@ public interface SkillService {
 	SkillDto updateSkill(Long skillId,SkillDto skillDto);
 	SkillDto deleteSkill(Long skillId);
 	
-	Set<SkillDto> getAllSkill(Long userProfileId);
+	List<SkillDto> getAllSkill(Long userProfileId);
 	SkillDto getSkill(Long skillId);
 }

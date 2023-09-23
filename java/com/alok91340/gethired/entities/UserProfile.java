@@ -3,8 +3,8 @@
  */
 package com.alok91340.gethired.entities;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -40,39 +40,43 @@ public class UserProfile extends BaseEntity {
 	
 	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference
-	private Set<Profile> profiles;
+	private List<Profile> profiles;
 	
 	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference
-	private Set<Education> educations;
+	private List<Education> educations;
 	
 	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference
-	private Set<Certificate> certificates;
+	private List<Certificate> certificates;
 	
 	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference
-	private Set<Skill> skills= new HashSet<>();
+	private List<Skill> skills= new ArrayList<>();
 	
 	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference
-	private Set<Experience> experiences;
+	private List<Experience> experiences;
 	
 	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference
-	private Set<Project> projects;
+	private List<Project> projects;
 	
 	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference
-	private Set<Language> languages;
+	private List<Language> languages;
 	
 	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference
-	private Set<Hobbies> hobbies;
+	private List<Hobbies> hobbies;
 	
 	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference
-	private Set<Appreciation> appreciations;
+	private List<Appreciation> appreciations;
+	
+	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
+	@JsonManagedReference
+	private List<Pdf> pdfs;
 	
 	@OneToOne
 	@JsonManagedReference

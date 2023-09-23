@@ -3,7 +3,7 @@
  */
 package com.alok91340.gethired.service.serviceImpl;
 
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,10 +55,10 @@ public class ProfileLinkServiceImpl implements ProfileLinkService{
 		return mapToDto(profileLink);
 	}
 	@Override
-	public Set<ProfileDto> getAllProfileLink(Long userProfileId) {
+	public List<ProfileDto> getAllProfileLink(Long userProfileId) {
 		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("User-Profile",userProfileId));
-		Set<Profile> profileLinks=userProfile.getProfiles();
-		Set<ProfileDto> profileLinkDtos=profileLinks.stream().map(profileLink->mapToDto(profileLink)).collect(Collectors.toSet());
+		List<Profile> profileLinks=userProfile.getProfiles();
+		List<ProfileDto> profileLinkDtos=profileLinks.stream().map(profileLink->mapToDto(profileLink)).collect(Collectors.toList());
 		
 		return profileLinkDtos;
 	}

@@ -3,7 +3,7 @@
  */
 package com.alok91340.gethired.service;
 
-import java.util.Set;
+import java.util.List;
 
 import com.alok91340.gethired.dto.LanguageDto;
 
@@ -15,7 +15,7 @@ public interface LanguageService {
 	
 	LanguageDto addLanguage(LanguageDto languageDto, Long userProfileId);
 	LanguageDto updateLanguage(LanguageDto languageDto, Long languageId);
-	Set<LanguageDto> getAllLanguage(Long userProfileId);
+	List<LanguageDto> getAllLanguage(Long userProfileId);
 	void deleteLanguage(Long languageId);
 	LanguageDto getLanguage(Long languageId);
 }

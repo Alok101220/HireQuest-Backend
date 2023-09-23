@@ -3,7 +3,7 @@
  */
 package com.alok91340.gethired.controller;
 
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,8 +44,8 @@ public class LanguageController {
 	}
 	
 	@GetMapping("/{userProfileId}/get-languages")
-	public ResponseEntity<Set<LanguageDto>> getAllLanguage(@PathVariable Long userProfileId){
-		Set<LanguageDto> languageDtos=this.languageService.getAllLanguage(userProfileId);
+	public ResponseEntity<List<LanguageDto>> getAllLanguage(@PathVariable Long userProfileId){
+		List<LanguageDto> languageDtos=this.languageService.getAllLanguage(userProfileId);
 		return new ResponseEntity<>(languageDtos,HttpStatus.OK);
 	}
 	@DeleteMapping("/{languageId}/delete-language")

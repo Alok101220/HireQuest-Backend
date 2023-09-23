@@ -3,7 +3,7 @@
  */
 package com.alok91340.gethired.service.serviceImpl;
 
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,11 +58,11 @@ public class EducationServiceImpl implements EducationService{
 	}
 
 	@Override
-	public Set<EducationDto> getAllEducation(Long userprofileId) {
+	public List<EducationDto> getAllEducation(Long userprofileId) {
 		UserProfile userProfile=this.userProfileRepository.findById(userprofileId).orElseThrow(()->new ResourceNotFoundException("user with userprofile Id",userprofileId));
-		Set<Education> educations=userProfile.getEducations();
-		Set<EducationDto>educationDtos=educations.stream().map(education -> mapToDto(education))
-                .collect(Collectors.toSet());
+		List<Education> educations=userProfile.getEducations();
+		List<EducationDto>educationDtos=educations.stream().map(education -> mapToDto(education))
+                .collect(Collectors.toList());
 				return educationDtos;
 	}
 

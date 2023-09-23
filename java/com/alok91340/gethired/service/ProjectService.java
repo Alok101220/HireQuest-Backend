@@ -3,7 +3,7 @@
  */
 package com.alok91340.gethired.service;
 
-import java.util.Set;
+import java.util.List;
 
 import com.alok91340.gethired.dto.ProjectDto;
 
@@ -16,6 +16,6 @@ public interface ProjectService {
 	ProjectDto addProject(ProjectDto projectDto,Long userProfileId);
 	ProjectDto updateProject(ProjectDto projectDto, Long projectId);
 	ProjectDto getProject(Long projectId);
-	Set<ProjectDto> getAllProject(Long userProfileId);
+	List<ProjectDto> getAllProject(Long userProfileId);
 	void deleteProject(Long projectId);
 }

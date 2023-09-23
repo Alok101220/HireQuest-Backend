@@ -3,7 +3,7 @@
  */
 package com.alok91340.gethired.service.serviceImpl;
 
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,10 +58,10 @@ public class CertificateServiceImpl implements CertificateService{
 	}
 
 	@Override
-	public Set<CertificateDto> getAllCertificate(Long userProfileId) {
+	public List<CertificateDto> getAllCertificate(Long userProfileId) {
 		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()-> new ResourceNotFoundException("user-profile",userProfileId));
-		Set<Certificate> certificates=userProfile.getCertificates();
-		Set<CertificateDto> certificateDto=certificates.stream().map(certificate->mapToDto(certificate)).collect(Collectors.toSet());
+		List<Certificate> certificates=userProfile.getCertificates();
+		List<CertificateDto> certificateDto=certificates.stream().map(certificate->mapToDto(certificate)).collect(Collectors.toList());
 		return certificateDto;
 	}
 

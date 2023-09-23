@@ -3,7 +3,7 @@
  */
 package com.alok91340.gethired.service;
 
-import java.util.Set;
+import java.util.List;
 
 import com.alok91340.gethired.dto.AwardDto;
 
@@ -15,7 +15,7 @@ public interface AppreciationService {
 	
 	AwardDto addAppreciation(AwardDto awardDto, Long userProfileId);
 	AwardDto updateAppreciation(AwardDto awardDto, Long awardId);
-	Set<AwardDto> getAllAppreciation(Long userProfileId);
+	List<AwardDto> getAllAppreciation(Long userProfileId);
 	void deleteAppreciation(Long awardId);
 	AwardDto getAppreciation(Long awardId);
 }

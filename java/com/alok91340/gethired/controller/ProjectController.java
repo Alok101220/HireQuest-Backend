@@ -3,7 +3,7 @@
  */
 package com.alok91340.gethired.controller;
 
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -51,9 +51,9 @@ public class ProjectController {
 	}
 	
 	@GetMapping("/{userProfileId}/get-projects")
-	public ResponseEntity<Set<ProjectDto>> getProjects(@PathVariable long userProfileId){
+	public ResponseEntity<List<ProjectDto>> getProjects(@PathVariable long userProfileId){
 		
-		Set<ProjectDto> result=this.projectService.getAllProject(userProfileId);
+		List<ProjectDto> result=this.projectService.getAllProject(userProfileId);
 		return ResponseEntity.ok(result);
 	}
 

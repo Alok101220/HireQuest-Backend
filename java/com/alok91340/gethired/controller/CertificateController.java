@@ -3,7 +3,7 @@
  */
 package com.alok91340.gethired.controller;
 
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,8 +43,8 @@ public class CertificateController {
 	}
 	
 	@GetMapping("{userProfileId}/get-certificates")
-	public ResponseEntity<Set<CertificateDto>> getAllLanguage(@PathVariable Long userProfileId){
-		Set<CertificateDto> certificateDtos=this.certificateService.getAllCertificate(userProfileId);
+	public ResponseEntity<List<CertificateDto>> getAllLanguage(@PathVariable Long userProfileId){
+		List<CertificateDto> certificateDtos=this.certificateService.getAllCertificate(userProfileId);
 		return new ResponseEntity<>(certificateDtos,HttpStatus.OK);
 	}
 	@DeleteMapping("{certificateId}/delete-certificate")

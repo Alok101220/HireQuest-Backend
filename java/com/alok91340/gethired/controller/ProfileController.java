@@ -3,7 +3,7 @@
  */
 package com.alok91340.gethired.controller;
 
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,8 +43,8 @@ public class ProfileController {
 	}
 	
 	@GetMapping("/{userProfileId}/get-profiles")
-	public ResponseEntity<Set<ProfileDto>> getAllProfileLink(@PathVariable Long userProfileId){
-		Set<ProfileDto> languageDtos=this.profileLinkService.getAllProfileLink(userProfileId);
+	public ResponseEntity<List<ProfileDto>> getAllProfileLink(@PathVariable Long userProfileId){
+		List<ProfileDto> languageDtos=this.profileLinkService.getAllProfileLink(userProfileId);
 		return new ResponseEntity<>(languageDtos,HttpStatus.OK);
 	}
 	@DeleteMapping("/{profileId}/delete-profile")

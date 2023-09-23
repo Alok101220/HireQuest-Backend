@@ -3,7 +3,7 @@
  */
 package com.alok91340.gethired.controller;
 
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,9 +44,9 @@ public class SkillController {
 	}
 	
 	@GetMapping("/{userProfileId}/get-skills")
-	public ResponseEntity<Set<SkillDto>> getAllSkill(@PathVariable Long userProfileId){
+	public ResponseEntity<List<SkillDto>> getAllSkill(@PathVariable Long userProfileId){
 		
-		Set<SkillDto> result=this.skillService.getAllSkill(userProfileId);
+		List<SkillDto> result=this.skillService.getAllSkill(userProfileId);
 		return new ResponseEntity<>(result,HttpStatus.OK);
 		
 	}

@@ -4,7 +4,7 @@
 package com.alok91340.gethired.service.serviceImpl;
 
 import java.util.stream.Collectors;
-import java.util.*;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,10 +58,10 @@ public class AppreciationServiceImpl implements AppreciationService{
 	}
 
 	@Override
-	public Set<AwardDto> getAllAppreciation(Long userProfileId) {
+	public List<AwardDto> getAllAppreciation(Long userProfileId) {
 		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
-		Set<Appreciation> awards=userProfile.getAppreciations();
-		Set<AwardDto> awardDtos=awards.stream().map(award->mapToDto(award)).collect(Collectors.toSet());
+		List<Appreciation> awards=userProfile.getAppreciations();
+		List<AwardDto> awardDtos=awards.stream().map(award->mapToDto(award)).collect(Collectors.toList());
 		return awardDtos;
 	}
 
