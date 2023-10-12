@@ -27,9 +27,11 @@ public class Appreciation {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	private String title;
-	private String date;
-	private String position;
+	private String appreciationTitle;
+	private String Start;
+	private String end;
+	private String appreciationUrl;
+	private String issuedBy;
 	private String description;
 	
 	@ManyToOne

@@ -9,7 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alok91340.gethired.dto.AwardDto;
+import com.alok91340.gethired.dto.AppreciationDto;
 import com.alok91340.gethired.service.AppreciationService;
 import com.alok91340.gethired.entities.Appreciation;
 import com.alok91340.gethired.entities.UserProfile;
@@ -31,7 +31,7 @@ public class AppreciationServiceImpl implements AppreciationService{
 	private UserProfileRepository userProfileRepository;
 
 	@Override
-	public AwardDto addAppreciation(AwardDto awardDto, Long userProfileId) {
+	public AppreciationDto addAppreciation(AppreciationDto awardDto, Long userProfileId) {
 
 		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
 		Appreciation award=mapToEntity(awardDto);
@@ -41,27 +41,30 @@ public class AppreciationServiceImpl implements AppreciationService{
 	}
 	
 	@Override
-	public AwardDto getAppreciation(Long awardId) {
+	public AppreciationDto getAppreciation(Long awardId) {
 		Appreciation award=this.awardRepository.findById(awardId).orElseThrow(()->new ResourceNotFoundException("Award",awardId));
 		return mapToDto(award);
 	}
 
 	@Override
-	public AwardDto updateAppreciation(AwardDto awardDto, Long awardId) {
-		Appreciation award=this.awardRepository.findById(awardId).orElseThrow(()->new ResourceNotFoundException("award",awardId));
-		award.setDate(awardDto.getDate());
-		award.setPosition(awardDto.getPosition());
-		award.setDescription(award.getDescription());
-		award.setTitle(award.getTitle());;
-		Appreciation savedAward=this.awardRepository.save(award);
+	public AppreciationDto updateAppreciation(AppreciationDto appreciationDto, Long awardId) {
+		Appreciation appreciation=this.awardRepository.findById(awardId).orElseThrow(()->new ResourceNotFoundException("award",awardId));
+		appreciation.setAppreciationTitle(appreciationDto.getAppreciationTitle());
+		appreciation.setAppreciationUrl(appreciationDto.getAppreciationUrl());
+		appreciation.setDescription(appreciationDto.getDescription());
+		appreciation.setStart(appreciationDto.getStart());
+		appreciation.setEnd(appreciationDto.getEnd());
+		appreciation.setIssuedBy(appreciationDto.getIssuedBy());
+		
+		Appreciation savedAward=this.awardRepository.save(appreciation);
 		return mapToDto(savedAward);
 	}
 
 	@Override
-	public List<AwardDto> getAllAppreciation(Long userProfileId) {
+	public List<AppreciationDto> getAllAppreciation(Long userProfileId) {
 		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
 		List<Appreciation> awards=userProfile.getAppreciations();
-		List<AwardDto> awardDtos=awards.stream().map(award->mapToDto(award)).collect(Collectors.toList());
+		List<AppreciationDto> awardDtos=awards.stream().map(award->mapToDto(award)).collect(Collectors.toList());
 		return awardDtos;
 	}
 
@@ -71,22 +74,26 @@ public class AppreciationServiceImpl implements AppreciationService{
 		
 	}
 	
-	private Appreciation mapToEntity(AwardDto awardDto) {
-		Appreciation award= new Appreciation();
-		award.setTitle(awardDto.getTitle());
-		award.setDescription(awardDto.getDescription());
-		award.setPosition(awardDto.getPosition());
-		award.setDate(awardDto.getDate());
-		return award;
+	private Appreciation mapToEntity(AppreciationDto appreciationDto) {
+		Appreciation appreciation= new Appreciation();
+		appreciation.setAppreciationTitle(appreciationDto.getAppreciationTitle());
+		appreciation.setAppreciationUrl(appreciationDto.getAppreciationUrl());
+		appreciation.setDescription(appreciationDto.getDescription());
+		appreciation.setStart(appreciationDto.getStart());
+		appreciation.setEnd(appreciationDto.getEnd());
+		appreciation.setIssuedBy(appreciationDto.getIssuedBy());
+		return appreciation;
 	}
-	private AwardDto mapToDto(Appreciation award) {
-		AwardDto awardDto= new AwardDto();
-		awardDto.setId(award.getId());
-		awardDto.setTitle(award.getTitle());
-		awardDto.setDescription(award.getDescription());
-		awardDto.setPosition(award.getPosition());
-		awardDto.setDate(award.getDate());
-		return awardDto;
+	private AppreciationDto mapToDto(Appreciation appreciation) {
+		AppreciationDto appreciationDto= new AppreciationDto();
+		appreciationDto.setId(appreciation.getId());
+		appreciationDto.setAppreciationTitle(appreciation.getAppreciationTitle());
+		appreciationDto.setAppreciationUrl(appreciation.getAppreciationUrl());
+		appreciationDto.setDescription(appreciation.getDescription());
+		appreciationDto.setStart(appreciation.getStart());
+		appreciationDto.setEnd(appreciation.getEnd());
+		appreciationDto.setIssuedBy(appreciation.getIssuedBy());
+		return appreciationDto;
 	}
 
 }

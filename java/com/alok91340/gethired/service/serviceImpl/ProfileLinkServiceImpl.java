@@ -69,7 +69,7 @@ public class ProfileLinkServiceImpl implements ProfileLinkService{
 		
 	}
 	private Profile mapToEntity(ProfileDto profileLinkDto,Profile profileLink) {
-		profileLink.setProfileName(profileLinkDto.getProfileName());
+		profileLink.setProfileName(profileLinkDto.getHandleName());
 		profileLink.setProfileUrl(profileLinkDto.getProfileUrl());
 		return profileLink;
 	}
@@ -77,7 +77,7 @@ public class ProfileLinkServiceImpl implements ProfileLinkService{
 		
 		ProfileDto profileLinkDto= new ProfileDto();
 		profileLinkDto.setId(profileLink.getId());
-		profileLinkDto.setProfileName(profileLink.getProfileName());
+		profileLinkDto.setHandleName(profileLink.getProfileName());
 		profileLinkDto.setProfileUrl(profileLink.getProfileUrl());
 		return profileLinkDto;
 	}

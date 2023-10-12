@@ -33,5 +33,7 @@ public class ChatRoom {
     @ManyToOne
     @JoinColumn(name = "receiver_id")
     private User receiver;
+    
+    private int unSeenMessageCount;
 
 }

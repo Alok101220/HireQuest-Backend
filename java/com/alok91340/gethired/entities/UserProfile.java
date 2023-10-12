@@ -50,9 +50,8 @@ public class UserProfile extends BaseEntity {
 	@JsonManagedReference
 	private List<Certificate> certificates;
 	
-	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
-	@JsonManagedReference
-	private List<Skill> skills= new ArrayList<>();
+	
+	private List<String> skills= new ArrayList<>();
 	
 	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference
@@ -62,13 +61,11 @@ public class UserProfile extends BaseEntity {
 	@JsonManagedReference
 	private List<Project> projects;
 	
-	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
-	@JsonManagedReference
-	private List<Language> languages;
 	
-	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
-	@JsonManagedReference
-	private List<Hobbies> hobbies;
+	private List<String> languages;
+	
+	
+	private List<String> hobbies=new ArrayList<>();;
 	
 	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JsonManagedReference

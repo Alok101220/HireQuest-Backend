@@ -28,11 +28,12 @@ public class Certificate {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
 	
-	private String title;
+	private String certificateTitle;
 	private String start;
 	private String end;
-	private String organisation;
+	private String issuedBy;
 	private String certificateUrl;
+	private String description;
 	
 	@ManyToOne
 	@JsonBackReference

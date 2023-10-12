@@ -11,9 +11,11 @@ import lombok.Data;
  */
 @Data
 public class ProfileDto {
-	private Long id;
-	private String profileName;
+private long id;
+	
+	private String handleName;
 	
 	private String profileUrl;
 	
+	private String description;
 }

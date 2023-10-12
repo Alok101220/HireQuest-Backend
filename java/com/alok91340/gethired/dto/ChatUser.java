@@ -6,6 +6,7 @@ package com.alok91340.gethired.dto;
 import java.time.LocalDateTime;
 
 import com.alok91340.gethired.entities.Image;
+import com.alok91340.gethired.entities.User;
 
 import lombok.Data;
 
@@ -16,7 +17,7 @@ import lombok.Data;
 @Data
 public class ChatUser {
     private Long id;
-    private String username;
+    private User receiver;
     private Image image;
     private LocalDateTime lastMessageTime;
     private Long unseenMessageCount;

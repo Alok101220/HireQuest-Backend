@@ -73,8 +73,11 @@ public class CertificateServiceImpl implements CertificateService{
 	}
 	
 	public void mapToEntity(CertificateDto certificateDto,Certificate certificate) {
-		certificate.setTitle(certificateDto.getTitle());
-		certificate.setOrganisation(certificateDto.getOrganisation());
+		certificate.setCertificateTitle(certificateDto.getCertificateTitle());
+		certificate.setCertificateUrl(certificateDto.getCertificateUrl());
+		certificate.setDescription(certificateDto.getDescription());
+		certificate.setIssuedBy(certificateDto.getIssuedBy());
+		
 		certificate.setStart(certificateDto.getStart());
 		certificate.setEnd(certificateDto.getEnd());
 	}
@@ -82,8 +85,11 @@ public class CertificateServiceImpl implements CertificateService{
 	public CertificateDto mapToDto(Certificate certificate) {
 		CertificateDto certificateDto=new CertificateDto();
 		certificateDto.setId(certificate.getId());
-		certificateDto.setTitle(certificate.getTitle());
-		certificateDto.setOrganisation(certificate.getOrganisation());
+		certificateDto.setCertificateTitle(certificate.getCertificateTitle());
+		certificateDto.setCertificateUrl(certificate.getCertificateUrl());
+		certificateDto.setDescription(certificate.getDescription());
+		certificateDto.setIssuedBy(certificate.getIssuedBy());
+		
 		certificateDto.setStart(certificate.getStart());
 		certificateDto.setEnd(certificate.getEnd());
 		return certificateDto;

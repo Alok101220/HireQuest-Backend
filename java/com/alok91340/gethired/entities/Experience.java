@@ -30,18 +30,15 @@ public class Experience {
 	private long id;
 	
 	
-	private String title;
+	private String jobTitle;
 	
 	@Size(max = 1000)
 	private String description;
 	
-	private String experienceUrl;
-	
 	private String start;
 	private String end;
 	
-	private String position;
-	private String organisation;
+	private String company;
 	
 	@ManyToOne
 	@JsonBackReference

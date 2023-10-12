@@ -28,10 +28,11 @@ public class Education {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
 	
-	private String name;
+	private String instituteName;
 	private String start;
 	private String end;
-	private String standard;
+	private String levelOfEducation;
+	private String fieldOfStudy;
 	
 	@ManyToOne
 	@JsonBackReference

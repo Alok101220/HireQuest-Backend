@@ -50,15 +50,19 @@ public class UserProfileServiceImpl implements UserProfileService{
 	}
 
 	@Override
-	public List<UserProfile> getUserProfiles(int pageNo, int pageSize, String sortBy, String sortDir) {
+	public List<UserProfile> getUserProfiles(String search,int pageNo, int pageSize, String sortBy, String sortDir) {
 		Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
 		Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-		Page<UserProfile> userProfiles = userProfileRepo.findAll(pageable);
-		
-		List<UserProfile> userProfileList=userProfiles.getContent();
-		
-		return userProfileList;
+		if (!search.isEmpty()) {
+	        // If a search term is provided, use it for filtering
+	        Page<UserProfile> userProfiles=userProfileRepo.searchUserProfiles(search, pageable);
+	        return userProfiles.getContent();
+	    } else {
+	        // Otherwise, fetch user profiles without filtering
+	        Page<UserProfile> userProfiles = userProfileRepo.findAll(pageable);
+	        return userProfiles.getContent();
+	    }
 	}
 	
 	UserProfileDto mapToDto(UserProfile userProfile) {

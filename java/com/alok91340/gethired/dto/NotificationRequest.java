@@ -12,9 +12,11 @@ import lombok.Data;
 //NotificationRequest.java
 @Data
 public class NotificationRequest {
- private String username;
- private String title;
- private String body;
-
- // Add getters and setters
+	
+	private String senderUsername;
+	private String title;
+	private String body;
+	private String receiverUsername;
+	private String notificationType;
+	
 }

@@ -8,16 +8,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.alok91340.gethired.dto.LanguageDto;
 import com.alok91340.gethired.service.LanguageService;
 
 /**
@@ -31,27 +27,17 @@ public class LanguageController {
 	@Autowired
 	private LanguageService languageService;
 	
-	@PostMapping("/{userProfileId}/add-language")
-	public ResponseEntity<LanguageDto> addLanguage(@PathVariable Long userProfileId, @RequestBody LanguageDto languageDto){
-		LanguageDto result=this.languageService.addLanguage(languageDto, userProfileId);
+	@PostMapping("/{userProfileId}/add-languages")
+	public ResponseEntity<List<String>> addLanguage(@PathVariable Long userProfileId, @RequestBody List<String> languages){
+		List<String> result=this.languageService.addLanguage(languages, userProfileId);
 		return ResponseEntity.ok(result);
 	}
 	
-	@PutMapping("/{languageId}/update-language")
-	public ResponseEntity<LanguageDto> updateLanguage(@PathVariable Long languageId,@RequestBody LanguageDto languageDto){
-		LanguageDto language=this.languageService.updateLanguage(languageDto, languageId);
-		return new ResponseEntity<>(language,HttpStatus.OK);
-	}
 	
 	@GetMapping("/{userProfileId}/get-languages")
-	public ResponseEntity<List<LanguageDto>> getAllLanguage(@PathVariable Long userProfileId){
-		List<LanguageDto> languageDtos=this.languageService.getAllLanguage(userProfileId);
+	public ResponseEntity<List<String>> getAllLanguage(@PathVariable Long userProfileId){
+		List<String> languageDtos=this.languageService.getAllLanguage(userProfileId);
 		return new ResponseEntity<>(languageDtos,HttpStatus.OK);
-	}
-	@DeleteMapping("/{languageId}/delete-language")
-	public ResponseEntity<String> deleteLanguage(@PathVariable Long languageId){
-		this.languageService.deleteLanguage(languageId);
-		return new ResponseEntity<>("deleted",HttpStatus.OK);
 	}
 
 }

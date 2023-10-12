@@ -3,6 +3,7 @@
  */
 package com.alok91340.gethired.dto;
 
+
 import lombok.Data;
 
 /**
@@ -10,14 +11,13 @@ import lombok.Data;
  *
  */
 @Data
-public class CertificateDto {
-private long id;
+public class AppreciationDto {
+private Long id;
 	
-	private String certificateTitle;
-	private String start;
+	private String appreciationTitle;
+	private String Start;
 	private String end;
+	private String appreciationUrl;
 	private String issuedBy;
-	private String certificateUrl;
 	private String description;
-	
 }

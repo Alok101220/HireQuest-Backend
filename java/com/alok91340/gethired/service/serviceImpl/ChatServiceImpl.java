@@ -49,7 +49,7 @@ public class ChatServiceImpl implements ChatService{
 
             ChatUser chatUser = new ChatUser();
 //            chatUser.setId(otherUser.getUsername());
-            chatUser.setUsername(otherUser.getUsername());
+            chatUser.setReceiver(otherUser);
             chatUser.setImage(otherUser.getImage());
             chatUser.setLastMessageTime(lastMessageTime);
             chatUser.setUnseenMessageCount(unseenMessageCount);

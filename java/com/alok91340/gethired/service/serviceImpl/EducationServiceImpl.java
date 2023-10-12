@@ -75,20 +75,22 @@ public class EducationServiceImpl implements EducationService{
 	
 	void mapToEntity(EducationDto educationDto,Education education) {
 		
-		education.setName(educationDto.getName());
+		education.setInstituteName(educationDto.getInstituteName());
+		education.setFieldOfStudy(educationDto.getFieldOfStudy());
 		education.setStart(educationDto.getStart());
 		education.setEnd(educationDto.getEnd());
-		education.setStandard(educationDto.getStandard());
+		education.setLevelOfEducation(educationDto.getLevelOfEducation());
 		
 	}
 	
 	EducationDto mapToDto(Education education) {
 		EducationDto educationDto=new EducationDto();
 		educationDto.setId(education.getId());
-		educationDto.setName(education.getName());
+		educationDto.setInstituteName(education.getInstituteName());
+		educationDto.setFieldOfStudy(education.getFieldOfStudy());
 		educationDto.setStart(education.getStart());
 		educationDto.setEnd(education.getEnd());
-		educationDto.setStandard(education.getStandard());
+		educationDto.setLevelOfEducation(education.getLevelOfEducation());
 		return educationDto;
 	}
 

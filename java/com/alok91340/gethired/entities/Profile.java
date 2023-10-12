@@ -32,6 +32,8 @@ public class Profile {
 	
 	private String profileUrl;
 	
+	private String description;
+	
 	@ManyToOne
 	@JsonBackReference
 	private UserProfile userProfile;

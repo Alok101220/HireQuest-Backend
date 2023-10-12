@@ -3,7 +3,6 @@
  */
 package com.alok91340.gethired.entities;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,11 +29,9 @@ public class Message {
     @JoinColumn(name = "room_id")
     private Long roomId;
 
-    @Column(name = "sender_id")
-    private String senderId;
+    private String senderUsername;
 
-    @Column(name = "receiver_id")
-    private String receiverId;
+    private String receiverUsername;
 
     private String content;
     private String timestamp;

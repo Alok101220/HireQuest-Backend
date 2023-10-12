@@ -49,13 +49,11 @@ public class ExperienceServiceImpl implements ExperienceService{
 	@Override
 	public ExperienceDto updateExperience(ExperienceDto experienceDto, Long experienceId) {
 		Experience experience=this.experienceRepository.findById(experienceId).orElseThrow(()->new ResourceNotFoundException("Experience",experienceId));
-		experience.setTitle(experienceDto.getTitle());
+		experience.setJobTitle(experienceDto.getTitle());
 		experience.setStart(experienceDto.getStart());
-		experience.setEnd(experience.getEnd());
-		experience.setPosition(experienceDto.getPosition());
-		experience.setOrganisation(experienceDto.getOrganisation());
+		experience.setEnd(experienceDto.getEnd());
+		experience.setCompany(experienceDto.getOrganisation());
 		experience.setDescription(experienceDto.getDescription());
-		experience.setExperienceUrl(experienceDto.getExperienceUrl());
 		Experience savedExperience=this.experienceRepository.save(experience);
 		
 		return mapToDto(savedExperience);
@@ -79,26 +77,22 @@ public class ExperienceServiceImpl implements ExperienceService{
 	
 	Experience mapToEntity(ExperienceDto experienceDto) {
 		Experience experience=new Experience();
-		experience.setDescription(experienceDto.getDescription());
-		experience.setPosition(experienceDto.getPosition());
-		experience.setOrganisation(experienceDto.getOrganisation());
-		experience.setExperienceUrl(experienceDto.getExperienceUrl());
-		experience.setTitle(experienceDto.getTitle());
+		experience.setJobTitle(experienceDto.getTitle());
 		experience.setStart(experienceDto.getStart());
 		experience.setEnd(experienceDto.getEnd());
+		experience.setCompany(experienceDto.getOrganisation());
+		experience.setDescription(experienceDto.getDescription());
 		return experience;
 	}
 	
 	ExperienceDto mapToDto(Experience experience) {
 		ExperienceDto experienceDto= new ExperienceDto();
 		experienceDto.setId(experience.getId());
-		experienceDto.setTitle(experience.getTitle());
-		experienceDto.setExperienceUrl(experience.getExperienceUrl());
-		experienceDto.setDescription(experience.getDescription());
-		experienceDto.setPosition(experience.getPosition());
-		experienceDto.setOrganisation(experience.getOrganisation());
+		experienceDto.setTitle(experience.getJobTitle());
 		experienceDto.setStart(experience.getStart());
 		experienceDto.setEnd(experience.getEnd());
+		experienceDto.setOrganisation(experience.getCompany());
+		experienceDto.setDescription(experience.getDescription());
 		return experienceDto;
 	}
 

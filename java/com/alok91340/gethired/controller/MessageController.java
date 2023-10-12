@@ -40,27 +40,27 @@ public class MessageController {
     @PostMapping("/send-message")
     public ResponseEntity<String> sendMessage(@RequestBody Message request) {
         try {
-            String senderId = request.getSenderId();
-            String receiverId = request.getReceiverId();
+            String senderUsername = request.getSenderUsername();
+            String receiverUsername = request.getReceiverUsername();
             String content = request.getContent();
 
             // Save the message to the database
             Message messageEntity = new Message();
 //            messageEntity.setRoom(request.getRoom());
-            messageEntity.setSenderId(senderId);
-            messageEntity.setReceiverId(receiverId);
+            messageEntity.setSenderUsername(senderUsername);
+            messageEntity.setReceiverUsername(receiverUsername);
             messageEntity.setContent(content);
             messageEntity.setTimestamp(request.getTimestamp());
             chatService.saveMessage(messageEntity);
 
             // Send the message via WebSocket
-            Set<WebSocketSession> receiverSessions = presenceService.getSessionsForUser(receiverId);
+            Set<WebSocketSession> receiverSessions = presenceService.getSessionsForUser(receiverUsername);
             for (WebSocketSession session : receiverSessions) {
                 try {
                     if (session.isOpen()) {
                     	String responseMessage = "{\"id\": " + 0 +
-                    			", \"senderId\": \"" + senderId + "\"" +
-                                ", \"receiverId\": \"" + receiverId + "\"" +
+                    			", \"senderUsername\": \"" + senderUsername + "\"" +
+                                ", \"receiverUsername\": \"" + receiverUsername + "\"" +
                                 ", \"content\": \"" + content + "\"" +
                                 ", \"timestamp\": \"" + messageEntity.getTimestamp() + "\"" +
                                 
@@ -81,14 +81,14 @@ public class MessageController {
         }
     }
 
-    @GetMapping("/{senderId}/{receiverId}/{timeStamp}/get-message")
+    @GetMapping("/{senderUsername}/{receiverUsername}/{timeStamp}/get-message")
     public ResponseEntity<List<Message>> getMessages(
-            @PathVariable String senderId,
-            @PathVariable String receiverId,
+            @PathVariable String senderUsername,
+            @PathVariable String receiverUsername,
             @PathVariable String timeStamp
     ) {
         try {
-            List<Message> messages = chatService.getMessages(senderId, receiverId,timeStamp);
+            List<Message> messages = chatService.getMessages(senderUsername, receiverUsername,timeStamp);
             return ResponseEntity.ok(messages);
         } catch (Exception e) {
             e.printStackTrace();

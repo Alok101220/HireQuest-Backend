@@ -3,14 +3,12 @@
  */
 package com.alok91340.gethired.entities;
 
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,16 +22,18 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class Hobbies {
+public class Notification {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private long id;
-	
-	private String name;
-	
-	@ManyToOne
-	@JsonBackReference
-	private UserProfile userProfile;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String title;
+    private String body;
+    private String senderUsername;
+    private String receiverUsername;
+    private String notificationType;
+    private boolean readStatus;
+    private LocalDateTime timestamp;
+    
 
 }

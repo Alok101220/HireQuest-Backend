@@ -12,9 +12,11 @@ import lombok.Data;
 
 @Data
 public class EducationDto {
-	private Long id;
-	private String name;
+private long id;
+	
+	private String instituteName;
 	private String start;
 	private String end;
-	private String standard;
+	private String levelOfEducation;
+	private String fieldOfStudy;
 }
