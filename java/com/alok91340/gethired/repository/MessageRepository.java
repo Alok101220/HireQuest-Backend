@@ -35,6 +35,10 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
             @Param("senderId") String senderId,
             @Param("receiverId") String receiverId,
             @Param("timeStamp") String timeStamp);
+    
+    int countByRoomIdAndReceiverUsernameAndSeen(Long chatRoomId,String receiverUsername, boolean seen);
+    
+    Message findTopByRoomIdOrderByTimestampDesc(Long chatRoomId);
 
 
 

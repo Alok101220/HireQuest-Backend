@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alok91340.gethired.dto.ChatRoomDto;
 import com.alok91340.gethired.dto.ChatUser;
 import com.alok91340.gethired.entities.ChatRoom;
 import com.alok91340.gethired.entities.Message;
@@ -35,29 +36,6 @@ public class ChatServiceImpl implements ChatService{
 	@Autowired
 	private UserRepository userRepository;
 
-	@Override
-	public List<ChatUser> getChattingUsersWithLastMessage(String currentUserId) {
-		User currentUser=this.userRepository.findUserByUsername(currentUserId);
-		List<ChatRoom> userChatRoom=this.chatRoomRepository.findBySender(currentUser);
-		
-		List<ChatUser> chatUsers = new ArrayList<>();
-		
-		for (ChatRoom room : userChatRoom) {
-            User otherUser = room.getSender().equals(currentUser) ? room.getReceiver() : room.getSender();
-            LocalDateTime lastMessageTime = messageRepository.findLatestMessageTime(room.getId());
-            Long unseenMessageCount = messageRepository.countUnseenMessages(room.getId(), currentUserId);
-
-            ChatUser chatUser = new ChatUser();
-//            chatUser.setId(otherUser.getUsername());
-            chatUser.setReceiver(otherUser);
-            chatUser.setImage(otherUser.getImage());
-            chatUser.setLastMessageTime(lastMessageTime);
-            chatUser.setUnseenMessageCount(unseenMessageCount);
-
-            chatUsers.add(chatUser);
-        }
-		return chatUsers;
-	}
 
 	@Override
 	public Message saveMessage(Message message) {
@@ -71,6 +49,8 @@ public class ChatServiceImpl implements ChatService{
 	    List<Message> messages = messageRepository.fetchAllMessage(senderId, receiverId, timeStamp);
 	    return messages;
 	}
+
+	
 
 
 }

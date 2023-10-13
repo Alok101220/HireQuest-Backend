@@ -3,12 +3,15 @@
  */
 package com.alok91340.gethired.entities;
 
+import java.util.Set;
+import java.util.HashSet;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,14 +29,20 @@ public class ChatRoom {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-	
-	@ManyToOne
-    @JoinColumn(name = "sender_id")
-    private User sender;
-    @ManyToOne
-    @JoinColumn(name = "receiver_id")
-    private User receiver;
     
-    private int unSeenMessageCount;
+	@ManyToMany
+    @JoinTable(
+        name = "chat_room_users",
+        joinColumns = @JoinColumn(name = "chat_room_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> users = new HashSet<>();
+    
+    private boolean isGroup=false;
+    
+    private boolean isRequest=true;
+    
+    private boolean isDeleted=true;
+    
 
 }
