@@ -19,10 +19,12 @@ import com.alok91340.gethired.dto.RegisterDto;
 import com.alok91340.gethired.dto.UserDto;
 import com.alok91340.gethired.entities.User;
 import com.alok91340.gethired.exception.ResourceNotFoundException;
+import com.alok91340.gethired.repository.NotificationPreferenceRepository;
 import com.alok91340.gethired.repository.UserProfileRepository;
 import com.alok91340.gethired.repository.UserRepository;
 import com.alok91340.gethired.service.UserService;
 import com.alok91340.gethired.entities.UserProfile;
+import com.alok91340.gethired.entities.NotificationPreference;
 
 /**
  * @author alok91340
@@ -36,6 +38,9 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private UserProfileRepository userProfileRepository;
+	
+	@Autowired
+	private NotificationPreferenceRepository notificationPreferenceRepository;
 	
 	
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -52,6 +57,8 @@ public class UserServiceImpl implements UserService{
 		mapToEntity(user,registerDto);
 		User savedUser=userRepo.save(user);
 		
+		createNotificationPreference(savedUser.getId());
+		
 		UserProfile userProfile=new UserProfile();
 		userProfile.setUser(savedUser);
 		userProfile.setCreatedAt(LocalDateTime.now());
@@ -59,6 +66,8 @@ public class UserServiceImpl implements UserService{
 		
 		return mapToDto(savedUser);
 	}
+
+	
 
 	@Override
 	public UserDto getUser(Long userId)throws ResourceNotFoundException {
@@ -158,5 +167,29 @@ public class UserServiceImpl implements UserService{
 		User updatedUser=this.userRepo.save(user);
 		
 		return mapToDto(updatedUser);
+	}
+	
+	/**
+	 * 
+	 */
+	private void createNotificationPreference(Long userId) {
+		
+		
+		String[] type={"message","chat-request","profile-visit","meeting-schedule","general"};
+		
+		for(String str:type) {
+			NotificationPreference notificationPreference=new NotificationPreference();
+			
+			notificationPreference.setMuted(false);
+			notificationPreference.setUserId(userId);
+			notificationPreference.setNotificationType(str);
+			
+			this.notificationPreferenceRepository.save(notificationPreference);
+			
+		
+		}
+		
+		
+		
 	}
 }
