@@ -5,7 +5,6 @@ package com.alok91340.gethired.service;
 
 import java.util.List;
 
-import com.alok91340.gethired.dto.ChatRoomDto;
 import com.alok91340.gethired.dto.ChatUser;
 import com.alok91340.gethired.entities.Message;
 import com.alok91340.gethired.entities.User;
@@ -24,6 +23,6 @@ public interface ChatService {
 	 */
 	Message saveMessage(Message messageEntity);
 	
-	List<Message> getMessages(String senderUser, String receiverUser,String timeStamp);
+	List<Message> getMessages(Long senderUser, Long receiverUser,String timeStamp);
 
 }

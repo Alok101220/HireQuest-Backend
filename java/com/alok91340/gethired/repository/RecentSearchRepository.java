@@ -17,10 +17,10 @@ import com.alok91340.gethired.entities.RecentSearch;
  */
 public interface RecentSearchRepository extends JpaRepository<RecentSearch, Long>{
 	
-	List<RecentSearch> findDistinctTop8ByUsernameOrderByIdDesc(String username);
+	List<RecentSearch> findDistinctTop8ByUserIdOrderByIdDesc(Long userId);
 	
 	@Modifying
-	@Query("DELETE FROM RecentSearch r WHERE r.username = :username")
-	void deleteAllByUsername(@Param("username") String username);
+	@Query("DELETE FROM RecentSearch r WHERE r.userId = :userId")
+	void deleteAllByUsername(Long userId);
 
 }

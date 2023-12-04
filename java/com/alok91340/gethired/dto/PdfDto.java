@@ -11,9 +11,8 @@ import lombok.Data;
  */
 @Data
 public class PdfDto {
-
-private long id;
-	
+	private Long id;
 	private String fileName;
-	private byte[] data;
+	private String fileSize;
+	private String timeStamp;
 }

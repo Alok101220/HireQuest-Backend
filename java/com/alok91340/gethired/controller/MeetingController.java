@@ -3,6 +3,8 @@
  */
 package com.alok91340.gethired.controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +38,10 @@ public class MeetingController {
 	@Autowired
 	private MeetingRepository meetingRepository;
 	
-	@PostMapping("/{username}/create-meeting")
-	private ResponseEntity<MeetingDto> createMeeting(@PathVariable String username, @RequestBody MeetingDto meetingDto){
+	@PostMapping("/create-meeting")
+	private ResponseEntity<MeetingDto> createMeeting( @RequestBody MeetingDto meetingDto){
 		
-		MeetingDto createdMeeting=this.meetingService.addMeeting(username, meetingDto);
+		MeetingDto createdMeeting=this.meetingService.addMeeting(meetingDto);
 		return new ResponseEntity<>(createdMeeting,HttpStatus.OK);
 	}
 	
@@ -54,18 +56,18 @@ public class MeetingController {
 		this.meetingService.deleteMeeting(meetingId);
 	}
 	
-	@GetMapping("/{currentDateTime}/upcomming-meetings")
-	private ResponseEntity<List<MeetingDto>> upcommingMeetings(@RequestParam(value = "currentDateTime") String currentDateTime){
+	@GetMapping("/{user}/upcoming-meetings")
+	private ResponseEntity<List<MeetingDto>> upcommingMeetings(@PathVariable String user){
 		
-		List<MeetingDto> meetings=this.meetingRepository.upcomingMeetings(currentDateTime);
+		List<MeetingDto> meetings=this.meetingService.upcommingMeetings(user);
 		return new ResponseEntity<>(meetings,HttpStatus.OK);
 		
 	}
 	
-	@GetMapping("/{currentDateTime}/past-meetings")
-	private ResponseEntity<List<MeetingDto>> pastMeetings(@RequestParam(value = "currentDateTime") String currentDateTime){
+	@GetMapping("/{user}/past-meetings")
+	private ResponseEntity<List<MeetingDto>> pastMeetings(@PathVariable String user){
 		
-		List<MeetingDto> meetings=this.meetingRepository.pastMeetings(currentDateTime);
+		List<MeetingDto> meetings=this.meetingService.pastMeetings(user);
 		return new ResponseEntity<>(meetings,HttpStatus.OK);
 		
 	}

@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alok91340.gethired.dto.RecentSearchDto;
 import com.alok91340.gethired.entities.RecentSearch;
@@ -18,6 +19,7 @@ import com.alok91340.gethired.service.RecentSearchService;
  * @author aloksingh
  *
  */
+@Transactional
 @Service
 public class RecentSearchImpl implements RecentSearchService{
 	
@@ -28,7 +30,7 @@ public class RecentSearchImpl implements RecentSearchService{
 	public RecentSearchDto addRecentSearch(RecentSearchDto recentSearchDto) {
 		RecentSearch recentSearch= new RecentSearch();
 		recentSearch.setSearchedText(recentSearchDto.getSearchedText());
-		recentSearch.setUsername(recentSearchDto.getUsername());
+		recentSearch.setUserId(recentSearchDto.getUserId());
 		RecentSearch savedRecentSearch=this.recentSearchRepository.save(recentSearch);
 		return mapToDto(savedRecentSearch);
 	}
@@ -41,7 +43,7 @@ public class RecentSearchImpl implements RecentSearchService{
 		RecentSearchDto recentSearchDto= new RecentSearchDto();
 		recentSearchDto.setId(recentSearch.getId());
 		recentSearchDto.setSearchedText(recentSearch.getSearchedText());
-		recentSearchDto.setUsername(recentSearch.getUsername());
+		recentSearchDto.setUserId(recentSearch.getUserId());
 		return recentSearchDto;
 	}
 
@@ -53,17 +55,18 @@ public class RecentSearchImpl implements RecentSearchService{
 	}
 
 	@Override
-	public List<RecentSearchDto> findLast8DistinctSearchesByUsername(String username) {
+	public List<RecentSearchDto> findLast8DistinctSearchesByUsername(Long userId) {
 		
-		List<RecentSearch> recentSearches=this.recentSearchRepository.findDistinctTop8ByUsernameOrderByIdDesc(username);
+		
+		List<RecentSearch> recentSearches=this.recentSearchRepository.findDistinctTop8ByUserIdOrderByIdDesc(userId);
 		
 		List<RecentSearchDto> recentSearchDtos=recentSearches.stream().map(recentSearch->mapToDto(recentSearch)).collect(Collectors.toList());
 		return recentSearchDtos;
 	}
 
 	@Override
-	public void deleteAllRecentSearch(String username) {
-		this.recentSearchRepository.deleteAllByUsername(username);
+	public void deleteAllRecentSearch(Long userId) {
+		this.recentSearchRepository.deleteAllByUsername(userId);
 		
 	}
 

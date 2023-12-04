@@ -3,14 +3,20 @@
  */
 package com.alok91340.gethired.service.serviceImpl;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.alok91340.gethired.dto.ChatRoomDto;
+import com.alok91340.gethired.dto.ChatRoomResponse;
+import com.alok91340.gethired.dto.UserChattingInfoDto;
 import com.alok91340.gethired.entities.ChatRoom;
 import com.alok91340.gethired.entities.Message;
 import com.alok91340.gethired.entities.User;
@@ -43,7 +49,7 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 	
 
 	@Override
-	public List<ChatRoomDto> getChatRoomsAndUnseenMessageCount(String senderUsername, String receiverUsername) {
+	public List<ChatRoomResponse> getChatRoomsAndUnseenMessageCount(Long senderId, Long receiverId) {
 		
 //		User sender= this.userRepository.findById(senderUsername).orElseThrow();
 //		User receiver = this.userRepository.findById(receiverUsername).orElseThrow();
@@ -72,10 +78,10 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 	
 
 	@Override
-	public void sendChatRequest(String senderUsername, String receiverUsername) {
+	public void sendChatRequest(Long senderId, Long receiverId) {
 		
-		User user1= this.userRepository.findById(senderUsername).orElseThrow();
-		User user2 = this.userRepository.findById(receiverUsername).orElseThrow();
+		User user1= this.userRepository.findById(senderId).orElseThrow();
+		User user2 = this.userRepository.findById(receiverId).orElseThrow();
 		
 		// Check if there's an existing chat room between user1 and user2
 	    Optional<ChatRoom> existingChatRoom = chatRoomRepository.findChatRoomByUsers(user1, user2);
@@ -92,23 +98,25 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 	        chatRoom.setDeleted(false);
 	        chatRoom.setGroup(false);
 	        chatRoom.setRequest(true); // Set it as a request
+	        chatRoom.setTimeStamp(LocalDateTime.now());
 	        chatRoomRepository.save(chatRoom);
 
 	        // Add users to the chat room
 	        chatRoom.getUsers().add(user1);
 	        chatRoom.getUsers().add(user2);
+	        
 
 	        // Save the chat room with users
 	        chatRoomRepository.save(chatRoom);
 	    }
 		
 		UserChatRoomId userChatRoomId1 = new UserChatRoomId();
-		userChatRoomId1.setUserId(user1.getUsername()); // Set the user's ID
+		userChatRoomId1.setUserId(user1.getId()); // Set the user's ID
 		userChatRoomId1.setChatRoomId(chatRoom.getId());
 
 		
 		UserChatRoomId userChatRoomId2 = new UserChatRoomId();
-		userChatRoomId2.setUserId(user2.getUsername()); // Set the user's ID
+		userChatRoomId2.setUserId(user2.getId()); // Set the user's ID
 		userChatRoomId2.setChatRoomId(chatRoom.getId());
 
 		
@@ -146,14 +154,16 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 	
 
 	@Override
-	public ChatRoomDto findUserChattingWith(String username) {
+	public List<ChatRoomResponse> findUserChattingWith(Long userId) {
 		
-		User user=this.userRepository.findById(username).orElse(null);
+		User user=this.userRepository.findById(userId).orElse(null);
 		
-		List<User> usersChattingWith = new ArrayList<>();
+//		List<User> usersChattingWith = new ArrayList<>();
+	    List<ChatRoomResponse> chatList= new ArrayList<>();
 	    
-	    // Assuming you have a UserChatRoomRepository
-	    List<UserChatRoom> userChatRooms = userChatRoomRepository.findByUserAndIsDeleted(user, false);
+	    List<Long> chatRoomIds=this.userChatRoomRepository.findChatRoomIdsByUser(user);
+		
+	    List<UserChatRoom> userChatRooms = userChatRoomRepository.findUserChatRoomByChatRoomIdsAndIsRequestSenderAndIsNotDeletedAndNotSameUser(userId,chatRoomIds );
 
 	    for (UserChatRoom userChatRoom : userChatRooms) {
 	        // Get the other user from the UserChatRoom
@@ -164,18 +174,45 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 	                .orElse(null);
 
 	        if (otherUser != null) {
-	            usersChattingWith.add(otherUser);
+	        	ChatRoomResponse chatRoomResponse=new ChatRoomResponse();
+	        	chatRoomResponse.setId(userChatRoom.getChatRoom().getId());
+	        	chatRoomResponse.setReceiver(otherUser);
+	        	
+	        	Pageable pageable = PageRequest.of(0, 1, Sort.by("timestamp").descending());
+	        	List<Message> latestMessage = this.messageRepository.findLatestMessage(userChatRoom.getChatRoom().getId(), pageable);
+
+	        	chatRoomResponse.setIsRequest(userChatRoom.getChatRoom().isRequest());
+	        	if(latestMessage.size()!=0) {
+	        		chatRoomResponse.setLastMessage(latestMessage.get(0));
+	        		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+
+	                // Parse the string to LocalDateTime
+	                LocalDateTime localDateTime = LocalDateTime.parse(latestMessage.get(0).getTimestamp(), formatter);
+
+	        		chatRoomResponse.setTimeStamp(localDateTime);
+	        	}
+	        	else {
+	        		chatRoomResponse.setTimeStamp(userChatRoom.getChatRoom().getTimeStamp());
+	        		
+	        	}
+	        			
+	            chatList.add(chatRoomResponse);
 	        }
 	    }
-
 	    
-		return null;
+	    
+		return chatList;
 	}
 
 	@Override
 	public void acceptChatRequest(Long chatRoomId) {
 		// Find the chat room (assuming you have the chat room ID)
+		
 		ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).orElse(null);
+		
+		UserChatRoom userChatRoom=this.userChatRoomRepository.findByChatRoomAndIsRequestSender(chatRoom, true);
+	
+		
 
 		if (chatRoom != null && chatRoom.isRequest()) {
 		    // Set it as an active chat
@@ -207,6 +244,27 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 		}
 
 		
+	}
+
+
+	@Override
+	public UserChattingInfoDto findUserChattingInfo(Long senderId, Long receiverId) {
+		User user1=this.userRepository.findById(senderId).orElse(null);
+		User user2=this.userRepository.findById(receiverId).orElse(null);
+		Optional<ChatRoom> chatRoom = this.chatRoomRepository.findChatRoomByUsers(user1, user2);
+		UserChattingInfoDto userChattingInfoDto = new UserChattingInfoDto();
+		if(chatRoom.isPresent()) {
+			
+			UserChatRoom userChatRoom = this.userChatRoomRepository.findByChatRoomAndUser(chatRoom.get(), user2);
+			
+			userChattingInfoDto.setIsRequested(chatRoom.get().isRequest());
+			userChattingInfoDto.setUsername(userChatRoom.getUser().getUsername());
+			userChattingInfoDto.setIsSender(userChatRoom.isRequestSender());
+			userChattingInfoDto.setImage(userChatRoom.getUser().getImage());
+			
+			
+		}
+		return userChattingInfoDto;
 	}
 
 }

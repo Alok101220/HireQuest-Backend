@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alok91340.gethired.dto.ChatRoomDto;
 import com.alok91340.gethired.dto.ChatUser;
 import com.alok91340.gethired.entities.ChatRoom;
 import com.alok91340.gethired.entities.Message;
@@ -44,7 +43,7 @@ public class ChatServiceImpl implements ChatService{
     }
 
 	@Override
-	public List<Message> getMessages(String senderId, String receiverId,String timeStamp) {
+	public List<Message> getMessages(Long senderId, Long receiverId,String timeStamp) {
 	    // Assuming you have a MessageRepository
 	    List<Message> messages = messageRepository.fetchAllMessage(senderId, receiverId, timeStamp);
 	    return messages;

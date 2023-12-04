@@ -29,8 +29,8 @@ public class Notification {
     private Long id;
     private String title;
     private String body;
-    private String senderUsername;
-    private String receiverUsername;
+    private Long senderId;
+    private Long receiverId;
     private String notificationType;
     private boolean readStatus;
     private LocalDateTime timestamp;

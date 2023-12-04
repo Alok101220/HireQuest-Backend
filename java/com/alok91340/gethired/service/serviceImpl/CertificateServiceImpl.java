@@ -60,7 +60,7 @@ public class CertificateServiceImpl implements CertificateService{
 	@Override
 	public List<CertificateDto> getAllCertificate(Long userProfileId) {
 		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()-> new ResourceNotFoundException("user-profile",userProfileId));
-		List<Certificate> certificates=userProfile.getCertificates();
+		List<Certificate> certificates=this.certificateRepository.findAllByUserProfile(userProfile);
 		List<CertificateDto> certificateDto=certificates.stream().map(certificate->mapToDto(certificate)).collect(Collectors.toList());
 		return certificateDto;
 	}

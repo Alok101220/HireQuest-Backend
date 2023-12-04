@@ -39,10 +39,10 @@ public class RecentSearchController {
 		
 	}
 	
-	@GetMapping("/{username}/get-recentSearches")
-	public ResponseEntity<List<RecentSearchDto>> getAllRecentSearch(@PathVariable String username){
+	@GetMapping("/{userId}/get-recentSearches")
+	public ResponseEntity<List<RecentSearchDto>> getAllRecentSearch(@PathVariable Long userId){
 		
-		List<RecentSearchDto> recentSearches=this.recentSearchService.findLast8DistinctSearchesByUsername(username);
+		List<RecentSearchDto> recentSearches=this.recentSearchService.findLast8DistinctSearchesByUsername(userId);
 		return ResponseEntity.ok(recentSearches);
 	}
 	
@@ -53,10 +53,10 @@ public class RecentSearchController {
 		return ResponseEntity.ok("deleted");
 	}
 	
-	@DeleteMapping("/{username}/delete-recentSearches")
-	public ResponseEntity<String> deleteRecentSearch(@PathVariable String username){
+	@DeleteMapping("/{userId}/delete-recentSearches")
+	public ResponseEntity<String> deleteAllRecentSearch(@PathVariable Long userId){
 		
-		this.recentSearchService.deleteAllRecentSearch(username);
+		this.recentSearchService.deleteAllRecentSearch(userId);
 		return ResponseEntity.ok("deleted");
 	}
 

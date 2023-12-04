@@ -36,7 +36,7 @@ public class ImageServiceImpl implements ImageService{
 	private ImageRepository imageRepository;
 
 	@Override
-    public Image saveImage(String userId, MultipartFile file) {
+    public Image saveImage(Long userId, MultipartFile file) {
         Image image = uploadImage(file);
         User user = this.userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user", (long) 0));
 

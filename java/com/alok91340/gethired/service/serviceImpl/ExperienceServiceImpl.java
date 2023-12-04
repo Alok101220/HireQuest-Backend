@@ -63,7 +63,7 @@ public class ExperienceServiceImpl implements ExperienceService{
 	public List<ExperienceDto> getAllExperience(Long userProfileId) {
 
 		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("User-Profile",userProfileId));
-		List<Experience> experiences=userProfile.getExperiences();
+		List<Experience> experiences=this.experienceRepository.findAllByUserProfile(userProfile);
 		List<ExperienceDto> experienceDtos=experiences.stream().map(experience->mapToDto(experience)).collect(Collectors.toList());
 		return experienceDtos;
 	}

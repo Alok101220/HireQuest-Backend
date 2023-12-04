@@ -12,11 +12,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alok91340.gethired.dto.ChatRoomDto;
+import com.alok91340.gethired.dto.ChatRoomResponse;
+import com.alok91340.gethired.dto.UserChattingInfoDto;
 import com.alok91340.gethired.entities.ChatRoom;
+import com.alok91340.gethired.entities.Message;
 import com.alok91340.gethired.entities.User;
 import com.alok91340.gethired.entities.UserChatRoom;
 import com.alok91340.gethired.repository.ChatRoomRepository;
@@ -47,13 +50,13 @@ public class ChatRoomController {
 	private UserRepository userRepository;
 	
 	
-	@PostMapping("/{senderUsername}/{receiverUsername}/send-chatRequest")
-	public ResponseEntity<String> createChatRoom(@PathVariable String senderUsername, @PathVariable String receiverUsername){
+	@PostMapping("/{senderId}/{receiverId}/send-chat-request")
+	public ResponseEntity<Boolean> createChatRoom(@PathVariable Long senderId, @PathVariable Long receiverId,@RequestBody Message message){
 		
-		this.chatRoomService.sendChatRequest(senderUsername, receiverUsername);
+		this.chatRoomService.sendChatRequest(senderId, receiverId );
 		
 	
-		return ResponseEntity.ok("Cerated");
+		return ResponseEntity.ok(true);
 		
 	}
 	
@@ -71,25 +74,29 @@ public class ChatRoomController {
 		
 	}
 	
-	@GetMapping("/{username}/get-pendingChatRequest")
-	public ResponseEntity<List<UserChatRoom>> getPendingChatRequestsForUser(@PathVariable String username) {
+	@GetMapping("/{userId}/get-pendingChatRequest")
+	public ResponseEntity<List<User>> getPendingChatRequestsForUser(@PathVariable Long userId) {
 		
-		User user=this.userRepository.findById(username).orElseThrow();
+		User user=this.userRepository.findById(userId).orElseThrow();
 		
-		List<ChatRoom> chatRoom=this.userChatRoomRepository.findChatRoomIdsByUser(user);
+		List<Long> chatRoom=this.userChatRoomRepository.findChatRoomIdsByUser(user);
 		
-		System.out.println();
-		System.out.println();System.out.println();System.out.println();System.out.println();System.out.println();
-		System.out.println(chatRoom);
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-	
-		List<UserChatRoom> userChatRooms=userChatRoomRepository.findUserChatRoomsByChatroomAndIsRequestSenderAndNotSameUser(user,chatRoom);
+		
+		List<User> userChatRooms=userChatRoomRepository.findUserChatRoomsByChatroomIdsAndIsRequestSenderAndNotSameUser(userId,chatRoom);
 		return ResponseEntity.ok(userChatRooms);
+	}
+	
+	@GetMapping("/{userId}/get-chatting-list")
+	public ResponseEntity<List<ChatRoomResponse>> getChattingList(@PathVariable Long userId){
+		List<ChatRoomResponse> chatList=this.chatRoomService.findUserChattingWith(userId);
+		return ResponseEntity.ok(chatList);
+	}
+	
+	@GetMapping("{senderId}/{receiverId}/get-user-info")
+	public ResponseEntity<UserChattingInfoDto> getUserInfo(@PathVariable Long senderId, @PathVariable Long receiverId){
+		
+		UserChattingInfoDto userInfo=this.chatRoomService.findUserChattingInfo(senderId, receiverId);
+		return ResponseEntity.ok(userInfo);
 	}
 
 

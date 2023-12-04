@@ -15,7 +15,7 @@ import com.alok91340.gethired.entities.User;
  * @author alok91340
  *
  */
-public interface UserRepository extends JpaRepository<User,String> {
+public interface UserRepository extends JpaRepository<User,Long> {
 	
 	User findUserByUsername(String username);
 	User findUserByEmail(String email);
@@ -24,6 +24,11 @@ public interface UserRepository extends JpaRepository<User,String> {
 
     Boolean existsByEmail(String email);
     
-    @Query("SELECT u FROM User u WHERE LOWER(u.name) LIKE %:query% OR LOWER(u.email) LIKE %:query%")
+    @Query("SELECT u FROM User u WHERE LOWER(u.name) LIKE %:query% OR LOWER(u.email) LIKE %:query% OR LOWER(u.username) LIKE %:query%")
     List<User> searchUsers(String query);
+	/**
+	 * @param userId
+	 * @return
+	 */
+//	Optional<User> findById(Long userId);
 }

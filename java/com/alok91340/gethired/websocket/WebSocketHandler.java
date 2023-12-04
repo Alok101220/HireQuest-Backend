@@ -3,7 +3,10 @@
  */
 package com.alok91340.gethired.websocket;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+
 /**
  * @author aloksingh
  *
@@ -28,107 +31,92 @@ import com.alok91340.gethired.repository.MessageRepository;
 import com.alok91340.gethired.repository.UserRepository;
 import com.alok91340.gethired.security.JwtTokenProvider;
 import com.alok91340.gethired.service.serviceImpl.FcmNotificationService;
-
 @Component
 public class WebSocketHandler extends TextWebSocketHandler {
+
+	@Autowired
+    private  MessageRepository messageRepository;
 	
-	private final MessageRepository messageRepository;
-    private final PresenceService presenceService;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final UserRepository userRepository;
-    private final FcmNotificationService fcmNotificationService;
-    
-    
-    public WebSocketHandler(MessageRepository messageRepository, PresenceService presenceService,JwtTokenProvider jwtTokenProvider,UserRepository userRepository,FcmNotificationService fcmNotificationService) {
-        this.messageRepository = messageRepository;
-        this.presenceService = presenceService;
-        this.jwtTokenProvider=jwtTokenProvider;
-        this.userRepository=userRepository;
-        this.fcmNotificationService=fcmNotificationService;
-    }
+	@Autowired
+    private  PresenceService presenceService;
 	
-    private final Map<String, WebSocketSession> activeSessions = new HashMap<>();
-    
+	@Autowired
+    private  JwtTokenProvider jwtTokenProvider;
+	
+	@Autowired
+    private  UserRepository userRepository;
+	
+	@Autowired
+    private  FcmNotificationService fcmNotificationService;
+
+    private final Map<Long, WebSocketSession> activeSessions = new HashMap<>();
+
+    // Constructor
+
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        // Extract the user token from the URI path
         String token = session.getUri().getPath().replace("/ws/", "");
-        
+
         try {
-            // Authenticate user using the token (e.g., verify token with your authentication service)
             String userName = this.jwtTokenProvider.getUserNameFromToken(token);
             Optional<User> userOptional = this.userRepository.findByUsername(userName);
 
             if (userOptional.isPresent()) {
-                String userId = userOptional.get().getUsername();
+                Long userId = userOptional.get().getId();
                 session.getAttributes().put("userId", userId);
-                
+
                 presenceService.addUserSession(userId, session);
-              
-
-                // Store the WebSocket session for the user
                 activeSessions.put(userId, session);
-
-                // Notify others that this user is online
-//                broadcastPresenceUpdate(userId, true);
             } else {
-                // Handle case where user is not found
                 session.close();
             }
         } catch (Exception e) {
-            // Handle authentication or retrieval error
-            e.printStackTrace(); // You may want to log the error
+            e.printStackTrace();
             session.close();
         }
     }
 
-
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        String senderUsername = getUserIdFromSession(session);
-
-        // Parse the message content and extract sender, receiver, and content
+        Long senderId = getUserIdFromSession(session);
         ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, Object> messageData = objectMapper.readValue(message.getPayload(), new TypeReference<Map<String,Object>>(){});
-        String receiverUsername=messageData.get("receiverUsername").toString();
-        
-        String content = (String) messageData.get("content");
-       
-        // Save the message to the database
-        senderUsername=messageData.get("senderUsername").toString();
-        Message messageEntity = new Message();
-        messageEntity.setSenderUsername(senderUsername);
-        messageEntity.setReceiverUsername(receiverUsername);
-        messageEntity.setContent(content);
-        messageEntity.setTimestamp((String)messageData.get("timestamp"));
-        messageEntity.setSeen(false);
-//        presenceService.addUserSession(receiverId, session);
 
-        // Process and send messages to recipients
-        Set<WebSocketSession> receiverSessions = presenceService.getSessionsForUser(receiverUsername);
-        if(receiverSessions.isEmpty()) {
-        	User user = userRepository.findById(receiverUsername)
-                    .orElseThrow(() -> new ResourceNotFoundException("user",(long)0));
-        	NotificationRequest request= new NotificationRequest();
-        	request.setBody(content);
-        	request.setTitle("message");
-        	request.setNotificationType("message");
-        	request.setReceiverUsername(receiverUsername);
-        	request.setSenderUsername(senderUsername);
-        	
-        	fcmNotificationService.sendNotification(user.getFcmToken(), request);
-        	
-        }else {
-        	for (WebSocketSession receiverSession : receiverSessions) {
+        Map<String, Object> messageData = objectMapper.readValue(message.getPayload(), new TypeReference<Map<String, Object>>(){});
+        Long receiverId = Long.valueOf(String.valueOf(messageData.get("receiverId")));
+        String content = (String) messageData.get("content");
+
+        Message messageEntity = new Message();
+        messageEntity.setSenderId(senderId);
+        messageEntity.setReceiverId(receiverId);
+        messageEntity.setContent(content);
+        messageEntity.setTimestamp((String) messageData.get("timestamp"));
+        messageEntity.setSeen(false);
+
+        Set<WebSocketSession> receiverSessions = presenceService.getSessionsForUser(receiverId);
+
+        if (receiverSessions.isEmpty()) {
+            User user = userRepository.findById(receiverId)
+                    .orElseThrow(() -> new ResourceNotFoundException("user", receiverId));
+
+            NotificationRequest request = new NotificationRequest();
+            request.setBody(content);
+            request.setTitle("message");
+            request.setNotificationType("message");
+            request.setReceiverId(receiverId);
+            request.setSenderId(senderId);
+            if(!user.getFcmToken().isEmpty()) {
+            	fcmNotificationService.sendNotification(user.getFcmToken(), request);
+            }
+            
+        } else {
+            for (WebSocketSession receiverSession : receiverSessions) {
                 try {
                     if (receiverSession.isOpen()) {
-                        // Create a message to send to the recipient
-                    	String responseMessage = "{\"id\": " + 0 +
-                    			", \"senderUsername\": \"" + senderUsername + "\"" +
-                                ", \"receiverUsername\": \"" + receiverUsername + "\"" +
+                        String responseMessage = "{\"id\": " + 0 +
+                                ", \"senderId\": \"" + senderId + "\"" +
+                                ", \"receiverId\": \"" + receiverId + "\"" +
                                 ", \"content\": \"" + content + "\"" +
                                 ", \"timestamp\": \"" + messageEntity.getTimestamp() + "\"" +
-                                
                                 ", \"seen\": " + false +
                                 "}";
 
@@ -139,29 +127,21 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 }
             }
         }
-        
-        Message savedMessage=this.messageRepository.save(messageEntity);
+
+        Message savedMessage = this.messageRepository.save(messageEntity);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        // Extract the user ID from the session
-        String userId = getUserIdFromSession(session);
-
-        // Remove the WebSocket session for the user
+        Long userId = getUserIdFromSession(session);
         activeSessions.remove(userId);
-
-        // Notify others that this user is offline
-//        broadcastPresenceUpdate(userId, false);
     }
 
     private void broadcastPresenceUpdate(String senderUsername, boolean isOnline) {
-        // Notify all connected WebSocket clients about the presence update
         for (WebSocketSession session : activeSessions.values()) {
             try {
                 if (session.isOpen()) {
-                    // Create a message to notify clients about the presence update
-                    String message = "{\"type\": \"presenceUpdate\", \"senderUsername\": " + senderUsername + ", \"isOnline\": " + isOnline + "}";
+                    String message = "{\"type\": \"presenceUpdate\", \"senderId\": " + senderUsername + ", \"isOnline\": " + isOnline + "}";
                     session.sendMessage(new TextMessage(message));
                 }
             } catch (IOException e) {
@@ -170,17 +150,20 @@ public class WebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-    // Implement getUserIdFromSession method to retrieve user ID from the WebSocketSession
-    private String getUserIdFromSession(WebSocketSession session) {
-        // Assume that you've stored the user ID in the session attributes during login
+    private Long getUserIdFromSession(WebSocketSession session) {
         Map<String, Object> attributes = session.getAttributes();
-        Object userIdObject = attributes.get("userId"); // Replace "userId" with the actual key you use
+        Object userIdObject = attributes.get("userId");
+
         if (userIdObject instanceof String) {
-            return userIdObject.toString();
+            try {
+                return Long.parseLong((String) userIdObject);
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        } else if (userIdObject instanceof Long) {
+            return (Long) userIdObject;
         } else {
             return null;
         }
     }
-
-    
 }

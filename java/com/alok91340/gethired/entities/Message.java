@@ -29,9 +29,9 @@ public class Message {
     @JoinColumn(name = "room_id")
     private Long roomId;
 
-    private String senderUsername;
+    private Long senderId;
 
-    private String receiverUsername;
+    private Long receiverId;
 
     private String content;
     private String timestamp;

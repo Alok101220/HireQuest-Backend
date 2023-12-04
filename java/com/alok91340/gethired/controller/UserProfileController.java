@@ -70,9 +70,9 @@ public class UserProfileController {
 		return ResponseEntity.ok(result);
 	}
 
-	@GetMapping("/{username}/get-user-profile")
-	public ResponseEntity<UserProfileDto> getUserProfileDto(@PathVariable("username") String username){
-		UserProfileDto result=this.userProfileService.getUserProfile(username);
+	@GetMapping("/{userId}/get-user-profile")
+	public ResponseEntity<UserProfileDto> getUserProfileDto(@PathVariable("userId") Long userId){
+		UserProfileDto result=this.userProfileService.getUserProfile(userId);
 		return new ResponseEntity<>(result,HttpStatus.OK);
 	}
 	

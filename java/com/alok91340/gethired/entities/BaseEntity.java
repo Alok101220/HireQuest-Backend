@@ -38,6 +38,7 @@ public abstract class BaseEntity {
     @LastModifiedDate
     @Column(name = "updated_at", insertable = false)
     private LocalDateTime updatedAt;
+    
     @LastModifiedBy
     @Column(insertable = false)
     private String updatedBy;

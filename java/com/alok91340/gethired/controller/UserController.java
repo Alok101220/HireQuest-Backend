@@ -5,6 +5,7 @@ package com.alok91340.gethired.controller;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,10 +30,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alok91340.gethired.utils.Constant;
 import com.alok91340.gethired.utils.isAuthenticatedAsAdminOrUser;
+import com.alok91340.gethired.websocket.PresenceService;
 
 import jakarta.servlet.http.HttpSession;
 
 import com.alok91340.gethired.dto.LoginDto;
+import com.alok91340.gethired.dto.RegisterDto;
 import com.alok91340.gethired.dto.RegistrationResponse;
 import com.alok91340.gethired.dto.UserDto;
 import com.alok91340.gethired.entities.User;
@@ -41,6 +44,7 @@ import com.alok91340.gethired.repository.UserRepository;
 import com.alok91340.gethired.security.JwtAuthResponse;
 import com.alok91340.gethired.security.JwtTokenProvider;
 import com.alok91340.gethired.service.UserService;
+import com.alok91340.gethired.service.serviceImpl.PresenceServiceImpl;
 
 /**
  * @author alok91340
@@ -55,6 +59,9 @@ public class UserController {
     
     @Autowired
     private UserDetailsService userDetailsService;
+    
+    @Autowired
+    private PresenceServiceImpl presenceService;
     
     @Autowired
     private JwtTokenProvider tokenProvider;
@@ -74,11 +81,11 @@ public class UserController {
     private UserRepository userRepo;
 //	get user by id
     @isAuthenticatedAsAdminOrUser
-	@GetMapping("/{username}/get-user")
-	public ResponseEntity<?> getUser(@AuthenticationPrincipal Authentication authentication,@PathVariable String username){
+	@GetMapping("/{userId}/get-user")
+	public ResponseEntity<?> getUser(@AuthenticationPrincipal Authentication authentication,@PathVariable Long userId){
 		
 //			UserDto userDto= userService.getUser(userId);
-		UserDto user= this.userService.getUser(username);
+		UserDto user= this.userService.getUser(userId);
 		
 			return new ResponseEntity<>(user,HttpStatus.OK);
 		
@@ -98,20 +105,20 @@ public class UserController {
 	
 //	create user
 	@PostMapping("/create-user")
-	public ResponseEntity<RegistrationResponse> createUser(@RequestBody UserDto userDto){
+	public ResponseEntity<RegistrationResponse> createUser(@RequestBody RegisterDto registerDto){
 
 		RegistrationResponse response=new RegistrationResponse();
 		// check for userName exists in DB
-        if (userRepo.existsByUsername(userDto.getUsername())) {
+        if (userRepo.existsByUsername(registerDto.getUsername())) {
         	response.setMessage("Username already exists");
             return new ResponseEntity<>(response,
                     HttpStatus.BAD_REQUEST);
         }
-        if (userRepo.existsByEmail(userDto.getEmail())) {
+        if (userRepo.existsByEmail(registerDto.getEmail())) {
         	response.setMessage("Email already exists");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-		UserDto result=userService.createUser(userDto);
+		UserDto result=userService.createUser(registerDto);
 		response.setMessage("User is successfully registered");
 		return new ResponseEntity<>(response,HttpStatus.OK);
 		
@@ -119,7 +126,7 @@ public class UserController {
 	
 //	authenticate
 	@PostMapping(value="/user-login", produces = "application/json")
-    public ResponseEntity<JwtAuthResponse> authenticateUser(@RequestBody LoginDto loginDto) throws Exception {
+    public ResponseEntity<JwtAuthResponse> loginUser(@RequestBody LoginDto loginDto) throws Exception {
 
 		if(!loginDto.getGoogleIdToken().isEmpty()) {
 			
@@ -141,7 +148,9 @@ public class UserController {
             UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
             String token = tokenProvider.generateToken(userDetails);
             user.setFcmToken(loginDto.getFcmToken());
+            user.setStatus(true);
             this.userRepo.save(user);
+            presenceService.setUserOnline(Long.toString(user.getId()));
             return ResponseEntity.ok(new JwtAuthResponse(token));
             
 		}
@@ -158,7 +167,9 @@ public class UserController {
         
         User user=this.userRepo.findByUsername(loginDto.getUsername()).orElseThrow(()-> new ResourceNotFoundException("user",(long)0));
         user.setFcmToken(loginDto.getFcmToken());
+        user.setStatus(true);
         this.userRepo.save(user);
+        presenceService.setUserOnline(Long.toString(user.getId()));
         return ResponseEntity.ok(new JwtAuthResponse(token));
 		}
     }
@@ -166,17 +177,17 @@ public class UserController {
 	
 	
 //	update user
-	@PutMapping("/{username}/update-user")
-	public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto,@PathVariable String username){
-		UserDto updatedUserDto= userService.updateUser(username, userDto);
+	@PutMapping("/{userId}/update-user")
+	public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto,@PathVariable Long userId){
+		UserDto updatedUserDto= userService.updateUser(userId, userDto);
 		return ResponseEntity.ok(updatedUserDto);
 	}
 	
 //	delete user
-	@DeleteMapping("/{username}/delete-user")
-	public ResponseEntity<?> deleteUser(@PathVariable String username){
-		userService.deleteUser(username);
-		return ResponseEntity.ok("Deleted user with id:"+username);
+	@DeleteMapping("/{userId}/delete-user")
+	public ResponseEntity<?> deleteUser(@PathVariable Long userId){
+		userService.deleteUser(userId);
+		return ResponseEntity.ok("Deleted user with id:"+userId);
 	}
 	
 	
@@ -212,20 +223,54 @@ public class UserController {
 	}
 	
 	
+	@PostMapping("/{userId}/userPresence-offline")
+	public ResponseEntity<String> offlineUserPresence(@PathVariable Long userId){
+		presenceService.setUserOffline(Long.toString(userId));
+		
+		return ResponseEntity.ok("offline");
+	}
+	
+	
+	@PutMapping("/user-logout")
+	public ResponseEntity<Boolean> logoutUser(@RequestParam(value="username") String username){
+		
+		
+		User user = this.userRepo.findByUsername(username).orElseThrow();
+		user.setStatus(false);
+		user.setFcmToken(null);
+		this.userRepo.save(user);
+		
+		
+		return ResponseEntity.ok(true);
+		
+		
+	}
+	
+	@GetMapping("{username}/get-fcm-token")
+	public ResponseEntity<Boolean> getFcmToken(@PathVariable String username){
+		Optional<User> user=this.userRepo.findByUsername(username);
+		if(user.get().getFcmToken() != null) {
+			return ResponseEntity.ok(true);
+		}else {
+			return ResponseEntity.ok(false);
+		}
+	}
+	
+	
 public UserDto mapToDto(User user) {
 		
 	UserDto userDto= new UserDto();
-		userDto.setName(user.getName());
-		userDto.setUsername(user.getUsername());
-		userDto.setEmail(user.getEmail());
-		userDto.setPassword(user.getPassword());
-		userDto.setHeadline(user.getHeadline());
-		userDto.setIsRecuriter(user.getIsRecuriter());
-		userDto.setStatus(user.isStatus());
-		userDto.setBirthdate(user.getBirthdate());
-		userDto.setCurrentOccupation(user.getCurrentOccupation());
-		userDto.setPhone(user.getPhone());
-		userDto.setFcmToken(user.getFcmToken());
+	userDto.setId(user.getId());
+	userDto.setName(user.getName());
+	userDto.setEmail(user.getEmail());
+	userDto.setUsername(user.getUsername());
+	userDto.setBirthdate(user.getBirthdate());
+	userDto.setHeadline(user.getHeadline());
+	userDto.setStatus(user.isStatus());
+	userDto.setPhone(user.getPhone());
+	userDto.setGender(user.getGender());
+	userDto.setIsRecuriter(user.getIsRecuriter());
+	userDto.setCurrentOccupation(user.getCurrentOccupation());
 		return userDto;
 	}
 
@@ -251,6 +296,6 @@ Exception {
 
         throw new Exception("INVALID_CREDENTIALS", e);
     }
-}
+  }
 	
 }

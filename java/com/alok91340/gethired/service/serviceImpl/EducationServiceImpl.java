@@ -60,7 +60,7 @@ public class EducationServiceImpl implements EducationService{
 	@Override
 	public List<EducationDto> getAllEducation(Long userprofileId) {
 		UserProfile userProfile=this.userProfileRepository.findById(userprofileId).orElseThrow(()->new ResourceNotFoundException("user with userprofile Id",userprofileId));
-		List<Education> educations=userProfile.getEducations();
+		List<Education> educations=this.educationRepository.findAllByUserProfile(userProfile);
 		List<EducationDto>educationDtos=educations.stream().map(education -> mapToDto(education))
                 .collect(Collectors.toList());
 				return educationDtos;

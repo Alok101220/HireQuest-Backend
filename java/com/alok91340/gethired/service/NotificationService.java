@@ -20,6 +20,6 @@ public interface NotificationService {
 	
 	void deleteNotification(Long notificationId);
 	
-	List<NotificationDto> getAllNotification(String receiverUserName);
+	List<NotificationDto> getAllNotification(Long receiverId);
 
 }

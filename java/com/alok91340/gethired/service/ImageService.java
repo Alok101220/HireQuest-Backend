@@ -19,6 +19,6 @@ import com.alok91340.gethired.entities.Image;
  */
 public interface ImageService {
 	
-	Image saveImage(String username,MultipartFile file) throws SerialException, SQLException, IOException;
+	Image saveImage(Long username,MultipartFile file) throws SerialException, SQLException, IOException;
 //	Image saveImage(Long imageId);
 }

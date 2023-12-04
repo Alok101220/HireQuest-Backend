@@ -15,17 +15,17 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Service
 public class PresenceService {
-    private final Map<String, Set<WebSocketSession>> userSessions = new ConcurrentHashMap<>();
+    private final Map<Long, Set<WebSocketSession>> userSessions = new ConcurrentHashMap<>();
 
-    public void addUserSession(String userId, WebSocketSession session) {
+    public void addUserSession(Long userId, WebSocketSession session) {
         userSessions.computeIfAbsent(userId, k -> new HashSet<>()).add(session);
     }
 
-    public void removeUserSession(String userId) {
+    public void removeUserSession(Long userId) {
         userSessions.remove(userId);
     }
 
-    public Set<WebSocketSession> getSessionsForUser(String userId) {
+    public Set<WebSocketSession> getSessionsForUser(Long userId) {
         return userSessions.getOrDefault(userId, Collections.emptySet());
     }
 }

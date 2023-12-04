@@ -38,28 +38,9 @@ public class UserProfile extends BaseEntity {
 	
 	private String about;
 	
-	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
-	@JsonManagedReference
-	private List<Profile> profiles;
-	
-	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
-	@JsonManagedReference
-	private List<Education> educations;
-	
-	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
-	@JsonManagedReference
-	private List<Certificate> certificates;
 	
 	
 	private List<String> skills= new ArrayList<>();
-	
-	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
-	@JsonManagedReference
-	private List<Experience> experiences;
-	
-	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
-	@JsonManagedReference
-	private List<Project> projects;
 	
 	
 	private List<String> languages;
@@ -67,13 +48,6 @@ public class UserProfile extends BaseEntity {
 	
 	private List<String> hobbies=new ArrayList<>();;
 	
-	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
-	@JsonManagedReference
-	private List<Appreciation> appreciations;
-	
-	@OneToMany(mappedBy="userProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
-	@JsonManagedReference
-	private List<Pdf> pdfs;
 	
 	@OneToOne
 	@JsonManagedReference

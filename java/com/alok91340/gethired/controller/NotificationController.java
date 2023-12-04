@@ -51,7 +51,7 @@ public class NotificationController {
 	@PostMapping("/send-notification")
 	public ResponseEntity<String> sendNotification(@RequestBody NotificationRequest request) {
 		// Call the notificationService to send the notification
-		User user = userRepository.findById(request.getReceiverUsername())
+		User user = userRepository.findById(request.getReceiverId())
 				.orElseThrow(() -> new ResourceNotFoundException("user",(long)0));
 		
 		String notificationId="";
@@ -86,9 +86,9 @@ public class NotificationController {
 		return new ResponseEntity<>("deleted",HttpStatus.OK);
 	}
 	
-	@GetMapping("/{receiverUsername}/get-notifications")
-	public ResponseEntity<List<NotificationDto>> getNotifications(@PathVariable String receiverUsername){
-		List<NotificationDto> notifications=this.notificationService.getAllNotification(receiverUsername);
+	@GetMapping("/{receiverId}/get-notifications")
+	public ResponseEntity<List<NotificationDto>> getNotifications(@PathVariable Long receiverId){
+		List<NotificationDto> notifications=this.notificationService.getAllNotification(receiverId);
 		return new ResponseEntity<>(notifications, HttpStatus.OK);
 	}
 	

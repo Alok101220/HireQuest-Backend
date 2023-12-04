@@ -38,7 +38,9 @@ public class SecurityConfig {
             "/api/hireQuest/{email}/check-email",
             "/api/hireQuest/{username}/check-username",
             "/api/hireQuest/{email}/{password}/change-password",
-            "/ws/{token}"
+            "/ws/{token}",
+            "api/hireQuest/{username}/get-fcm-token",
+            "api/hireQuest/user-logout"
     };
 
     @Autowired(required = false)

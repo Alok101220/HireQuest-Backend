@@ -63,7 +63,7 @@ public class AppreciationServiceImpl implements AppreciationService{
 	@Override
 	public List<AppreciationDto> getAllAppreciation(Long userProfileId) {
 		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
-		List<Appreciation> awards=userProfile.getAppreciations();
+		List<Appreciation> awards=this.awardRepository.findAllByUserProfile(userProfile);
 		List<AppreciationDto> awardDtos=awards.stream().map(award->mapToDto(award)).collect(Collectors.toList());
 		return awardDtos;
 	}

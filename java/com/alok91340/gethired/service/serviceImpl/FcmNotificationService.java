@@ -30,7 +30,7 @@ public class FcmNotificationService {
      Message message = Message.builder()
              .setNotification(notification)
              .putData("notification_type", request.getNotificationType())
-             .putData("sender", request.getSenderUsername())
+             .putData("sender", request.getSenderId().toString())
              .setToken(fcmToken)
              .build();
 

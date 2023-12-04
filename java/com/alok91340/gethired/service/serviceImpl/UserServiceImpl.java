@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.alok91340.gethired.dto.RegisterDto;
 import com.alok91340.gethired.dto.UserDto;
 import com.alok91340.gethired.entities.User;
 import com.alok91340.gethired.exception.ResourceNotFoundException;
@@ -45,10 +46,10 @@ public class UserServiceImpl implements UserService{
     }
 	
 	@Override
-	public UserDto createUser(UserDto userDto) {
+	public UserDto createUser(RegisterDto registerDto) {
 	
 		User user=new User();
-		mapToEntity(user,userDto);
+		mapToEntity(user,registerDto);
 		User savedUser=userRepo.save(user);
 		
 		UserProfile userProfile=new UserProfile();
@@ -60,8 +61,8 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public UserDto getUser(String username)throws ResourceNotFoundException {
-		User user=userRepo.findById(username).orElseThrow(()-> new ResourceNotFoundException("user not available",(long)0));
+	public UserDto getUser(Long userId)throws ResourceNotFoundException {
+		User user=userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("user not available",(long)0));
 		
 		return mapToDto(user);
 	}
@@ -80,11 +81,10 @@ public class UserServiceImpl implements UserService{
 		return userDtoList;
 	}
 
-	// ...
 
 	@Override
-	public UserDto updateUser(String username, UserDto userDto) {
-	    User user = userRepo.findById(username)
+	public UserDto updateUser(Long userId, UserDto userDto) {
+	    User user = userRepo.findById(userId)
 	                        .orElseThrow(() -> new ResourceNotFoundException("user", (long)0));
 	    
 	    user.setName(userDto.getName());
@@ -97,6 +97,7 @@ public class UserServiceImpl implements UserService{
 		user.setStatus(userDto.isStatus());
 		user.setPhone(userDto.getPhone());
 		user.setIsRecuriter(userDto.getIsRecuriter());
+		user.setGender(userDto.getGender());
 		user.setCurrentOccupation(userDto.getCurrentOccupation());
 
 	    user.setUpdatedAt(LocalDateTime.now());
@@ -107,12 +108,10 @@ public class UserServiceImpl implements UserService{
 	    return savedUserDto;
 	}
 
-	// ...
-
 
 	@Override
-	public String deleteUser(String username) {
-		User user= this.userRepo.findById(username).orElseThrow(()->new ResourceNotFoundException("user",(long)0));
+	public String deleteUser(Long userId) {
+		User user= this.userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("user",(long)0));
 		this.userRepo.delete(user);
 		return null;
 	}
@@ -121,21 +120,15 @@ public class UserServiceImpl implements UserService{
 	 * @param user
 	 * @param userDto
 	 */
-	public User mapToEntity(User user,UserDto userDto) {
-		user.setName(userDto.getName());
-		user.setEmail(userDto.getEmail());
-		String hashedPassword = bCryptPasswordEncoder.encode(userDto.getPassword());
+	public User mapToEntity(User user,RegisterDto registerDto) {
+		user.setName(registerDto.getName());
+		user.setEmail(registerDto.getEmail());
+		String hashedPassword = bCryptPasswordEncoder.encode(registerDto.getPassword());
 		user.setPassword(hashedPassword);
-		user.setUsername(userDto.getUsername());
+		user.setUsername(registerDto.getUsername());
 		user.setCreatedAt(LocalDateTime.now());
-		user.setCreatedBy(userDto.getUsername());
-		user.setBirthdate(userDto.getBirthdate());
-		user.setHeadline(userDto.getHeadline());
-		user.setStatus(userDto.isStatus());
-		user.setPhone(userDto.getPhone());
-		user.setIsRecuriter(userDto.getIsRecuriter());
-		user.setCurrentOccupation(userDto.getCurrentOccupation());
-		user.setFcmToken(userDto.getFcmToken());
+		user.setCreatedBy(registerDto.getUsername());
+		
 		return user;
 		
 	}
@@ -143,18 +136,17 @@ public class UserServiceImpl implements UserService{
 	public UserDto mapToDto(User user) {
 		
 		UserDto userDto= new UserDto();
-		
+		userDto.setId(user.getId());
 		userDto.setName(user.getName());
 		userDto.setEmail(user.getEmail());
-		userDto.setPassword(user.getPassword());
 		userDto.setUsername(user.getUsername());
 		userDto.setBirthdate(user.getBirthdate());
 		userDto.setHeadline(user.getHeadline());
 		userDto.setStatus(user.isStatus());
-		userDto.setPhone(userDto.getPhone());
+		userDto.setPhone(user.getPhone());
+		userDto.setGender(user.getGender());
 		userDto.setIsRecuriter(user.getIsRecuriter());
 		userDto.setCurrentOccupation(user.getCurrentOccupation());
-		userDto.setFcmToken(user.getFcmToken());
 		return userDto;
 	}
 

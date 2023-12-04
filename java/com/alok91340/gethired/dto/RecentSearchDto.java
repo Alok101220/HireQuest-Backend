@@ -14,7 +14,7 @@ public class RecentSearchDto {
 
 	private long id;
 	
-	private String username;
+	private Long userId;
 	private String searchedText;
 	
 }

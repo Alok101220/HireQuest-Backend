@@ -19,7 +19,7 @@ import lombok.Data;
 public class UserChatRoomId implements Serializable {
 
     @Column(name = "user_id")
-    private String userId;
+    private Long userId;
 
     @Column(name = "chatroom_id")
     private Long chatRoomId;

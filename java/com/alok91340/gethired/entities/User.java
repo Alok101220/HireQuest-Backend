@@ -9,7 +9,10 @@ import java.util.Set;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -36,12 +39,16 @@ import lombok.Setter;
 public class User extends BaseEntity implements UserDetails{
 	
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private long id;
+	
 	private String username;
 	
 	private String name;
 	
 	private String email;
 	
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
 	
 	private String headline;
@@ -52,6 +59,7 @@ public class User extends BaseEntity implements UserDetails{
 	private Image image;
 	
 	private String birthdate;
+	private String gender;
 	
 	private String currentOccupation;
 	
@@ -65,37 +73,44 @@ public class User extends BaseEntity implements UserDetails{
 	@JsonManagedReference
 	private Address address;
 	
+	@JsonIgnore
 	private String fcmToken;
+	
 	
 	// relation with role
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "username", referencedColumnName = "username"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles;
 
+    @JsonIgnore
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		
 		return null;
 	}
 
+    @JsonIgnore
 	@Override
 	public boolean isAccountNonExpired() {
 				
 		return false;
 	}
 
+    @JsonIgnore
 	@Override
 	public boolean isAccountNonLocked() {
 		
 		return false;
 	}
 
+    @JsonIgnore
 	@Override
 	public boolean isCredentialsNonExpired() {
 
 		return false;
 	}
 
+    @JsonIgnore
 	@Override
 	public boolean isEnabled() {
 

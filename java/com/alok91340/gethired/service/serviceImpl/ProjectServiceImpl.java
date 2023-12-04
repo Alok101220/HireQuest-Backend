@@ -62,12 +62,14 @@ public class ProjectServiceImpl implements ProjectService{
 
 	@Override
 	public List<ProjectDto> getAllProject(Long userProfileId) {
-		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("user-profile",userProfileId));
-		List<Project> projects = userProfile.getProjects();
-		List<ProjectDto> projectDtos=projects.stream().map(project->mapToDto(project)).collect(Collectors.toList());
-		
-		return projectDtos;
+	    UserProfile userProfile = this.userProfileRepository.findById(userProfileId)
+	            .orElseThrow(() -> new ResourceNotFoundException("user-profile", userProfileId));
+	    List<Project> projects = this.projectRepository.findAllByUserProfile(userProfile);
+	    List<ProjectDto> projectDtos = projects.stream().map(project -> mapToDto(project)).collect(Collectors.toList());
+
+	    return projectDtos;
 	}
+
 
 	@Override
 	public void deleteProject(Long projectId) {

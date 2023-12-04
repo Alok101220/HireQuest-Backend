@@ -5,6 +5,7 @@ package com.alok91340.gethired.service;
 
 import java.util.List;
 
+import com.alok91340.gethired.dto.RegisterDto;
 import com.alok91340.gethired.dto.UserDto;
 
 /**
@@ -14,15 +15,15 @@ import com.alok91340.gethired.dto.UserDto;
 
 public interface UserService {
 	
-	UserDto createUser(UserDto userDto);
+	UserDto createUser(RegisterDto registerDto);
 	
-	UserDto getUser(String username);
+	UserDto getUser(Long userId);
 	
 	List<UserDto> getAllUser(int pageNo, int pageSize, String sortBy, String sortDir);
 	
-	UserDto updateUser(String username, UserDto userDto);
+	UserDto updateUser(Long userId, UserDto userDto);
 	
-	String deleteUser(String username);
+	String deleteUser(Long userId);
 	
 	UserDto updatePassword(String email,String password);
 	

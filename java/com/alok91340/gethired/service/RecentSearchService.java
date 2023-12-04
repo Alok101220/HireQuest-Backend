@@ -17,9 +17,9 @@ public interface RecentSearchService {
 	
 	void deleteRecentSearch(Long recentSearchId);
 	
-	List<RecentSearchDto> findLast8DistinctSearchesByUsername(String username);
+	List<RecentSearchDto> findLast8DistinctSearchesByUsername(Long userId);
 	
-	void deleteAllRecentSearch(String username);
+	void deleteAllRecentSearch(Long userId);
 	
 	
 

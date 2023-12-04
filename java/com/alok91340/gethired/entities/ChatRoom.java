@@ -4,6 +4,7 @@
 package com.alok91340.gethired.entities;
 
 import java.util.Set;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -43,6 +44,8 @@ public class ChatRoom {
     private boolean isRequest=true;
     
     private boolean isDeleted=true;
+    
+    private LocalDateTime timeStamp;
     
 
 }

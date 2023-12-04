@@ -25,7 +25,7 @@ public class RecentSearch {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
 	
-	private String username;
+	private Long userId;
 	private String searchedText;
 
 }

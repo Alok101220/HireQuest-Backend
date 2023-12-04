@@ -20,7 +20,7 @@ public interface UserProfileRepository extends JpaRepository<UserProfile, Long> 
 	
 	
 
-	@Query("SELECT DISTINCT u FROM UserProfile u WHERE LOWER(u.user.name) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(u.user.email) LIKE LOWER(CONCAT('%', :query, '%'))")
+	@Query("SELECT DISTINCT u FROM UserProfile u WHERE LOWER(u.user.name) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(u.user.email) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(u.user.username) LIKE LOWER(CONCAT('%', :query, '%'))")
 	Page<UserProfile> searchUserProfiles(String query, Pageable pageable);
 
 //	Page<UserProfile> searchUserProfiles(String query,String language, Pageable pageable);

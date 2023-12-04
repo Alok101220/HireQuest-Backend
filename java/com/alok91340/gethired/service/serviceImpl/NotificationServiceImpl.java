@@ -33,8 +33,8 @@ public class NotificationServiceImpl implements NotificationService{
 		notification.setBody(request.getBody());
 		notification.setNotificationType(request.getNotificationType());
 		notification.setReadStatus(false);
-		notification.setReceiverUsername(request.getReceiverUsername());
-		notification.setSenderUsername(request.getSenderUsername());
+		notification.setReceiverId(request.getReceiverId());
+		notification.setSenderId(request.getSenderId());
 		notification.setTitle(request.getTitle());
 		notification.setTimestamp(LocalDateTime.now());
 		Notification savedNotification=this.notificationRepository.save(notification);
@@ -49,8 +49,8 @@ public class NotificationServiceImpl implements NotificationService{
 	}
 
 	@Override
-	public List<NotificationDto> getAllNotification(String receiverUserName) {
-		List<Notification> notifications=this.notificationRepository.getNotificationAccordingToReceiverUserName(receiverUserName);
+	public List<NotificationDto> getAllNotification(Long receiverId) {
+		List<Notification> notifications=this.notificationRepository.getNotificationAccordingToReceiverId(receiverId);
 		List<NotificationDto> notificationDtos=notifications.stream().map(notification->mapToDto(notification)).collect(Collectors.toList());
 		return notificationDtos;
 	}
@@ -63,8 +63,8 @@ public class NotificationServiceImpl implements NotificationService{
 		notificationDto.setTitle(notification.getTitle());
 		notificationDto.setNotificationType(notification.getNotificationType());
 		notificationDto.setReadStatus(notification.isReadStatus());
-		notificationDto.setReceiverUsername(notification.getReceiverUsername());
-		notificationDto.setSenderUsername(notification.getSenderUsername());
+		notificationDto.setReceiverId(notification.getReceiverId());
+		notificationDto.setSenderId(notification.getSenderId());
 		notificationDto.setTimestamp(notification.getTimestamp());
 		
 		return notificationDto;

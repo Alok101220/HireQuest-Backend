@@ -26,6 +26,8 @@ public class GethiredApplication implements CommandLineRunner{
 	public static void main(String[] args) {
 		SpringApplication.run(GethiredApplication.class, args);
 		
+		
+		
 	}
 	
 	@Override

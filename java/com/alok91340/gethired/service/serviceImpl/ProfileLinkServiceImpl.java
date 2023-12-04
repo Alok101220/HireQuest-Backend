@@ -57,7 +57,7 @@ public class ProfileLinkServiceImpl implements ProfileLinkService{
 	@Override
 	public List<ProfileDto> getAllProfileLink(Long userProfileId) {
 		UserProfile userProfile=this.userProfileRepository.findById(userProfileId).orElseThrow(()->new ResourceNotFoundException("User-Profile",userProfileId));
-		List<Profile> profileLinks=userProfile.getProfiles();
+		List<Profile> profileLinks=this.profileLinkRespository.findAllByUserProfile(userProfile);
 		List<ProfileDto> profileLinkDtos=profileLinks.stream().map(profileLink->mapToDto(profileLink)).collect(Collectors.toList());
 		
 		return profileLinkDtos;

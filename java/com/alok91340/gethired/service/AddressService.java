@@ -11,7 +11,7 @@ import com.alok91340.gethired.dto.AddressDto;
  */
 public interface AddressService {
 	
-	AddressDto addAddress(AddressDto addressDto, String username);
+	AddressDto addAddress(AddressDto addressDto, Long username);
 	AddressDto updateAddress(AddressDto addressDto, Long addressId);
 	AddressDto getAddress(Long addressId);
 	void deleteAddress(Long addressid);
