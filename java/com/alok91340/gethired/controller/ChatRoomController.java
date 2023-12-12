@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alok91340.gethired.dto.ChatRoomResponse;
@@ -50,25 +51,24 @@ public class ChatRoomController {
 	private UserRepository userRepository;
 	
 	
-	@PostMapping("/{senderId}/{receiverId}/send-chat-request")
-	public ResponseEntity<Boolean> createChatRoom(@PathVariable Long senderId, @PathVariable Long receiverId,@RequestBody Message message){
+	@PostMapping("/{senderId}/send-chat-request")
+	public ResponseEntity<Boolean> createChatRoom(@PathVariable Long senderId, @RequestParam Long receiverId,@RequestBody Message message){
 		
 		this.chatRoomService.sendChatRequest(senderId, receiverId );
 		
-	
 		return ResponseEntity.ok(true);
 		
 	}
 	
-	@PutMapping("/{chatRoomId}/accept-chatRequest")
-	public ResponseEntity<String> acceptChatRequest(@PathVariable Long chatRoomId){
+	@PutMapping("/accept-chatRequest")
+	public ResponseEntity<String> acceptChatRequest(@RequestParam("chatRoomId") Long chatRoomId){
 		this.chatRoomService.acceptChatRequest(chatRoomId);
 		return ResponseEntity.ok("accepted");
 		
 	}
 	
-	@DeleteMapping("/{chatRoomId}/delete-chatRequest")
-	public ResponseEntity<String> deleteChatRequest(@PathVariable Long chatRoomId){
+	@DeleteMapping("/delete-chatRequest")
+	public ResponseEntity<String> deleteChatRequest(@RequestParam("chatRoomId") Long chatRoomId){
 		this.chatRoomService.deleteChatRoom(chatRoomId);
 		return ResponseEntity.ok("deleted");
 		

@@ -17,6 +17,9 @@ public interface UserProfileService {
 	UserProfileDto getUserProfile(Long userId);
 	
 	List<UserProfile> getUserProfiles(String search,int pageNo, int pageSize, String sortBy, String sortDir);
+	
+	List<UserProfile> getUserProfiles(String search,String role, int pageNo, int pageSize, String sortBy, String sortDir);
+	
 
 	
 	UserProfileDto updateUserProfile(UserProfileDto userProfileDto, Long userProfileId);

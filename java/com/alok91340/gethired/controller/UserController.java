@@ -196,6 +196,14 @@ public class UserController {
 		boolean isAvailable=this.userRepo.existsByUsername(username);
 		return new ResponseEntity<>(isAvailable,HttpStatus.OK);
 	}
+	
+	@GetMapping("/get-user")
+	private ResponseEntity<UserDto> getUser(@RequestParam("username") String username){
+		User user=this.userRepo.findUserByUsername(username);
+		UserDto userDto=this.userService.getUser(user.getId());
+		return ResponseEntity.ok(userDto);
+		
+	}
 	@GetMapping("/{email}/check-email")
 	public ResponseEntity<Boolean> checkEmail(@PathVariable String email){
 		boolean isAvailable=this.userRepo.existsByEmail(email);

@@ -92,5 +92,23 @@ public class UserProfileServiceImpl implements UserProfileService{
 		return mapToDto(savedUserProfile);
 	}
 
+	@Override
+	public List<UserProfile> getUserProfiles(String search, String role, int pageNo, int pageSize, String sortBy,
+			String sortDir) {
+		
+		Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+		Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+		if (!search.isEmpty()) {
+	        // If a search term is provided, use it for filtering
+	        Page<UserProfile> userProfiles=userProfileRepo.searchUserProfiles(search,role, pageable);
+	        return userProfiles.getContent();
+	    } else {
+	        // Otherwise, fetch user profiles without filtering
+	        Page<UserProfile> userProfiles = userProfileRepo.findAll(pageable);
+	        return userProfiles.getContent();
+	    }
+	}
+
 
 }
