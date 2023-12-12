@@ -36,7 +36,7 @@ public class ImageServiceImpl implements ImageService{
 	private ImageRepository imageRepository;
 
 	@Override
-    public Image saveImage(Long userId, MultipartFile file) {
+    public ImageDto saveImage(Long userId, MultipartFile file) {
         Image image = uploadImage(file);
         User user = this.userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user", (long) 0));
 
@@ -50,13 +50,13 @@ public class ImageServiceImpl implements ImageService{
 			}
             Image updatedImage = this.imageRepository.save(img);
 //            updatedImage.setData(ImageUtils.decompressImage(updatedImage.getData()));
-            return updatedImage;
+            return mapToDto(updatedImage);
         } else {
             image.setUser(user);
 
             Image savedImage = this.imageRepository.save(image);
             savedImage.setData(ImageUtils.decompressImage(savedImage.getData()));
-            return savedImage;
+            return mapToDto(savedImage);
         }
     } 
 
@@ -73,7 +73,24 @@ public class ImageServiceImpl implements ImageService{
         return imageData;
     }
 
-   
+	@Override
+	public ImageDto getImage(Long userId) {
+		User user=this.userRepository.findById(userId).orElseThrow();
+		Image image=this.imageRepository.findImageByUser(user);
+		return mapToDto(image);
+		
+		
+	}
+	
+	ImageDto mapToDto(Image image) {
+		ImageDto imageDto= new ImageDto();
+		imageDto.setId(image.getId());
+		imageDto.setData(image.getData());
+		imageDto.setName(image.getName());
+		imageDto.setType(image.getType());
+		return imageDto;
+
+	}
 
 
 }

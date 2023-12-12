@@ -11,7 +11,6 @@ import javax.sql.rowset.serial.SerialException;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alok91340.gethired.dto.ImageDto;
-import com.alok91340.gethired.entities.Image;
 
 /**
  * @author alok91340
@@ -19,6 +18,7 @@ import com.alok91340.gethired.entities.Image;
  */
 public interface ImageService {
 	
-	Image saveImage(Long username,MultipartFile file) throws SerialException, SQLException, IOException;
+	ImageDto saveImage(Long userId,MultipartFile file) throws SerialException, SQLException, IOException;
 //	Image saveImage(Long imageId);
+	ImageDto getImage(Long userId);
 }
