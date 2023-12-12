@@ -48,7 +48,7 @@ public class UserProfileController {
 		
 		
 		List<UserProfile> userProfile=null;
-		if(role==null) {
+		if(role==null||role.length()==0) {
 			userProfile = userProfileService.getUserProfiles(search,pageNo,pageSize,sortBy,sortDir);
 		}else {
 			userProfile = this.userProfileService.getUserProfiles(search, role, pageNo, pageSize, sortBy, sortDir);

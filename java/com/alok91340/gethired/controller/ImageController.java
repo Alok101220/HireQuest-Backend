@@ -44,10 +44,10 @@ public class ImageController {
 	@Autowired 
 	private ImageRepository imageRepository;
 	
-	@PostMapping("/{userId}/upload-image")
-	private ResponseEntity<Image> uploadImage(@PathVariable Long userId, @RequestParam("file") MultipartFile file){
+	@PostMapping("/upload-image")
+	private ResponseEntity<ImageDto> uploadImage(@RequestParam("userId") Long userId, @RequestParam("file") MultipartFile file){
 		
-		Image image=null;
+		ImageDto image=null;
 		try {
 			image = this.imageService.saveImage(userId, file);
 		} catch (SerialException e) {
@@ -64,6 +64,12 @@ public class ImageController {
 		return new ResponseEntity<>(image,HttpStatus.OK);
 		
 	
+	}
+	
+	@GetMapping("/get-image")
+	public ResponseEntity<ImageDto> getImage(@RequestParam("userId") Long userId){
+		ImageDto image=this.imageService.getImage(userId);
+		return ResponseEntity.ok(image);
 	}
 	
 	@GetMapping("/{imageId}/download-image")
