@@ -24,9 +24,12 @@ import com.alok91340.gethired.entities.UserChatRoom;
 import com.alok91340.gethired.entities.UserChatRoomId;
 import com.alok91340.gethired.repository.ChatRoomRepository;
 import com.alok91340.gethired.repository.MessageRepository;
+import com.alok91340.gethired.dto.NotificationRequest;
 import com.alok91340.gethired.repository.UserChatRoomRepository;
 import com.alok91340.gethired.repository.UserRepository;
 import com.alok91340.gethired.service.ChatRoomService;
+import com.alok91340.gethired.service.NotificationService;
+import com.alok91340.gethired.utils.NotificationType;
 
 /**
  * @author aloksingh
@@ -46,6 +49,9 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private NotificationService notificationService;
 	
 
 	@Override
@@ -78,7 +84,7 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 	
 
 	@Override
-	public void sendChatRequest(Long senderId, Long receiverId) {
+	public void sendChatRequest(Long senderId, Long receiverId, Message message) {
 		
 		User user1= this.userRepository.findById(senderId).orElseThrow();
 		User user2 = this.userRepository.findById(receiverId).orElseThrow();
@@ -87,11 +93,12 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 	    Optional<ChatRoom> existingChatRoom = chatRoomRepository.findChatRoomByUsers(user1, user2);
 
 	    ChatRoom chatRoom;
+	    ChatRoom savedChatRoom;
 	    if (existingChatRoom.isPresent() && !existingChatRoom.get().isGroup()) {
 	        // Use the existing chat room
 	        chatRoom = existingChatRoom.get();
 	        chatRoom.setDeleted(false);
-	        chatRoomRepository.save(chatRoom);
+	        savedChatRoom = chatRoomRepository.save(chatRoom);
 	    } else {
 	        // Create a new chat room
 	        chatRoom = new ChatRoom();
@@ -105,10 +112,26 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 	        chatRoom.getUsers().add(user1);
 	        chatRoom.getUsers().add(user2);
 	        
-
 	        // Save the chat room with users
-	        chatRoomRepository.save(chatRoom);
+
+	        savedChatRoom =chatRoomRepository.save(chatRoom);
+	        
+	        Message requestMessage=new Message();
+	        requestMessage.setContent(message.getContent());
+	        requestMessage.setDelivered(false);
+	        requestMessage.setReceiverId(receiverId);
+	        requestMessage.setSenderId(senderId);
+	        requestMessage.setRoomId(savedChatRoom.getId() );
+	        requestMessage.setSeen(false);
+	        requestMessage.setTimestamp(message.getTimestamp());	    
+	        
+	        messageRepository.save(requestMessage);
+	        
+	        
+	        
 	    }
+	    if(savedChatRoom!=null) {
+	    	
 		
 		UserChatRoomId userChatRoomId1 = new UserChatRoomId();
 		userChatRoomId1.setUserId(user1.getId()); // Set the user's ID
@@ -137,10 +160,20 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 		userChatRoomRepository.save(userChatRoom1);
 		userChatRoomRepository.save(userChatRoom2);
 
+		NotificationRequest request= new NotificationRequest();
+		request.setBody("Send you chat request");
+		request.setNotificationType(NotificationType.REQUEST);
+		request.setReceiverUsername(user2.getUsername());
+		request.setSenderUsername(user1.getUsername());
+		request.setTitle("Chat Request");
 		
+		this.notificationService.saveNotification(request);
+		
+	    }
 		
 		return ;
 	}
+
 
 	@Override
 	public void deleteChatRoom(Long chatRoomId) {
@@ -179,15 +212,15 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 	        	chatRoomResponse.setReceiver(otherUser);
 	        	
 	        	Pageable pageable = PageRequest.of(0, 1, Sort.by("timestamp").descending());
-	        	List<Message> latestMessage = this.messageRepository.findLatestMessage(userChatRoom.getChatRoom().getId(), pageable);
+	        	Message latestMessage = this.messageRepository.findLatestMessage(userChatRoom.getChatRoom().getId());
 
 	        	chatRoomResponse.setIsRequest(userChatRoom.getChatRoom().isRequest());
-	        	if(latestMessage.size()!=0) {
-	        		chatRoomResponse.setLastMessage(latestMessage.get(0));
+	        	if(latestMessage!=null) {
+	        		chatRoomResponse.setLastMessage(latestMessage);
 	        		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
 	                // Parse the string to LocalDateTime
-	                LocalDateTime localDateTime = LocalDateTime.parse(latestMessage.get(0).getTimestamp(), formatter);
+	                LocalDateTime localDateTime = LocalDateTime.parse(latestMessage.getTimestamp().substring(0, 23), formatter);
 
 	        		chatRoomResponse.setTimeStamp(localDateTime);
 	        	}
@@ -258,7 +291,7 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 			UserChatRoom userChatRoom = this.userChatRoomRepository.findByChatRoomAndUser(chatRoom.get(), user2);
 			
 			userChattingInfoDto.setIsRequested(chatRoom.get().isRequest());
-			userChattingInfoDto.setUsername(userChatRoom.getUser().getUsername());
+			userChattingInfoDto.setUsername(userChatRoom.getUser().getName());
 			userChattingInfoDto.setIsSender(userChatRoom.isRequestSender());
 			userChattingInfoDto.setImage(userChatRoom.getUser().getImage());
 			

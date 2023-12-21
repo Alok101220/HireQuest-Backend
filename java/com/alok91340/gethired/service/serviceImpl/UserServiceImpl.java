@@ -23,6 +23,7 @@ import com.alok91340.gethired.repository.NotificationPreferenceRepository;
 import com.alok91340.gethired.repository.UserProfileRepository;
 import com.alok91340.gethired.repository.UserRepository;
 import com.alok91340.gethired.service.UserService;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.alok91340.gethired.entities.UserProfile;
 import com.alok91340.gethired.entities.NotificationPreference;
 
@@ -65,6 +66,31 @@ public class UserServiceImpl implements UserService{
 		this.userProfileRepository.save(userProfile);
 		
 		return mapToDto(savedUser);
+	}
+	
+	public UserDto createUserWithGoogleSignIn(Payload payload) {
+		
+		String email = payload.getEmail();
+        String name = (String) payload.get("name");
+        String userName=email.split("@")[0];
+        
+        User newUser= new User();
+        newUser.setEmail(email);
+        newUser.setName(name);
+        newUser.setUsername(userName);
+        
+        String hashedPassword = bCryptPasswordEncoder.encode(userName);
+        newUser.setPassword(hashedPassword);
+        newUser.setCreatedAt(LocalDateTime.now());
+        User savedUser=userRepo.save(newUser);
+		createNotificationPreference(savedUser.getId());
+		UserProfile userProfile=new UserProfile();
+		userProfile.setUser(savedUser);
+		userProfile.setCreatedAt(LocalDateTime.now());
+		this.userProfileRepository.save(userProfile);
+		
+		return mapToDto(savedUser);
+		
 	}
 
 	

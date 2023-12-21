@@ -84,27 +84,32 @@ public class WebSocketHandler extends TextWebSocketHandler {
         Map<String, Object> messageData = objectMapper.readValue(message.getPayload(), new TypeReference<Map<String, Object>>(){});
         Long receiverId = Long.valueOf(String.valueOf(messageData.get("receiverId")));
         String content = (String) messageData.get("content");
-
+        Long roomId = Long.valueOf(String.valueOf(messageData.get("roomId")));
         Message messageEntity = new Message();
+        messageEntity.setRoomId(roomId);
         messageEntity.setSenderId(senderId);
         messageEntity.setReceiverId(receiverId);
         messageEntity.setContent(content);
         messageEntity.setTimestamp((String) messageData.get("timestamp"));
         messageEntity.setSeen(false);
+        
+        Message savedMessage = this.messageRepository.save(messageEntity);
 
         Set<WebSocketSession> receiverSessions = presenceService.getSessionsForUser(receiverId);
 
         if (receiverSessions.isEmpty()) {
             User user = userRepository.findById(receiverId)
                     .orElseThrow(() -> new ResourceNotFoundException("user", receiverId));
+            User sender = userRepository.findById(senderId)
+                    .orElseThrow(() -> new ResourceNotFoundException("user", senderId));
 
             NotificationRequest request = new NotificationRequest();
             request.setBody(content);
             request.setTitle("message");
             request.setNotificationType("message");
-            request.setReceiverId(receiverId);
-            request.setSenderId(senderId);
-            if(!user.getFcmToken().isEmpty()) {
+            request.setReceiverUsername(user.getUsername());    
+            request.setSenderUsername(sender.getUsername());
+            if(!(user.getFcmToken()!=null)&&!user.getFcmToken().isEmpty()) {
             	fcmNotificationService.sendNotification(user.getFcmToken(), request);
             }
             
@@ -113,6 +118,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 try {
                     if (receiverSession.isOpen()) {
                         String responseMessage = "{\"id\": " + 0 +
+                        		", \"roomId\": \"" +roomId + "\"" +
                                 ", \"senderId\": \"" + senderId + "\"" +
                                 ", \"receiverId\": \"" + receiverId + "\"" +
                                 ", \"content\": \"" + content + "\"" +
@@ -128,7 +134,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
             }
         }
 
-        Message savedMessage = this.messageRepository.save(messageEntity);
+//        Message savedMessage = this.messageRepository.save(messageEntity);
     }
 
     @Override

@@ -40,7 +40,8 @@ public class SecurityConfig {
             "/api/hireQuest/{email}/{password}/change-password",
             "/ws/{token}",
             "api/hireQuest/{username}/get-fcm-token",
-            "api/hireQuest/user-logout"
+            "api/hireQuest/user-logout",
+            "api/hireQuest/google-sign-in"
     };
 
     @Autowired(required = false)

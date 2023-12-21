@@ -10,13 +10,15 @@ package com.alok91340.gethired.utils;
 
 public class NotificationType {
 
-	public static final String REQUEST = "request";
+	public static final String REQUEST = "chat-request";
 	
-	public static final String MEETING = "meeting";
+	public static final String MEETING = "meeting-schedule";
 	
-	public static final String CHAT = "chat";
+	public static final String MESSAGE = "message";
 	
-	public static final String PROFILE_VIEW ="profile_view";
+	public static final String PROFILE_VIEW ="profile-visit";
 	
 	public static final String PROFILE_BOOKMARK = "profile_bookmark";
+	
+	public static final String GENERAL = "general";
 }

@@ -13,10 +13,10 @@ import lombok.Data;
 @Data
 public class NotificationRequest {
 	
-	private Long senderId;
+	private String senderUsername;
 	private String title;
 	private String body;
-	private Long receiverId;
+	private String receiverUsername;
 	private String notificationType;
 	
 }

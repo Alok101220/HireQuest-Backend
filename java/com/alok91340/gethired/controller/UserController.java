@@ -29,11 +29,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alok91340.gethired.utils.Constant;
+import com.alok91340.gethired.utils.GoogleIdTokenVerifierUtil;
 import com.alok91340.gethired.utils.isAuthenticatedAsAdminOrUser;
 import com.alok91340.gethired.websocket.PresenceService;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 
 import jakarta.servlet.http.HttpSession;
 
+import com.alok91340.gethired.dto.GoogleSignInDto;
 import com.alok91340.gethired.dto.LoginDto;
 import com.alok91340.gethired.dto.RegisterDto;
 import com.alok91340.gethired.dto.RegistrationResponse;
@@ -124,6 +127,30 @@ public class UserController {
 		
 	}
 	
+	@PostMapping("/google-sign-in")
+	public ResponseEntity<JwtAuthResponse> signInWithGoogle(@RequestBody GoogleSignInDto googleSignInDto){
+		
+		User user=this.userRepo.findUserByEmail(googleSignInDto.getGoogleSignInId());
+		System.out.println("  `````````````````````````````     "    +user);	 
+		if(user==null) {
+			
+			Payload payload=GoogleIdTokenVerifierUtil.verifyAndExtractEmail(googleSignInDto.getGoogleSignInId());
+			
+			if(payload!=null) {
+				System.out.println("  `````````````````````````````     "    +payload);	            
+				UserDto userDto= this.userService.createUserWithGoogleSignIn(payload);
+	            
+			}
+			return null;
+			
+			
+		}else {
+			
+			return null;
+		}
+		
+	}
+	
 //	authenticate
 	@PostMapping(value="/user-login", produces = "application/json")
     public ResponseEntity<JwtAuthResponse> loginUser(@RequestBody LoginDto loginDto) throws Exception {
@@ -197,9 +224,17 @@ public class UserController {
 		return new ResponseEntity<>(isAvailable,HttpStatus.OK);
 	}
 	
-	@GetMapping("/get-user")
+	@GetMapping("/get-userBy-username")
 	private ResponseEntity<UserDto> getUser(@RequestParam("username") String username){
 		User user=this.userRepo.findUserByUsername(username);
+		UserDto userDto=this.userService.getUser(user.getId());
+		return ResponseEntity.ok(userDto);
+		
+	}
+	
+	@GetMapping("/get-userBy-userId")
+	private ResponseEntity<UserDto> getUser(@RequestParam("userId") Long userId){
+		User user=this.userRepo.findById(userId).orElseThrow();
 		UserDto userDto=this.userService.getUser(user.getId());
 		return ResponseEntity.ok(userDto);
 		

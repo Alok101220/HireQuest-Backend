@@ -4,6 +4,7 @@
 package com.alok91340.gethired.service.serviceImpl;
 
 import com.alok91340.gethired.dto.NotificationRequest;
+import com.alok91340.gethired.repository.NotificationPreferenceRepository;
 import com.alok91340.gethired.repository.NotificationRepository;
 /**
  * @author alok91340
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class FcmNotificationService {
 	
+	
 
  public String sendNotification(String fcmToken, NotificationRequest request) {
      Notification notification = Notification.builder()
@@ -30,7 +32,7 @@ public class FcmNotificationService {
      Message message = Message.builder()
              .setNotification(notification)
              .putData("notification_type", request.getNotificationType())
-             .putData("sender", request.getSenderId().toString())
+             .putData("sender", request.getSenderUsername())
              .setToken(fcmToken)
              .build();
 

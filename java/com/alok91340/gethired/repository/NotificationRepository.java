@@ -17,7 +17,7 @@ import com.alok91340.gethired.entities.Notification;
  */
 public interface NotificationRepository extends JpaRepository<Notification,Long>{
 	
-	@Query("select n from Notification n where n.receiverId = :receiverId")
-    List<Notification> getNotificationAccordingToReceiverId(@Param("receiverId") Long receiverId);
+	@Query("select n from Notification n where n.receiverUsername = :receiverUsername ORDER BY n.timestamp DESC")
+    List<Notification> getNotificationAccordingToReceiverId(@Param("receiverUsername") String receiverUsername);
 
 }

@@ -21,8 +21,8 @@ import com.alok91340.gethired.entities.Message;
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
 	
-	@Query("SELECT m FROM Message m WHERE m.roomId = :roomId ORDER BY m.timestamp DESC")
-	List<Message> findLatestMessage(@Param("roomId") Long roomId, Pageable pageable);
+	@Query("SELECT m FROM Message m WHERE m.roomId = :roomId ORDER BY m.timestamp DESC LIMIT 1")
+	Message findLatestMessage(@Param("roomId") Long roomId);
 
     
     @Query("SELECT COUNT(m) FROM Message m WHERE m.roomId = :roomId AND m.receiverId = :userId AND m.seen = false")
@@ -45,6 +45,3 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
 
 }
-
-    
-

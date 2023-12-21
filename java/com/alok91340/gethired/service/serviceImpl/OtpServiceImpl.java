@@ -59,7 +59,12 @@ public class OtpServiceImpl implements OtpService {
     private Otp updateAndSendOtp(Otp otp) {
         String otpCode = generateRandomOtpCode();
         otp.setOtpCode(otpCode);
-        emailService.sendSimpleEmail(otp.getEmail(), "OTP for Email Verification", otpCode);
+        try {
+			emailService.sendSimpleEmail(otp.getEmail(), "OTP for Email Verification", otpCode);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         return otpRepository.save(otp);
     }
 
@@ -68,7 +73,12 @@ public class OtpServiceImpl implements OtpService {
         Otp newOtp = new Otp();
         newOtp.setOtpCode(otpCode);
         newOtp.setEmail(email);
-        emailService.sendSimpleEmail(email, "OTP for Email Verification", otpCode);
+        try {
+			emailService.sendSimpleEmail(email, "OTP for Email Verification", otpCode);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         return otpRepository.save(newOtp);
     }
 

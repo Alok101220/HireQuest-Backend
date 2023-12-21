@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.alok91340.gethired.dto.ChatRoomResponse;
 import com.alok91340.gethired.dto.UserChattingInfoDto;
+import com.alok91340.gethired.entities.Message;
 
 /**
  * @author aloksingh
@@ -22,7 +23,7 @@ public interface ChatRoomService {
 	
 	UserChattingInfoDto findUserChattingInfo(Long senderId, Long receiverId);
 	
-	void sendChatRequest(Long senderId, Long receiverId);
+	void sendChatRequest(Long senderId, Long receiverId, Message message);
 	
 	void acceptChatRequest(Long chatRoomId);
 	

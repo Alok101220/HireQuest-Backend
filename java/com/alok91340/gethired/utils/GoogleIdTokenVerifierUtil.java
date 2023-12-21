@@ -17,25 +17,24 @@ import java.util.Collections;
 
 public class GoogleIdTokenVerifierUtil {
 
-    public static String verifyAndExtractEmail(String googleIdTokenString) {
+    public static Payload verifyAndExtractEmail(String googleIdTokenString) {
         // Replace with your own Google API Client ID
-        String googleClientId = "YOUR_GOOGLE_CLIENT_ID";
+        String googleClientId = "892359217503-ombs7ghgkdj39rucj9akb852m8c7a9l4.apps.googleusercontent.com";
 
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
             new NetHttpTransport(), new JacksonFactory())
             .setAudience(Collections.singletonList(googleClientId))
             .build();
-
         try {
             GoogleIdToken idToken = verifier.verify(googleIdTokenString);
             if (idToken != null) {
                 Payload payload = idToken.getPayload();
-                return payload.getEmail();
+                return payload;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return ""; // Return null in case of failure or invalid token
+        return null; // Return null in case of failure or invalid token
     }
 }

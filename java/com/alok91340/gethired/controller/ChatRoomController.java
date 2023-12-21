@@ -54,7 +54,7 @@ public class ChatRoomController {
 	@PostMapping("/{senderId}/send-chat-request")
 	public ResponseEntity<Boolean> createChatRoom(@PathVariable Long senderId, @RequestParam Long receiverId,@RequestBody Message message){
 		
-		this.chatRoomService.sendChatRequest(senderId, receiverId );
+		this.chatRoomService.sendChatRequest(senderId, receiverId ,message);
 		
 		return ResponseEntity.ok(true);
 		

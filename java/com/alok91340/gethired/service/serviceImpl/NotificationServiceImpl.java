@@ -13,7 +13,11 @@ import org.springframework.stereotype.Service;
 import com.alok91340.gethired.dto.NotificationDto;
 import com.alok91340.gethired.dto.NotificationRequest;
 import com.alok91340.gethired.entities.Notification;
+import com.alok91340.gethired.entities.NotificationPreference;
+import com.alok91340.gethired.entities.User;
+import com.alok91340.gethired.repository.NotificationPreferenceRepository;
 import com.alok91340.gethired.repository.NotificationRepository;
+import com.alok91340.gethired.repository.UserRepository;
 import com.alok91340.gethired.service.NotificationService;
 
 /**
@@ -26,6 +30,19 @@ public class NotificationServiceImpl implements NotificationService{
 	
 	@Autowired
 	private NotificationRepository notificationRepository;
+	
+	@Autowired
+	private NotificationPreferenceRepository notificationPreferenceRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	private final FcmNotificationService fcmNotificationService;
+	
+	@Autowired
+	public NotificationServiceImpl(FcmNotificationService fcmNotificationService) {
+		this.fcmNotificationService = fcmNotificationService;
+	}
 
 	@Override
 	public NotificationDto saveNotification(NotificationRequest request) {
@@ -33,11 +50,21 @@ public class NotificationServiceImpl implements NotificationService{
 		notification.setBody(request.getBody());
 		notification.setNotificationType(request.getNotificationType());
 		notification.setReadStatus(false);
-		notification.setReceiverId(request.getReceiverId());
-		notification.setSenderId(request.getSenderId());
+		notification.setSenderUsername(request.getSenderUsername());
+		notification.setReceiverUsername(request.getReceiverUsername());
 		notification.setTitle(request.getTitle());
 		notification.setTimestamp(LocalDateTime.now());
 		Notification savedNotification=this.notificationRepository.save(notification);
+		
+		
+		User user = userRepository.findUserByUsername(request.getReceiverUsername());
+		
+		NotificationPreference np=this.notificationPreferenceRepository.findNotificationPreferenceByNotificationTypeAndUserId(request.getNotificationType(), user.getId());
+		
+		if(!np.getMuted() && user.getFcmToken()!=null&& !user.getFcmToken().isEmpty()) {
+			fcmNotificationService.sendNotification(user.getFcmToken(), request);
+		}
+		
 		return mapToDto(savedNotification);
 	}
 
@@ -49,8 +76,8 @@ public class NotificationServiceImpl implements NotificationService{
 	}
 
 	@Override
-	public List<NotificationDto> getAllNotification(Long receiverId) {
-		List<Notification> notifications=this.notificationRepository.getNotificationAccordingToReceiverId(receiverId);
+	public List<NotificationDto> getAllNotification(String receiverUsername) {
+		List<Notification> notifications=this.notificationRepository.getNotificationAccordingToReceiverId(receiverUsername);
 		List<NotificationDto> notificationDtos=notifications.stream().map(notification->mapToDto(notification)).collect(Collectors.toList());
 		return notificationDtos;
 	}
@@ -63,8 +90,8 @@ public class NotificationServiceImpl implements NotificationService{
 		notificationDto.setTitle(notification.getTitle());
 		notificationDto.setNotificationType(notification.getNotificationType());
 		notificationDto.setReadStatus(notification.isReadStatus());
-		notificationDto.setReceiverId(notification.getReceiverId());
-		notificationDto.setSenderId(notification.getSenderId());
+		notificationDto.setReceiverUserName(notification.getReceiverUsername());
+		notificationDto.setSenderUsername(notification.getSenderUsername());
 		notificationDto.setTimestamp(notification.getTimestamp());
 		
 		return notificationDto;
